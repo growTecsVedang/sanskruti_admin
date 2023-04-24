@@ -1,6 +1,17 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { BiUserCircle, BiCalendarStar } from "react-icons/bi";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { AiOutlineClose, AiOutlineInbox } from "react-icons/ai";
+import { Sidebar } from "./Sidebar";
+import { Link } from "react-router-dom";
+import { MdOutlineDashboard } from "react-icons/md";
+import { FiUsers, FiLogOut } from "react-icons/fi";
+import { RiArrowDropDownLine } from "react-icons/ri";
+import { BsShieldLockFill } from "react-icons/bs";
+import { ImImages, ImProfile } from "react-icons/im";
 export const Navbar = () => {
+  const [open, setOpen] = useState(false);
+  const [prod, setProd] = useState(false);
   return (
     <div className="">
       <nav className="relative px-8 py-4 flex justify-between items-center border-y border-gray-400 ">
@@ -23,41 +34,225 @@ export const Navbar = () => {
               <path d="M5.26 17.242a.75.75 0 10-.897-1.203 5.243 5.243 0 00-2.05 5.022.75.75 0 00.625.627 5.243 5.243 0 005.022-2.051.75.75 0 10-1.202-.897 3.744 3.744 0 01-3.008 1.51c0-1.23.592-2.323 1.51-3.008z" />
             </svg>
           </span>
-          <span className="text-gray-600  text-xl">DevUI</span>
+          <span className="text-gray-600  text-xl">Sanskrutinx</span>
         </a>
-        <div className="lg:hidden">
-          <button className="navbar-burger flex items-center text-gray-600 dark:text-gray-300 p-3">
-            <svg
-              className="block h-4 w-4 fill-current"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Mobile menu</title>
-              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-            </svg>
-          </button>
-        </div>
-
-        <div className="hidden lg:block">
-          <div className="flex items-center space-x-2">
-            <img
-              className="inline-block w-12 h-12 rounded-full"
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
-              alt="John Doe"
-            />
-            <span className="flex flex-col">
-              <span className="text-sm font-medium text-gray-900 ">
-                John Doe
+        <div className="flex gap-5">
+          <div className="">
+            <div className="flex items-center space-x-2">
+              <span className="flex flex-col">
+                <div className="cursor-pointer">
+                  <BiUserCircle size={30} />
+                </div>
               </span>
-              <span className="text-sm font-medium text-gray-500  cursor-pointer">
-                View Profile
-              </span>
-            </span>
+            </div>
+          </div>
+          <div className="lg:hidden">
+            {open ? (
+              <div onClick={() => setOpen(!open)}>
+                {<AiOutlineClose size={30} />}
+              </div>
+            ) : (
+              <div onClick={() => setOpen(!open)}>
+                {<RxHamburgerMenu size={30} />}
+              </div>
+            )}
           </div>
         </div>
       </nav>
+      {/* mobile  */}
+      <div
+        className={
+          open
+            ? "  h-[100vh] w-[220px] absolute  ease-in-out duration-500  bg-[#fbfbfb] z-20 left-[0px] "
+            : "fixed left-[-100%]"
+        }
+      >
+        <Link to="/home">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <MdOutlineDashboard size={30} />
+            <div className="mx-5">Dashboard</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <div
+          onClick={() => setProd(!prod)}
+          className=" cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-xl"
+        >
+          <AiOutlineInbox size={30} />
+          <div className="mx-5">Product</div>
+          <RiArrowDropDownLine size={30} />
+        </div>
+        {prod ? (
+          <div className="bg-[#ebf7f7]">
+            <Link to="/categories">
+              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+                <div className="mx-5">Categories</div>
+              </div>
+            </Link>
+            <Link to="/subcategories">
+              <div className="h-[40px] flex mt-3 items-center w-[200px] pl-5 text-xl">
+                <div className="mx-5">SubCategories</div>
+              </div>
+            </Link>
+            <Link to="/attributes">
+              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+                <div className="mx-5">Attributes</div>
+              </div>
+            </Link>
+            <Link to="/products">
+              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+                <div className="mx-5">Products</div>
+              </div>
+            </Link>
+          </div>
+        ) : (
+          ""
+        )}
+        <hr className="text-black h-2" />
+        <Link to="/banner">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <ImImages size={30} />
+            <div className="mx-5">Banner</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/orders">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <MdOutlineDashboard size={30} />
+            <div className="mx-5">Orders</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/users">
+          <div className="h-[40px] flex my-3  w-[200px] pl-5 text-xl">
+            <FiUsers size={30} />
+            <div className="mx-5">Users</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/reviews">
+          <div className="h-[40px] flex my-3  w-[200px] pl-5 text-xl">
+            <BiCalendarStar size={30} />
+            <div className="mx-5">Reviews</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/permissions">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <BsShieldLockFill size={30} />
+            <div className="mx-5">Permissions</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/profile">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <ImProfile size={30} />
+            <div className="mx-5">Profile</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+          <FiLogOut size={30} />
+          <div className="mx-5">Logout</div>
+        </div>
+        <hr className="text-black h-2" />
+      </div>
+      {/* laptop */}
+      <div
+        className={
+          "hidden lg:block  h-[100vh] w-[220px] absolute  ease-in-out duration-500  bg-[#fbfbfb] z-20 left-[0px] "
+        }
+      >
+        <Link to="/home">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <MdOutlineDashboard size={30} />
+            <div className="mx-5">Dashboard</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <div
+          onClick={() => setProd(!prod)}
+          className=" cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-xl"
+        >
+          <AiOutlineInbox size={30} />
+          <div className="mx-5">Product</div>
+          <RiArrowDropDownLine size={30} />
+        </div>
+        {prod ? (
+          <div className="bg-[#ebf7f7]">
+            <Link to="/categories">
+              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+                <div className="mx-5">Categories</div>
+              </div>
+            </Link>
+            <Link to="/subcategories">
+              <div className="h-[40px] flex mt-3 items-center w-[200px] pl-5 text-xl">
+                <div className="mx-5">SubCategories</div>
+              </div>
+            </Link>
+            <Link to="/attributes">
+              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+                <div className="mx-5">Attributes</div>
+              </div>
+            </Link>
+            <Link to="/products">
+              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+                <div className="mx-5">Products</div>
+              </div>
+            </Link>
+          </div>
+        ) : (
+          ""
+        )}
+        <hr className="text-black h-2" />
+        <Link to="/banner">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <ImImages size={30} />
+            <div className="mx-5">Banner</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/orders">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <MdOutlineDashboard size={30} />
+            <div className="mx-5">Orders</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/users">
+          <div className="h-[40px] flex my-3  w-[200px] pl-5 text-xl">
+            <FiUsers size={30} />
+            <div className="mx-5">Users</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/reviews">
+          <div className="h-[40px] flex my-3  w-[200px] pl-5 text-xl">
+            <BiCalendarStar size={30} />
+            <div className="mx-5">Reviews</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/permissions">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <BsShieldLockFill size={30} />
+            <div className="mx-5">Permissions</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/profile">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <ImProfile size={30} />
+            <div className="mx-5">Profile</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+          <FiLogOut size={30} />
+          <div className="mx-5">Logout</div>
+        </div>
+        <hr className="text-black h-2" />
+      </div>
     </div>
   );
 };
-
-Navbar.displayName = "Navbar";
