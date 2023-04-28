@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { BiUserCircle, BiCalendarStar } from "react-icons/bi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose, AiOutlineInbox } from "react-icons/ai";
-import { Sidebar } from "./Sidebar";
 import { Link } from "react-router-dom";
 import { MdOutlineDashboard } from "react-icons/md";
 import { FiUsers, FiLogOut } from "react-icons/fi";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { BsShieldLockFill } from "react-icons/bs";
 import { ImImages, ImProfile } from "react-icons/im";
-export const Navbar = () => {
+const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [prod, setProd] = useState(false);
   return (
@@ -68,7 +67,7 @@ export const Navbar = () => {
         }
       >
         <Link to="/home">
-          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+          <div className="h-[40px] flex mt-3  w-[100%] pl-5 text-xl">
             <MdOutlineDashboard size={30} />
             <div className="mx-5">Dashboard</div>
           </div>
@@ -76,7 +75,7 @@ export const Navbar = () => {
         <hr className="text-black h-2" />
         <div
           onClick={() => setProd(!prod)}
-          className=" cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-xl"
+          className=" cursor-pointer h-[40px] flex mt-3  w-[100%] pl-5 text-xl"
         >
           <AiOutlineInbox size={30} />
           <div className="mx-5">Product</div>
@@ -85,12 +84,12 @@ export const Navbar = () => {
         {prod ? (
           <div className="bg-[#ebf7f7]">
             <Link to="/categories">
-              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+              <div className="h-[40px] flex mt-3 items-center  w-[100%] pl-5 text-xl">
                 <div className="mx-5">Categories</div>
               </div>
             </Link>
             <Link to="/subcategories">
-              <div className="h-[40px] flex mt-3 items-center w-[200px] pl-5 text-xl">
+              <div className="h-[40px] flex mt-3 items-center w-[100%] pl-5 text-xl">
                 <div className="mx-5">SubCategories</div>
               </div>
             </Link>
@@ -158,101 +157,8 @@ export const Navbar = () => {
         <hr className="text-black h-2" />
       </div>
       {/* laptop */}
-      <div
-        className={
-          "hidden lg:block  h-[100vh] w-[220px] absolute  ease-in-out duration-500  bg-[#fbfbfb] z-20 left-[0px] "
-        }
-      >
-        <Link to="/home">
-          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
-            <MdOutlineDashboard size={30} />
-            <div className="mx-5">Dashboard</div>
-          </div>
-        </Link>
-        <hr className="text-black h-2" />
-        <div
-          onClick={() => setProd(!prod)}
-          className=" cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-xl"
-        >
-          <AiOutlineInbox size={30} />
-          <div className="mx-5">Product</div>
-          <RiArrowDropDownLine size={30} />
-        </div>
-        {prod ? (
-          <div className="bg-[#ebf7f7]">
-            <Link to="/categories">
-              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
-                <div className="mx-5">Categories</div>
-              </div>
-            </Link>
-            <Link to="/subcategories">
-              <div className="h-[40px] flex mt-3 items-center w-[200px] pl-5 text-xl">
-                <div className="mx-5">SubCategories</div>
-              </div>
-            </Link>
-            <Link to="/attributes">
-              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
-                <div className="mx-5">Attributes</div>
-              </div>
-            </Link>
-            <Link to="/products">
-              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
-                <div className="mx-5">Products</div>
-              </div>
-            </Link>
-          </div>
-        ) : (
-          ""
-        )}
-        <hr className="text-black h-2" />
-        <Link to="/banner">
-          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
-            <ImImages size={30} />
-            <div className="mx-5">Banner</div>
-          </div>
-        </Link>
-        <hr className="text-black h-2" />
-        <Link to="/orders">
-          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
-            <MdOutlineDashboard size={30} />
-            <div className="mx-5">Orders</div>
-          </div>
-        </Link>
-        <hr className="text-black h-2" />
-        <Link to="/users">
-          <div className="h-[40px] flex my-3  w-[200px] pl-5 text-xl">
-            <FiUsers size={30} />
-            <div className="mx-5">Users</div>
-          </div>
-        </Link>
-        <hr className="text-black h-2" />
-        <Link to="/reviews">
-          <div className="h-[40px] flex my-3  w-[200px] pl-5 text-xl">
-            <BiCalendarStar size={30} />
-            <div className="mx-5">Reviews</div>
-          </div>
-        </Link>
-        <hr className="text-black h-2" />
-        <Link to="/permissions">
-          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
-            <BsShieldLockFill size={30} />
-            <div className="mx-5">Permissions</div>
-          </div>
-        </Link>
-        <hr className="text-black h-2" />
-        <Link to="/profile">
-          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
-            <ImProfile size={30} />
-            <div className="mx-5">Profile</div>
-          </div>
-        </Link>
-        <hr className="text-black h-2" />
-        <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
-          <FiLogOut size={30} />
-          <div className="mx-5">Logout</div>
-        </div>
-        <hr className="text-black h-2" />
-      </div>
     </div>
   );
 };
+
+export default Navbar;
