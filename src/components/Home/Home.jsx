@@ -2,11 +2,12 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import BarChart from "../Charts/BarChart";
+import OrderStat from "./OrderStat";
 const Home = () => {
   return (
-    <div>
+    <div className="">
       <Navbar />
-      <div className=" flex w-[full] ">
+      <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
         <Sidebar />
         <div className=" flex flex-col overflow-y-scroll  h-[100vh] w-[100%] lg:w-[80%]">
           <div className="flex flex-col lg:flex-row mx-3 mt-3 ">
@@ -28,6 +29,7 @@ const Home = () => {
             </div>
           </div>
           <BarChart />
+          <OrderStat />
         </div>
       </div>
     </div>

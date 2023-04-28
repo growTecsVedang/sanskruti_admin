@@ -8,7 +8,7 @@ import Categories from "./components/Category/Categories";
 
 function App() {
   return (
-    <>
+    <div className="">
       <Routes>
         <Route path="/" element={<SignInOne />} />
         <Route path="/register" element={<SignUpOne />} />
@@ -16,7 +16,7 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/categories" element={<Categories />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

@@ -43,11 +43,11 @@ function BarChart() {
   ];
 
   return (
-    <div className="w-full overflow-hidden ">
-      <h1 className="text-xl lg:text-3xl ml-4 my-5  font-semibold ">
+    <div className="w-full my-2">
+      <h1 className="text-xl lg:text-3xl ml-4 my-1  font-semibold ">
         Product Categories
       </h1>
-      <div className="w-[95%] h-[400px] lg:h-[600px] mx-auto bg-slate-100 ">
+      <div className="w-[95%] h-[380px] lg:h-[550px] mx-auto rounded-md ">
         <ResponsiveContainer>
           <LineChart
             data={data}
