@@ -7,34 +7,21 @@ import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
 
-const Products = () => {
+const Attributes = () => {
   const columns = [
-    { field: "id", headerName: "Product ID", minWidth: 200, flex: 0.5 },
+    { field: "id", headerName: "Title", minWidth: 200, flex: 0.5 },
 
     {
-      field: "name",
-      headerName: "Name",
-      minWidth: 350,
-      flex: 1,
-    },
-    {
-      field: "Category",
-      headerName: "Category",
+      field: "Values",
+      headerName: "Values",
       minWidth: 180,
       flex: 0.3,
     },
 
     {
-      field: "Sub Category",
-      headerName: "Sub Category",
+      field: "Created",
+      headerName: "Created",
       minWidth: 180,
-      flex: 0.5,
-    },
-    {
-      field: "Varients",
-      headerName: "Varients",
-      type: "number",
-      minWidth: 70,
       flex: 0.5,
     },
 
@@ -69,16 +56,16 @@ const Products = () => {
               <div className=" mx-auto w-[80%] h-[45px] flex mt-5  overflow-hidden ">
                 <input
                   type="text"
-                  placeholder="Search Products"
+                  placeholder="Search Category"
                   className="w-[200px] flex-grow rounded-l-3xl border-[1px] border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none  disabled:cursor-not-allowed disabled:opacity-50 "
                 />
                 <div className="cursor-pointer w-[100px] flex justify-center items-center rounded-r-3xl border-[1px] border-gray-300  bg-[#4361ee] text-white">
                   Search
                 </div>
               </div>
-              <Link to="/addproduct">
-                <button className=" mx-[10%] mt-4 lg:mt-6  h-[45px] w-[120px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
-                  Add Product
+              <Link to="/attributeform">
+                <button className=" mx-[10%] mt-4 lg:mt-6 px-2 h-[45px] w-[80px] lg:w-[100px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
+                  Add
                 </button>
               </Link>
             </div>
@@ -99,4 +86,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Attributes;
