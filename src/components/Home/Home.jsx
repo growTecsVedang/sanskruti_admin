@@ -9,7 +9,7 @@ const Home = () => {
       <Navbar />
       <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
         <Sidebar />
-        <div className=" flex flex-col overflow-y-scroll  h-[100vh] w-[100%] lg:w-[80%]">
+        <div className=" flex flex-col overflow-y-scroll no-scroll  h-[100vh] w-[100%] lg:w-[80%]">
           <div className="flex flex-col lg:flex-row mx-3 mt-3 ">
             <div className="h-[100px] lg:ml-2 bg-[#f5dd90] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
               <h1 className="text-lg ml-5 ">Total products</h1>

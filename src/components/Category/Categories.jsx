@@ -5,6 +5,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
+import { Link } from "react-router-dom";
 
 const Categories = () => {
   const columns = [
@@ -58,7 +59,7 @@ const Categories = () => {
         <div className=" flex flex-col overflow-y-scroll h-[100vh] w-[100%] lg:w-[80%]">
           <div className="flex flex-col ml-5 ">
             <div className="  lg:flex lg:h-[80px] lg:items-center  ">
-              <div className=" mx-auto w-[80%] h-[45px] flex mt-5  overflow-hidden ">
+              <div className="mx-auto lg:mx-0  w-[80%] h-[45px] flex mt-5  overflow-hidden ">
                 <input
                   type="text"
                   placeholder="Search Category"
@@ -68,9 +69,11 @@ const Categories = () => {
                   Search
                 </div>
               </div>
-              <button className=" mx-[10%] mt-4 lg:mt-6 px-2 h-[45px] w-[120px] lg:w-[150px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
-                Add Category
-              </button>
+              <Link to="/categoryform">
+                <button className=" lg:mx-[5%] mx-[10%] mt-4 lg:mt-6 px-2 h-[45px] w-[120px] lg:w-[150px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
+                  Add Category
+                </button>
+              </Link>
             </div>
             <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
           </div>

@@ -8,6 +8,7 @@ import Categories from "./components/Category/Categories";
 import Attributes from "./components/Attributes/Attributes";
 import AttributeForm from "./components/Attributes/AttributeForm";
 import AddProduct from "./components/Product/AddProduct";
+import CategoryForm from "./components/Category/CategoryForm";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/attributes" element={<Attributes />} />
         <Route path="/attributeform" element={<AttributeForm />} />
         <Route path="/addproduct" element={<AddProduct />} />
+        <Route path="/categoryform" element={<CategoryForm />} />
       </Routes>
     </div>
   );

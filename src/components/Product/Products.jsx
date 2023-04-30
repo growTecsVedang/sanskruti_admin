@@ -63,10 +63,10 @@ const Products = () => {
       <Navbar />
       <div className=" flex w-[full] ">
         <Sidebar />
-        <div className=" flex flex-col overflow-y-scroll h-[100vh] w-[100%] lg:w-[80%]">
+        <div className=" flex flex-col overflow-y-scroll h-[100vh] w-[100%]  lg:w-[80%] no-scroll ">
           <div className="flex flex-col ml-5 ">
             <div className="  lg:flex lg:h-[80px] lg:items-center  ">
-              <div className=" mx-auto w-[80%] h-[45px] flex mt-5  overflow-hidden ">
+              <div className=" mx-auto lg:mx-0 w-[80%] h-[45px] flex mt-5  overflow-hidden ">
                 <input
                   type="text"
                   placeholder="Search Products"
@@ -77,7 +77,7 @@ const Products = () => {
                 </div>
               </div>
               <Link to="/addproduct">
-                <button className=" mx-[10%] mt-4 lg:mt-6  h-[45px] w-[120px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
+                <button className=" lg:mx-[5%] mx-[10%] mt-4 lg:mt-6  h-[45px] w-[120px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
                   Add Product
                 </button>
               </Link>
