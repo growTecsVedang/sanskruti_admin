@@ -13,7 +13,7 @@ const Sidebar = () => {
   return (
     <div
       className={
-        "hidden lg:block  h-[100vh] w-[20%]   ease-in-out duration-500 overflow-y-scroll  bg-[#fbfbfb] z-20 left-[0px]  "
+        "hidden lg:block  h-[100vh] w-[20%]   ease-in-out duration-500 overflow-y-scroll   bg-[#fbfbfb] z-20 left-[0px]  "
       }
     >
       <Link to="/home">

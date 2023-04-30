@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../Home/Navbar";
 import Sidebar from "../Home/Sidebar";
 
-const CategoryForm = () => {
+const SubCategoryForm = () => {
   return (
     <div className="">
       <Navbar />
@@ -11,8 +11,8 @@ const CategoryForm = () => {
 
         <div className=" flex flex-col overflow-y-scroll   h-[100vh] w-[100%] lg:w-[80%] no-scroll ">
           <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
-            <h1 className="text-black lg:text-3xl text-2xl   pl-4 ">
-              Category Form
+            <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
+              Sub Category Form
             </h1>
           </div>
           <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
@@ -58,6 +58,18 @@ const CategoryForm = () => {
                   className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
                   placeholder="Title"
                 />
+              </div>
+              <div className="w-[95%] mx-auto mt-[60px] flex  ">
+                <h1 className="flex items-center text-lg text-gray-400 mr-4 ">
+                  Category
+                </h1>
+                <select className="cursor-pointer h-[45px] min-w-[140px] pl-3  bg-gray-50 rounded-md text-lg border-2 border-gray-300 ">
+                  <option value="category 1">category 1</option>
+                  <option value="category 2">category 2</option>
+                  <option value="category 3">category 3</option>
+                  <option value="category 4">category 4</option>
+                  <option value="category 5">category 5</option>
+                </select>
               </div>
               <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
                 <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
@@ -105,4 +117,4 @@ const CategoryForm = () => {
   );
 };
 
-export default CategoryForm;
+export default SubCategoryForm;

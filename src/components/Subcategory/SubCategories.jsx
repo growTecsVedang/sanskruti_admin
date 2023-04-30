@@ -7,20 +7,20 @@ import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
 
-const Categories = () => {
+const SubCategories = () => {
   const columns = [
     { field: "id", headerName: "Category ID", minWidth: 200, flex: 0.5 },
 
     {
-      field: "Category",
-      headerName: "Category",
+      field: "Sub Category",
+      headerName: "Sub Category",
       minWidth: 180,
       flex: 0.3,
     },
 
     {
-      field: "Sub Category",
-      headerName: "Sub Category",
+      field: " Category",
+      headerName: " Category",
       minWidth: 180,
       flex: 0.5,
     },
@@ -69,9 +69,9 @@ const Categories = () => {
                   Search
                 </div>
               </div>
-              <Link to="/categoryform">
-                <button className=" lg:mx-[5%] mx-[10%] mt-4 lg:mt-6 px-2 h-[45px] w-[120px] lg:w-[150px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
-                  Add Category
+              <Link to="/subcategoryform">
+                <button className=" lg:mx-[5%] mx-[10%] mt-4 lg:mt-6 px-2 h-[45px] w-[160px] lg:w-[150px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
+                  Add sub Category
                 </button>
               </Link>
             </div>
@@ -92,4 +92,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default SubCategories;

@@ -9,6 +9,8 @@ import Attributes from "./components/Attributes/Attributes";
 import AttributeForm from "./components/Attributes/AttributeForm";
 import AddProduct from "./components/Product/AddProduct";
 import CategoryForm from "./components/Category/CategoryForm";
+import SubCategories from "./components/Subcategory/SubCategories";
+import SubCategoryForm from "./components/Subcategory/SubCategoryForm";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route path="/attributeform" element={<AttributeForm />} />
         <Route path="/addproduct" element={<AddProduct />} />
         <Route path="/categoryform" element={<CategoryForm />} />
+        <Route path="/subcategories" element={<SubCategories />} />
+        <Route path="/subcategoryform" element={<SubCategoryForm />} />
       </Routes>
     </div>
   );

@@ -29,7 +29,7 @@ const AttributeForm = () => {
       <Navbar />
       <div className=" flex w-[full] bg-[#edf2f4] ">
         <Sidebar />
-        <div className="w-full">
+        <div className="w-full ">
           <div className="w-[97%] mx-auto mt-5  min-h-[50px] bg-white  rounded-md flex flex-col     shadow-md ">
             <h1 className="text-xl h-[50px] flex  items-center pl-3 font-semibold ">
               Attribute Form
