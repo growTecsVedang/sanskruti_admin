@@ -8,7 +8,7 @@ const BannerForm = () => {
       <Navbar />
       <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
         <Sidebar />
-        <div className=" flex flex-col overflow-y-scroll no-scroll  h-[100vh] w-[100%] lg:w-[80%]">
+        <div className=" flex flex-col overflow-y-scroll overflow-x-hidden no-scroll  h-[100vh] w-[100%] lg:w-[80%]">
           <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
             <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
               Add Banner
@@ -73,7 +73,7 @@ const BannerForm = () => {
           {/* display */}
           <div className="w-[97%] min-h-full   mx-auto mt-2 mb-[1px] py-3   bg-white  rounded-md flex flex-col     shadow-md">
             <h2 className="text-lg font-bold mt-5  mx-4 ">Mobile Fit</h2>
-            <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[225px]  ">
+            <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[230px] overflow-y-hidden  ">
               <div className="">
                 <div className="w-[250px] h-[150px] border-2 border-gray-200 "></div>
                 <div className="w-[250px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 ">
@@ -90,7 +90,7 @@ const BannerForm = () => {
 
             {/* tab */}
             <h2 className="text-lg font-bold mt-5  mx-4 ">Tablet Fit</h2>
-            <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[225px]  ">
+            <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[230px] overflow-y-hidden  ">
               <div className="">
                 <div className="w-[300px] h-[150px] border-2 border-gray-200 "></div>
                 <div className="w-[300px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 ">
@@ -107,7 +107,7 @@ const BannerForm = () => {
 
             {/* laptop  */}
             <h2 className="text-lg font-bold mt-5  mx-4 ">Laptop Fit</h2>
-            <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[225px] ">
+            <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[230px] overflow-y-hidden  ">
               <div className="">
                 <div className="w-[400px] h-[150px] border-2 border-gray-200 "></div>
                 <div className="w-[400px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 ">
