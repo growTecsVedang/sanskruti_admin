@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../Home/Navbar";
 import Sidebar from "../Home/Sidebar";
+import { AiOutlineDelete } from "react-icons/ai";
 
 const AttributeForm = () => {
   const [title, setTitle] = useState("");
   const [val, setVal] = useState("");
   const [arr, setArr] = useState([]);
   useEffect(() => {}, [arr]);
+
+  function deleteAttribute(k) {
+    setArr(
+      arr.filter((item, key) => {
+        return key !== k;
+      })
+    );
+  }
 
   function addAttribute() {
     if (val !== "") {
@@ -52,22 +61,31 @@ const AttributeForm = () => {
                 />
               </div>
               <div className="w-[95%] mx-auto h-[80px] sm:h-[40px] lg:h-[40px] px-5 mt-3 rounded-md flex items-center bg-[#bde0fe]  ">
-                To delete an attribute value , just make the field empty
+                To delete an attribute value , press delete button
               </div>
               <div className="w-[95%] flex flex-col mx-auto mt-6 ">
                 <label htmlFor="" className="mb-4 text-lg text-gray-400">
                   Attribute values
                 </label>
-                <div className="w-full h-[60px] flex flex-row overflow-x-scroll ">
+                <div className="w-full h-[60px] flex flex-row items-center overflow-x-scroll ">
                   {arr.map((items, key) => {
                     return (
-                      <input
-                        key={key}
-                        type="text"
-                        value={items}
-                        className=" w-[60px] h-[35px] rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 mr-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700"
-                        placeholder="value"
-                      />
+                      <div className="flex mr-3 ">
+                        <input
+                          key={key}
+                          type="text"
+                          value={items}
+                          className=" w-[60px] h-[35px] rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 mr-1 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700"
+                          placeholder="value"
+                        />
+                        <span
+                          key={key}
+                          onClick={() => deleteAttribute(key)}
+                          className="flex items-center bg-slate-100 active:bg-slate-300  rounded-md w-[30px] h-[35px] "
+                        >
+                          {<AiOutlineDelete size={28} />}
+                        </span>
+                      </div>
                     );
                   })}
                   <input

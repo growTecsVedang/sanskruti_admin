@@ -69,11 +69,9 @@ const Categories = () => {
                   Search
                 </div>
               </div>
-              <Link to="/categoryform">
-                <button className=" lg:mx-[5%] mx-[10%] mt-4 lg:mt-6 px-2 h-[45px] w-[120px] lg:w-[150px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
-                  Add Category
-                </button>
-              </Link>
+              <button className=" lg:mx-[5%] mx-[10%] mt-4 lg:mt-6 px-2 h-[45px] w-[120px] lg:w-[150px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
+                <Link to="/categoryform">Add Category</Link>
+              </button>
             </div>
             <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
           </div>

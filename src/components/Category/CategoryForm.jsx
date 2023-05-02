@@ -1,8 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../Home/Navbar";
 import Sidebar from "../Home/Sidebar";
 
 const CategoryForm = () => {
+  const [images, setImages] = useState([]);
+  const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
+  const [meta, setMeta] = useState("");
+  const [metad, setMetad] = useState("");
+  const [imagesPreview, setImagesPreview] = useState([]);
+
+  const createImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setImages([]);
+    setImagesPreview([]);
+    files.forEach((file) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImagesPreview((old) => [...old, reader.result]);
+          setImages((old) => [...old, reader.result]);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    });
+    console.log(files);
+  };
+
+  const createCategorySubmitHandler = (e) => {
+    e.preventDefault();
+    const myForm = new FormData();
+    images.forEach((image) => {
+      myForm.append("images", image);
+    });
+    myForm.set("title", title);
+    myForm.set("slug", slug);
+    myForm.set("meta", meta);
+    myForm.set("metad", metad);
+
+    console.log(
+      myForm.get("title"),
+      " ",
+      myForm.get("slug"),
+      " ",
+      myForm.get("meta"),
+      " ",
+      myForm.get("metad"),
+      " "
+    );
+  };
+
   return (
     <div className="">
       <Navbar />
@@ -16,7 +65,10 @@ const CategoryForm = () => {
             </h1>
           </div>
           <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
-            <form>
+            <form
+              onSubmit={createCategorySubmitHandler}
+              encType="multipart/form-data"
+            >
               <div class="  mt-5 flex items-center justify-center   w-[95%]   lg:w-[95%] mx-auto cursor-pointer ">
                 <label
                   for="dropzone-file"
@@ -46,7 +98,13 @@ const CategoryForm = () => {
                       SVG, PNG, JPG or GIF (MAX. 800x400px)
                     </p>
                   </div>
-                  <input id="dropzone-file" type="file" class="hidden" />
+                  <input
+                    id="dropzone-file"
+                    type="file"
+                    class="hidden"
+                    multiple
+                    onChange={createImageChange}
+                  />
                 </label>
               </div>
               <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
@@ -55,8 +113,10 @@ const CategoryForm = () => {
                 </label>
                 <input
                   type="text"
-                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="Title"
+                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
                 />
               </div>
               <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
@@ -65,6 +125,8 @@ const CategoryForm = () => {
                 </label>
                 <input
                   type="text"
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
                   className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
                   placeholder="Slug"
                 />
@@ -75,6 +137,8 @@ const CategoryForm = () => {
                 </label>
                 <input
                   type="text"
+                  value={meta}
+                  onChange={(e) => setMeta(e.target.value)}
                   className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
                   placeholder="Meta Title"
                 />
@@ -85,17 +149,19 @@ const CategoryForm = () => {
                 </label>
                 <textarea
                   type="text"
+                  value={metad}
+                  onChange={(e) => setMetad(e.target.value)}
                   className=" min-h-[250px] px-3 py-2 rounded-md border text-black border-gray-300 bg-transparent  text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
                   placeholder="Meta Description"
                 />
               </div>
               <div className="w-full pr-4 mt-3 h-[60px] flex items-center justify-end  ">
-                <div
+                <button
                   type="submit"
                   className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
                 >
                   Save & edit
-                </div>
+                </button>
               </div>
             </form>
           </div>

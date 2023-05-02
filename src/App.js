@@ -11,6 +11,8 @@ import AddProduct from "./components/Product/AddProduct";
 import CategoryForm from "./components/Category/CategoryForm";
 import SubCategories from "./components/Subcategory/SubCategories";
 import SubCategoryForm from "./components/Subcategory/SubCategoryForm";
+import Banner from "./components/Banner/Banner";
+import BannerForm from "./components/Banner/BannerForm";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <Route path="/categoryform" element={<CategoryForm />} />
         <Route path="/subcategories" element={<SubCategories />} />
         <Route path="/subcategoryform" element={<SubCategoryForm />} />
+        <Route path="/banner" element={<Banner />} />
+        <Route path="/bannerform" element={<BannerForm />} />
       </Routes>
     </div>
   );
