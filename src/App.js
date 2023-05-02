@@ -13,8 +13,11 @@ import SubCategories from "./components/Subcategory/SubCategories";
 import SubCategoryForm from "./components/Subcategory/SubCategoryForm";
 import Banner from "./components/Banner/Banner";
 import BannerForm from "./components/Banner/BannerForm";
-import Users from "./components/Users/Users";
 import Orders from "./components/Orders/Orders";
+import Permission from "./components/Permissions/Permission";
+import EditPermission from "./components/Permissions/EditPermission";
+import ViewUser from "./components/User/ViewUser";
+import Users from "./components/User/Users";
 
 function App() {
   return (
@@ -34,7 +37,10 @@ function App() {
         <Route path="/banner" element={<Banner />} />
         <Route path="/bannerform" element={<BannerForm />} />
         <Route path="/users" element={<Users />} />
-        <Route path="orders" element={<Orders />} />
+        <Route path="/permissions" element={<Permission />} />
+        <Route path="/editpermission" element={<EditPermission />} />
+        <Route path="/viewuser" element={<ViewUser />} />
+        <Route path="/orders" element={<Orders />} />
       </Routes>
     </div>
   );
