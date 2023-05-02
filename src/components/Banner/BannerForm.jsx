@@ -71,7 +71,7 @@ const BannerForm = () => {
           </div>
 
           {/* display */}
-          <div className="w-[97%] min-h-full   mx-auto mt-2 mb-[1px] py-3   bg-white  rounded-md flex flex-col     shadow-md">
+          <div className="w-[97%]    mx-auto mt-2 mb-[1px] py-3   bg-white  rounded-md flex flex-col     shadow-md">
             <h2 className="text-lg font-bold mt-5  mx-4 ">Mobile Fit</h2>
             <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[230px] overflow-y-hidden  ">
               <div className="">
