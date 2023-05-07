@@ -7,7 +7,7 @@ export const SignInOne = ({ history, location }) => {
   const notify = () => toast("Wow so easy!");
   const navigate = useNavigate();
   const handleClick = () => {
-    notify();
+    // notify();
     navigate("/home");
   };
   return (
@@ -104,7 +104,7 @@ export const SignInOne = ({ history, location }) => {
           </Link>
           <button
             type="button"
-            onClick={notify}
+            // onClick={notify}
             class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
           >
             <div class="absolute inset-y-0 left-0 p-4">
