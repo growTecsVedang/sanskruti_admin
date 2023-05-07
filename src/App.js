@@ -18,13 +18,20 @@ import Permission from "./components/Permissions/Permission";
 import EditPermission from "./components/Permissions/EditPermission";
 import ViewUser from "./components/User/ViewUser";
 import Users from "./components/User/Users";
+import { SignUpWithEmail } from "./components/SignUpWithEmail";
+import { SignInWithEmail } from "./components/SignInWithEmail";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <div className="">
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<SignInOne />} />
+        <Route path="/emailsignin" element={<SignInWithEmail />} />
         <Route path="/register" element={<SignUpOne />} />
+        <Route path="/emailauth" element={<SignUpWithEmail />} />
         <Route path="/home" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/categories" element={<Categories />} />

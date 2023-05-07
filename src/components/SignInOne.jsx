@@ -1,9 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
+import { MdOutlineEmail } from "react-icons/md";
+import { toast } from "react-toastify";
 
-export const SignInOne = () => {
+export const SignInOne = ({ history, location }) => {
+  const notify = () => toast("Wow so easy!");
+  const navigate = useNavigate();
+  const handleClick = () => {
+    notify();
+    navigate("/home");
+  };
   return (
-    <section className="w-full h-[100vh] flex items-center justify-center">
+    <section className=" w-[90%] mx-auto   md:w-full h-[100vh] flex items-center justify-center">
       <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
         <h1 className="text-2xl sm:text-4xl text-center mb-5 font-bold ">
           Sanskrutinx
@@ -25,13 +33,13 @@ export const SignInOne = () => {
                 htmlFor=""
                 className="text-base font-medium text-gray-900 "
               >
-                Email address
+                Phone No
               </label>
               <div className="mt-2.5">
                 <input
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  dark:focus:ring-offset-gray-900"
-                  type="email"
-                  placeholder="Email"
+                  type="number"
+                  placeholder="Phone No"
                 ></input>
               </div>
             </div>
@@ -60,9 +68,10 @@ export const SignInOne = () => {
             <div>
               <button
                 type="button"
+                onClick={handleClick}
                 class="inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
               >
-                <Link to="/home"> Sign In</Link>
+                Sign In
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -82,8 +91,20 @@ export const SignInOne = () => {
           </div>
         </form>
         <div class="mt-3 space-y-3">
+          <Link to="/emailsignin">
+            <button
+              type="button"
+              class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
+            >
+              <div class="absolute inset-y-0 left-0 p-4">
+                <MdOutlineEmail size={28} />
+              </div>
+              Sign in with Email
+            </button>
+          </Link>
           <button
             type="button"
+            onClick={notify}
             class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
           >
             <div class="absolute inset-y-0 left-0 p-4">
