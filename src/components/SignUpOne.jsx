@@ -1,8 +1,54 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { MdOutlineEmail } from "react-icons/md";
+import { toast } from "react-toastify";
+import { clearState, signUpUserWithNumber } from "../Redux/slices/UserSlice";
 
-export const SignUpOne = () => {
+const SignUpOne = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { message, type } = useSelector((state) => state.user);
+  const [username, setUsername] = useState("");
+  const [Mobile_No, setMobile_No] = useState(0);
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState(" ");
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (
+      username.trim() !== "" &&
+      phone.trim() !== "" &&
+      password.trim() !== ""
+    ) {
+      dispatch(
+        signUpUserWithNumber({
+          username,
+          Mobile_No,
+          password,
+        })
+      );
+    }
+  }
+
+  useEffect(() => {
+    setMobile_No(Number(phone));
+  }, [phone]);
+
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+        history.push("/");
+      } else {
+        notify(message);
+        dispatch(clearState());
+        setPhone("");
+      }
+    }
+  }, [dispatch, message, type, history]);
+
   return (
     <section className="w-[90%] mx-auto   md:w-full h-[100vh] flex items-center justify-center">
       <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
@@ -12,12 +58,12 @@ export const SignUpOne = () => {
         <h2 className="text-3xl font-bold leading-tight text-black ">
           Sign Up
         </h2>
-        <p className="mt-2 text-base text-gray-600 ">
+        <div className="mt-2 text-base text-gray-600 ">
           Already have an account?
           <div className="font-medium text-indigo-600 transition-all duration-200 hover:text-indigo-700 hover:underline focus:text-indigo-700">
             <Link to="/">Sign In</Link>
           </div>
-        </p>
+        </div>
 
         <form action="#" method="POST" className="mt-4">
           <div className="space-y-5">
@@ -31,29 +77,14 @@ export const SignUpOne = () => {
               <div className="mt-2.5">
                 <input
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:focus:ring-offset-gray-900 "
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   type="text"
                   placeholder="Enter You Full Name"
                   id="name"
                 ></input>
               </div>
             </div>
-            {/* 
-            <div>
-              <label
-                htmlFor="name"
-                className="text-base font-medium text-gray-900 "
-              >
-                Phone No.
-              </label>
-              <div className="mt-2.5">
-                <input
-                  className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:focus:ring-offset-gray-900 "
-                  type="number"
-                  placeholder="Enter Your Phone Number"
-                  id="name"
-                ></input>
-              </div>
-            </div> */}
 
             <div>
               <label
@@ -65,7 +96,9 @@ export const SignUpOne = () => {
               <div className="mt-2.5">
                 <input
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:focus:ring-offset-gray-900"
+                  onChange={(e) => setPhone(e.target.value)}
                   type="number"
+                  value={phone}
                   placeholder="Enter Your Phone No"
                 ></input>
               </div>
@@ -82,6 +115,8 @@ export const SignUpOne = () => {
                 <input
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:focus:ring-offset-gray-900"
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter Your Password"
                   id="password"
                 ></input>
@@ -91,6 +126,7 @@ export const SignUpOne = () => {
             <div>
               <button
                 type="button"
+                onClick={(e) => handleSubmit(e)}
                 className="inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
               >
                 Sign Up
@@ -98,27 +134,21 @@ export const SignUpOne = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
                   className="ml-2 h-4 w-4"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
-                  />
+                  <path d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
                 </svg>
               </button>
             </div>
           </div>
         </form>
-        <div class="mt-3 space-y-3">
+        <div className="mt-3 space-y-3">
           <Link to="/emailauth">
             <button
               type="button"
-              class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
+              className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
             >
-              <div class="absolute inset-y-0 left-0 p-4">
+              <div className="absolute inset-y-0 left-0 p-4">
                 <MdOutlineEmail size={28} />
               </div>
               Sign up with Email
@@ -127,11 +157,11 @@ export const SignUpOne = () => {
 
           <button
             type="button"
-            class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
+            className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
           >
-            <div class="absolute inset-y-0 left-0 p-4">
+            <div className="absolute inset-y-0 left-0 p-4">
               <svg
-                class="h-6 w-6 text-rose-500"
+                className="h-6 w-6 text-rose-500"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
@@ -144,11 +174,11 @@ export const SignUpOne = () => {
 
           <button
             type="button"
-            class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
+            className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
           >
-            <div class="absolute inset-y-0 left-0 p-4">
+            <div className="absolute inset-y-0 left-0 p-4">
               <svg
-                class="h-6 w-6 text-[#2563EB]"
+                className="h-6 w-6 text-[#2563EB]"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
@@ -164,4 +194,4 @@ export const SignUpOne = () => {
   );
 };
 
-SignUpOne.displayName = "SignUpOne";
+export default SignUpOne;

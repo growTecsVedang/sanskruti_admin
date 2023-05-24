@@ -1,14 +1,14 @@
 import React from "react";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { MdOutlineEmail } from "react-icons/md";
 import { toast } from "react-toastify";
 
-export const SignInOne = ({ history, location }) => {
+const SignInOne = () => {
   const notify = () => toast("Wow so easy!");
-  const navigate = useNavigate();
+  const history = useHistory();
   const handleClick = () => {
     // notify();
-    navigate("/home");
+    history.push("/home");
   };
   return (
     <section className=" w-[90%] mx-auto   md:w-full h-[100vh] flex items-center justify-center">
@@ -19,12 +19,15 @@ export const SignInOne = ({ history, location }) => {
         <h2 className="text-3xl font-bold leading-tight text-black  sm:text-4xl">
           Sign in
         </h2>
-        <p className="mt-2 text-base text-gray-600 ">
-          Don&apos;t have an account?
-          <a className="font-medium text-indigo-600 transition-all duration-200 hover:text-indigo-700 hover:underline focus:text-indigo-700">
-            <Link to="/register"> Create a free account</Link>
-          </a>
-        </p>
+        <div className="mt-2 flex gap-x-2  text-base text-gray-600 ">
+          <p> Don&apos;t have an account?</p>
+          <Link
+            to="/register"
+            className="cursor-pointer font-medium text-indigo-600 transition-all duration-200 hover:text-indigo-700 hover:underline focus:text-indigo-700"
+          >
+            Create a free account
+          </Link>
+        </div>
 
         <form action="#" method="POST" className="mt-8">
           <div className="space-y-5">
@@ -69,34 +72,28 @@ export const SignInOne = ({ history, location }) => {
               <button
                 type="button"
                 onClick={handleClick}
-                class="inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
+                className="inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
               >
                 Sign In
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="ml-2 h-4 w-4"
+                  className="ml-2 h-4 w-4"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
-                  ></path>
+                  <path d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
                 </svg>
               </button>
             </div>
           </div>
         </form>
-        <div class="mt-3 space-y-3">
+        <div className="mt-3 space-y-3">
           <Link to="/emailsignin">
             <button
               type="button"
-              class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
+              className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
             >
-              <div class="absolute inset-y-0 left-0 p-4">
+              <div className="absolute inset-y-0 left-0 p-4">
                 <MdOutlineEmail size={28} />
               </div>
               Sign in with Email
@@ -105,11 +102,11 @@ export const SignInOne = ({ history, location }) => {
           <button
             type="button"
             // onClick={notify}
-            class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
+            className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
           >
-            <div class="absolute inset-y-0 left-0 p-4">
+            <div className="absolute inset-y-0 left-0 p-4">
               <svg
-                class="h-6 w-6 text-rose-500"
+                className="h-6 w-6 text-rose-500"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
@@ -121,11 +118,11 @@ export const SignInOne = ({ history, location }) => {
           </button>
           <button
             type="button"
-            class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
+            className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
           >
-            <div class="absolute inset-y-0 left-0 p-4">
+            <div className="absolute inset-y-0 left-0 p-4">
               <svg
-                class="h-6 w-6 text-[#2563EB]"
+                className="h-6 w-6 text-[#2563EB]"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
@@ -141,4 +138,4 @@ export const SignInOne = ({ history, location }) => {
   );
 };
 
-SignInOne.displayName = "SignInOne";
+export default SignInOne;

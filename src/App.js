@@ -1,7 +1,7 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
-import { SignInOne } from "./components/SignInOne";
-import { SignUpOne } from "./components/SignUpOne";
+import { Route, Switch } from "react-router-dom";
+import SignInOne from "./components/SignInOne";
+import SignUpOne from "./components/SignUpOne";
 import Home from "./components/Home/Home";
 import Products from "./components/Product/Products";
 import Categories from "./components/Category/Categories";
@@ -18,37 +18,37 @@ import Permission from "./components/Permissions/Permission";
 import EditPermission from "./components/Permissions/EditPermission";
 import ViewUser from "./components/User/ViewUser";
 import Users from "./components/User/Users";
-import { SignUpWithEmail } from "./components/SignUpWithEmail";
-import { SignInWithEmail } from "./components/SignInWithEmail";
+import SignUpWithEmail from "./components/SignUpWithEmail";
+import SignInWithEmail from "./components/SignInWithEmail";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <div className="">
-      <ToastContainer />
-      <Routes>
-        <Route path="/" element={<SignInOne />} />
-        <Route path="/emailsignin" element={<SignInWithEmail />} />
-        <Route path="/register" element={<SignUpOne />} />
-        <Route path="/emailauth" element={<SignUpWithEmail />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/attributes" element={<Attributes />} />
-        <Route path="/attributeform" element={<AttributeForm />} />
-        <Route path="/addproduct" element={<AddProduct />} />
-        <Route path="/categoryform" element={<CategoryForm />} />
-        <Route path="/subcategories" element={<SubCategories />} />
-        <Route path="/subcategoryform" element={<SubCategoryForm />} />
-        <Route path="/banner" element={<Banner />} />
-        <Route path="/bannerform" element={<BannerForm />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/permissions" element={<Permission />} />
-        <Route path="/editpermission" element={<EditPermission />} />
-        <Route path="/viewuser" element={<ViewUser />} />
-        <Route path="/orders" element={<Orders />} />
-      </Routes>
+      <ToastContainer autoClose={2000} />
+      <Switch>
+        <Route exact path="/" component={SignInOne} />
+        <Route exact path="/emailsignin" component={SignInWithEmail} />
+        <Route exact path="/register" component={SignUpOne} />
+        <Route exact path="/emailauth" component={SignUpWithEmail} />
+        <Route exact path="/home" component={Home} />
+        <Route exact path="/products" component={Products} />
+        <Route exact path="/categories" component={Categories} />
+        <Route exact path="/attributes" component={Attributes} />
+        <Route exact path="/attributeform" component={AttributeForm} />
+        <Route exact path="/addproduct" component={AddProduct} />
+        <Route exact path="/categoryform" component={CategoryForm} />
+        <Route exact path="/subcategories" component={SubCategories} />
+        <Route exact path="/subcategoryform" component={SubCategoryForm} />
+        <Route exact path="/banner" component={Banner} />
+        <Route exact path="/bannerform" component={BannerForm} />
+        <Route exact path="/users" component={Users} />
+        <Route exact path="/permissions" component={Permission} />
+        <Route exact path="/editpermission" component={EditPermission} />
+        <Route exact path="/viewuser" component={ViewUser} />
+        <Route exact path="/orders" component={Orders} />
+      </Switch>
     </div>
   );
 }
