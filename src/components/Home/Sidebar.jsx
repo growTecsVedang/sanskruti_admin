@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { MdOutlineDashboard } from "react-icons/md";
 import { FiUsers, FiLogOut } from "react-icons/fi";
 import { RiArrowDropDownLine } from "react-icons/ri";
@@ -7,9 +7,14 @@ import { BsShieldLockFill } from "react-icons/bs";
 import { ImImages, ImProfile } from "react-icons/im";
 import { BiCalendarStar } from "react-icons/bi";
 import { AiOutlineInbox } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { logOutUserWithNumber } from "../../Redux/slices/UserSlice";
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
+  const { accessToken } = useSelector((state) => state.user);
   const [prod, setProd] = useState(false);
+
   return (
     <div
       className={
@@ -100,7 +105,16 @@ const Sidebar = () => {
         </div>
       </Link>
       <hr className="text-black h-2" />
-      <div className=" cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+      <div
+        onClick={() =>
+          dispatch(
+            logOutUserWithNumber({
+              accessToken,
+            })
+          )
+        }
+        className=" cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-xl"
+      >
         <FiLogOut size={30} />
         <div className="mx-5">Logout</div>
       </div>

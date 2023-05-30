@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import SignInOne from "./components/SignInOne";
 import SignUpOne from "./components/SignUpOne";
@@ -22,8 +22,37 @@ import SignUpWithEmail from "./components/SignUpWithEmail";
 import SignInWithEmail from "./components/SignInWithEmail";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { loadUser } from "./Redux/slices/UserSlice";
+import { useHistory } from "react-router-dom";
 
 function App() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { isAuthenticated } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    function getCookie() {
+      var name = "connect.sid".concat("=");
+      var decodedCookie = document.cookie;
+      var cookieArray = decodedCookie.split(";");
+
+      for (var i = 0; i < cookieArray.length; i++) {
+        var cookie = cookieArray[i].trim();
+        if (cookie.startsWith(name)) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+      return null; // Cookie not found
+    }
+    const cookie = getCookie();
+    dispatch(
+      loadUser({
+        cookie,
+      })
+    );
+  }, [dispatch, isAuthenticated, history]);
+
   return (
     <div className="">
       <ToastContainer autoClose={2000} />

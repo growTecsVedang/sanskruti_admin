@@ -1,8 +1,46 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { MdOutlineEmail } from "react-icons/md";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { clearState, logInUserWithEmail } from "../Redux/slices/UserSlice";
 
 const SignInWithEmail = () => {
+  const { message, type, isAuthenticated } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (email.trim() !== "" && password.trim() !== "") {
+      dispatch(
+        logInUserWithEmail({
+          email,
+          password,
+        })
+      );
+    }
+  }
+  const redirect = location.search ? location.search.split("=")[1] : "/home";
+
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (isAuthenticated) {
+      history.push(redirect);
+    } else if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+        history.push(redirect);
+      } else {
+        notify(message);
+        dispatch(clearState());
+      }
+    }
+  }, [dispatch, isAuthenticated, type, message, redirect, history]);
   return (
     <section className="w-[90%] mx-auto   md:w-full h-[100vh] flex items-center justify-center">
       <div className="w-full sm:w-[400px] ">
@@ -30,6 +68,8 @@ const SignInWithEmail = () => {
               </label>
               <div className="mt-2.5">
                 <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:focus:ring-offset-gray-900"
                   type="email"
                   placeholder="Enter Your Email"
@@ -47,6 +87,8 @@ const SignInWithEmail = () => {
               </label>
               <div className="mt-2.5">
                 <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:focus:ring-offset-gray-900"
                   type="password"
                   placeholder="Enter Your Password"
@@ -58,6 +100,7 @@ const SignInWithEmail = () => {
             <div>
               <button
                 type="button"
+                onClick={(e) => handleSubmit(e)}
                 className="inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
               >
                 Sign Up With Email

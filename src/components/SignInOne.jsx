@@ -1,15 +1,57 @@
-import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { MdOutlineEmail } from "react-icons/md";
 import { toast } from "react-toastify";
+import { clearState, logInUserWithNumber } from "../Redux/slices/UserSlice";
 
 const SignInOne = () => {
-  const notify = () => toast("Wow so easy!");
+  const [Mobile_No, setMobile_No] = useState(0);
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
   const history = useHistory();
-  const handleClick = () => {
-    // notify();
-    history.push("/home");
-  };
+  const location = useLocation();
+  const { message, type, isAuthenticated } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (phone.trim() !== "" && password.trim() !== "") {
+      dispatch(
+        logInUserWithNumber({
+          Mobile_No,
+          password,
+        })
+      );
+    }
+  }
+  function handleGoogleSubmit(e) {
+    console.log("call before");
+    const res = window.open(
+      "http://localhost:4000/api/v1/googlelogin",
+      "_self"
+    );
+    console.log("call after");
+  }
+  useEffect(() => {
+    setMobile_No(Number(phone));
+  }, [phone]);
+  const redirect = location.search ? location.search.split("=")[1] : "/home";
+
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (isAuthenticated) {
+      history.push(redirect);
+    } else if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+        history.push(redirect);
+      } else {
+        notify(message);
+        dispatch(clearState());
+      }
+    }
+  }, [dispatch, isAuthenticated, type, message, redirect, history]);
   return (
     <section className=" w-[90%] mx-auto   md:w-full h-[100vh] flex items-center justify-center">
       <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
@@ -29,7 +71,7 @@ const SignInOne = () => {
           </Link>
         </div>
 
-        <form action="#" method="POST" className="mt-8">
+        <form className="mt-8">
           <div className="space-y-5">
             <div>
               <label
@@ -42,7 +84,9 @@ const SignInOne = () => {
                 <input
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  dark:focus:ring-offset-gray-900"
                   type="number"
-                  placeholder="Phone No"
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Enter Your Phone No"
+                  value={phone}
                 ></input>
               </div>
             </div>
@@ -62,16 +106,18 @@ const SignInOne = () => {
               </div>
               <div className="mt-2.5">
                 <input
-                  className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-50 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900"
+                  className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:focus:ring-offset-gray-900"
                   type="password"
-                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter Your Password"
                 ></input>
               </div>
             </div>
             <div>
               <button
                 type="button"
-                onClick={handleClick}
+                onClick={(e) => handleSubmit(e)}
                 className="inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
               >
                 Sign In
@@ -101,7 +147,7 @@ const SignInOne = () => {
           </Link>
           <button
             type="button"
-            // onClick={notify}
+            onClick={(e) => handleGoogleSubmit(e)}
             className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
           >
             <div className="absolute inset-y-0 left-0 p-4">

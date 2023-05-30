@@ -8,16 +8,17 @@ import { FiUsers, FiLogOut } from "react-icons/fi";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { BsShieldLockFill } from "react-icons/bs";
 import { ImImages, ImProfile } from "react-icons/im";
+import { logOutUserWithNumber } from "../../Redux/slices/UserSlice";
+import { useDispatch, useSelector } from "react-redux";
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const { accessToken } = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
   const [prod, setProd] = useState(false);
   return (
     <div className="">
       <nav className="relative px-8 py-4 flex justify-between items-center border-y border-gray-400 ">
-        <a
-          className="text-3xl font-bold leading-none flex items-center space-x-4"
-          href="#"
-        >
+        <p className="text-3xl font-bold leading-none flex items-center space-x-4">
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +35,7 @@ const Navbar = () => {
             </svg>
           </span>
           <span className="text-gray-600  text-xl">Sanskrutinx</span>
-        </a>
+        </p>
         <div className="flex gap-5">
           <div className="">
             <div className="flex items-center space-x-2">
@@ -150,7 +151,16 @@ const Navbar = () => {
           </div>
         </Link>
         <hr className="text-black h-2" />
-        <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+        <div
+          onClick={() =>
+            dispatch(
+              logOutUserWithNumber({
+                accessToken,
+              })
+            )
+          }
+          className="cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-xl"
+        >
           <FiLogOut size={30} />
           <div className="mx-5">Logout</div>
         </div>

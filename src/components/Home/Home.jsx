@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import BarChart from "../Charts/BarChart";
 import OrderStat from "./OrderStat";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
+import { clearState } from "../../Redux/slices/UserSlice";
+import { useDispatch, useSelector } from "react-redux";
 const Home = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { message, type, isAuthenticated } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+        history.push("/");
+      } else {
+        notify(message);
+        console.log("called");
+        dispatch(clearState());
+      }
+    }
+  }, [dispatch, isAuthenticated, type, message, history]);
   return (
     <div className="">
       <Navbar />

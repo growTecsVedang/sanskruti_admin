@@ -1,56 +1,79 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Home/Navbar";
 import Sidebar from "../Home/Sidebar";
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addCategory,
+  addCategoryImage,
+  clearState,
+} from "../../Redux/slices/CategorySlice";
+import { toast } from "react-toastify";
 const CategoryForm = () => {
-  const [images, setImages] = useState([]);
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
-  const [meta, setMeta] = useState("");
-  const [metad, setMetad] = useState("");
-  const [imagesPreview, setImagesPreview] = useState([]);
+  const { accessToken, isAuthenticated } = useSelector((state) => state.user);
+  const { message, type, _id } = useSelector((state) => state.categories);
+  const dispatch = useDispatch();
+  const [images, setImages] = useState({});
+  const [Title, setTitle] = useState("");
+  const [Slug, setSlug] = useState("");
+  const [Meta_Title, setMeta_Title] = useState("");
+  const [Meta_Description, setMeta_Description] = useState("");
+  const [imagesPreview, setImagesPreview] = useState({});
 
   const createImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setImages([]);
-    setImagesPreview([]);
-    files.forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImagesPreview((old) => [...old, reader.result]);
-          setImages((old) => [...old, reader.result]);
-        }
-      };
-
-      reader.readAsDataURL(file);
-    });
-    console.log(files);
+    let temp = e.target.files[0];
+    setImages(temp);
   };
 
   const createCategorySubmitHandler = (e) => {
     e.preventDefault();
-    const myForm = new FormData();
-    images.forEach((image) => {
-      myForm.append("images", image);
-    });
-    myForm.set("title", title);
-    myForm.set("slug", slug);
-    myForm.set("meta", meta);
-    myForm.set("metad", metad);
 
-    console.log(
-      myForm.get("title"),
-      " ",
-      myForm.get("slug"),
-      " ",
-      myForm.get("meta"),
-      " ",
-      myForm.get("metad"),
-      " "
+    if (
+      Title.trim() !== "" &&
+      Slug.trim() !== "" &&
+      Meta_Description.trim() !== "" &&
+      Meta_Title.trim() !== ""
+    ) {
+      dispatch(
+        addCategory({
+          accessToken,
+          Title,
+          Slug,
+          Meta_Title,
+          Meta_Description,
+        })
+      );
+      setTitle("");
+      setSlug("");
+      setMeta_Title("");
+      setMeta_Description("");
+    }
+  };
+  const createCategoryImageSubmitHandler = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("image", images);
+    console.log(formData.get("image"));
+    console.log(_id);
+    dispatch(
+      addCategoryImage({
+        _id,
+        formData,
+      })
     );
   };
+
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+      } else {
+        notify(message);
+        dispatch(clearState());
+      }
+    }
+  }, [dispatch, type, message]);
 
   return (
     <div className="">
@@ -67,6 +90,68 @@ const CategoryForm = () => {
           <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
             <form
               onSubmit={createCategorySubmitHandler}
+              encType="multipart/form-data"
+            >
+              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
+                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  value={Title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Title"
+                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
+                />
+              </div>
+              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
+                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
+                  Slug
+                </label>
+                <input
+                  type="text"
+                  value={Slug}
+                  onChange={(e) => setSlug(e.target.value)}
+                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
+                  placeholder="Slug"
+                />
+              </div>
+              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
+                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
+                  Meta Title
+                </label>
+                <input
+                  type="text"
+                  value={Meta_Title}
+                  onChange={(e) => setMeta_Title(e.target.value)}
+                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
+                  placeholder="Meta Title"
+                />
+              </div>
+              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
+                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
+                  Meta Description
+                </label>
+                <textarea
+                  type="text"
+                  value={Meta_Description}
+                  onChange={(e) => setMeta_Description(e.target.value)}
+                  className=" min-h-[250px] px-3 py-2 rounded-md border text-black border-gray-300 bg-transparent  text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
+                  placeholder="Meta Description"
+                />
+              </div>
+              <div className="w-full pr-4 mt-3 h-[60px] flex items-center justify-end  ">
+                <button
+                  type="submit"
+                  className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
+                >
+                  Save & edit
+                </button>
+              </div>
+            </form>
+
+            <form
+              onSubmit={createCategoryImageSubmitHandler}
               encType="multipart/form-data"
             >
               <div class="  mt-5 flex items-center justify-center   w-[95%]   lg:w-[95%] mx-auto cursor-pointer ">
@@ -107,60 +192,12 @@ const CategoryForm = () => {
                   />
                 </label>
               </div>
-              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Title"
-                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                />
-              </div>
-              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-                  Slug
-                </label>
-                <input
-                  type="text"
-                  value={slug}
-                  onChange={(e) => setSlug(e.target.value)}
-                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                  placeholder="Slug"
-                />
-              </div>
-              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-                  Meta Title
-                </label>
-                <input
-                  type="text"
-                  value={meta}
-                  onChange={(e) => setMeta(e.target.value)}
-                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                  placeholder="Meta Title"
-                />
-              </div>
-              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-                  Meta Description
-                </label>
-                <textarea
-                  type="text"
-                  value={metad}
-                  onChange={(e) => setMetad(e.target.value)}
-                  className=" min-h-[250px] px-3 py-2 rounded-md border text-black border-gray-300 bg-transparent  text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                  placeholder="Meta Description"
-                />
-              </div>
               <div className="w-full pr-4 mt-3 h-[60px] flex items-center justify-end  ">
                 <button
                   type="submit"
                   className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
                 >
-                  Save & edit
+                  Upload
                 </button>
               </div>
             </form>
