@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { MdOutlineDashboard } from "react-icons/md";
 import { FiUsers, FiLogOut } from "react-icons/fi";
 import { RiArrowDropDownLine } from "react-icons/ri";
@@ -8,7 +8,7 @@ import { ImImages, ImProfile } from "react-icons/im";
 import { BiCalendarStar } from "react-icons/bi";
 import { AiOutlineInbox } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { logOutUserWithNumber } from "../../Redux/slices/UserSlice";
+import { logOutUser } from "../../Redux/slices/UserSlice";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -108,7 +108,7 @@ const Sidebar = () => {
       <div
         onClick={() =>
           dispatch(
-            logOutUserWithNumber({
+            logOutUser({
               accessToken,
             })
           )

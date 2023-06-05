@@ -9,7 +9,7 @@ import {
 } from "../../Redux/slices/CategorySlice";
 import { toast } from "react-toastify";
 const CategoryForm = () => {
-  const { accessToken, isAuthenticated } = useSelector((state) => state.user);
+  const { accessToken } = useSelector((state) => state.user);
   const { message, type, _id } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
   const [images, setImages] = useState({});
@@ -17,7 +17,6 @@ const CategoryForm = () => {
   const [Slug, setSlug] = useState("");
   const [Meta_Title, setMeta_Title] = useState("");
   const [Meta_Description, setMeta_Description] = useState("");
-  const [imagesPreview, setImagesPreview] = useState({});
 
   const createImageChange = (e) => {
     let temp = e.target.files[0];
@@ -52,14 +51,16 @@ const CategoryForm = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("image", images);
-    console.log(formData.get("image"));
-    console.log(_id);
-    dispatch(
-      addCategoryImage({
-        _id,
-        formData,
-      })
-    );
+    if (images !== {}) {
+      dispatch(
+        addCategoryImage({
+          _id,
+          formData,
+          accessToken,
+        })
+      );
+      setImages({});
+    }
   };
 
   useEffect(() => {

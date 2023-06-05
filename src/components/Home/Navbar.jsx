@@ -8,7 +8,7 @@ import { FiUsers, FiLogOut } from "react-icons/fi";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { BsShieldLockFill } from "react-icons/bs";
 import { ImImages, ImProfile } from "react-icons/im";
-import { logOutUserWithNumber } from "../../Redux/slices/UserSlice";
+import { logOutUser } from "../../Redux/slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -154,7 +154,7 @@ const Navbar = () => {
         <div
           onClick={() =>
             dispatch(
-              logOutUserWithNumber({
+              logOutUser({
                 accessToken,
               })
             )

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
@@ -6,21 +6,54 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
+import { loadAllVarients } from "../../Redux/slices/VarientSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const Attributes = () => {
+  const dispatch = useDispatch();
+  const { varients } = useSelector((state) => state.varients);
+
+  useEffect(() => {
+    function getCookie() {
+      var name = "connect.sid".concat("=");
+      var decodedCookie = document.cookie;
+      var cookieArray = decodedCookie.split(";");
+
+      for (var i = 0; i < cookieArray.length; i++) {
+        var cookie = cookieArray[i].trim();
+        if (cookie.startsWith(name)) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+      return null; // Cookie not found
+    }
+    const cookie = getCookie();
+    dispatch(
+      loadAllVarients({
+        cookie,
+      })
+    );
+  }, [dispatch]);
+
   const columns = [
-    { field: "id", headerName: "Title", minWidth: 200, flex: 0.5 },
+    { field: "id", headerName: "ID", minWidth: 200, flex: 0.5 },
 
     {
-      field: "Values",
-      headerName: "Values",
+      field: "name",
+      headerName: "Varient Name",
+      minWidth: 180,
+      flex: 0.3,
+    },
+    {
+      field: "value",
+      headerName: "Attributes Count",
       minWidth: 180,
       flex: 0.3,
     },
 
     {
-      field: "Created",
-      headerName: "Created",
+      field: "Created_At",
+      headerName: "Created At",
       minWidth: 180,
       flex: 0.5,
     },
@@ -45,6 +78,15 @@ const Attributes = () => {
     },
   ];
   const rows = [];
+  varients &&
+    varients.forEach((item, key) => {
+      rows.push({
+        id: item._id,
+        name: item.varientName,
+        value: item.value.length,
+        Created_At: item.created_at,
+      });
+    });
   return (
     <div>
       <Navbar />

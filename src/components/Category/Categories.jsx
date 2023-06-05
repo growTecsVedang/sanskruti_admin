@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
@@ -6,8 +6,34 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loadAllCategories } from "../../Redux/slices/CategorySlice";
+// import "./Category.css";
 
 const Categories = () => {
+  const { categories } = useSelector((state) => state.categories);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    function getCookie() {
+      var name = "connect.sid".concat("=");
+      var decodedCookie = document.cookie;
+      var cookieArray = decodedCookie.split(";");
+
+      for (var i = 0; i < cookieArray.length; i++) {
+        var cookie = cookieArray[i].trim();
+        if (cookie.startsWith(name)) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+      return null; // Cookie not found
+    }
+    const cookie = getCookie();
+    dispatch(
+      loadAllCategories({
+        cookie,
+      })
+    );
+  }, [dispatch]);
   const columns = [
     { field: "id", headerName: "Category ID", minWidth: 200, flex: 0.5 },
 
@@ -17,18 +43,17 @@ const Categories = () => {
       minWidth: 180,
       flex: 0.3,
     },
-
     {
-      field: "Sub Category",
+      field: "Sub_Category",
       headerName: "Sub Category",
       minWidth: 180,
-      flex: 0.5,
+      flex: 0.3,
     },
     {
-      field: "Created At",
+      field: "Created_At",
       headerName: "Created At",
-      minWidth: 200,
-      flex: 0.5,
+      minWidth: 180,
+      flex: 0.3,
     },
 
     {
@@ -51,6 +76,19 @@ const Categories = () => {
     },
   ];
   const rows = [];
+
+  categories &&
+    categories.forEach((item, key) => {
+      if (item._id.trim() !== "" && item.Title.trim() !== "") {
+        rows.push({
+          id: item._id,
+          Category: item.Title,
+          Sub_Category: item.SubCategory,
+          Created_At: item.created_at,
+        });
+      }
+    });
+
   return (
     <div>
       <Navbar />
@@ -75,15 +113,16 @@ const Categories = () => {
             </div>
             <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
           </div>
-
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-            disableSelectionOnClick
-            className="productListTable"
-            autoHeight
-          />
+          <div className="w-full">
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={10}
+              disableSelectionOnClick
+              className="productListTable"
+              autoHeight
+            />
+          </div>
         </div>
       </div>
     </div>

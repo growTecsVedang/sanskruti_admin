@@ -18,8 +18,6 @@ import Permission from "./components/Permissions/Permission";
 import EditPermission from "./components/Permissions/EditPermission";
 import ViewUser from "./components/User/ViewUser";
 import Users from "./components/User/Users";
-import SignUpWithEmail from "./components/SignUpWithEmail";
-import SignInWithEmail from "./components/SignInWithEmail";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
@@ -29,6 +27,7 @@ import { useHistory } from "react-router-dom";
 function App() {
   const dispatch = useDispatch();
   const history = useHistory();
+
   const { isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -46,21 +45,27 @@ function App() {
       return null; // Cookie not found
     }
     const cookie = getCookie();
-    dispatch(
-      loadUser({
-        cookie,
-      })
-    );
+    if (cookie) {
+      dispatch(
+        loadUser({
+          cookie,
+        })
+      );
+    }
   }, [dispatch, isAuthenticated, history]);
+
+  if (isAuthenticated) {
+    history.push("/home");
+  } else {
+    history.push("/");
+  }
 
   return (
     <div className="">
       <ToastContainer autoClose={2000} />
       <Switch>
         <Route exact path="/" component={SignInOne} />
-        <Route exact path="/emailsignin" component={SignInWithEmail} />
         <Route exact path="/register" component={SignUpOne} />
-        <Route exact path="/emailauth" component={SignUpWithEmail} />
         <Route exact path="/home" component={Home} />
         <Route exact path="/products" component={Products} />
         <Route exact path="/categories" component={Categories} />

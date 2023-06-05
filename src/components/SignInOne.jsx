@@ -2,36 +2,50 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { MdOutlineEmail } from "react-icons/md";
+import { AiOutlinePhone } from "react-icons/ai";
 import { toast } from "react-toastify";
-import { clearState, logInUserWithNumber } from "../Redux/slices/UserSlice";
+import {
+  clearState,
+  logInUserWithEmailOrNumber,
+} from "../Redux/slices/UserSlice";
 
 const SignInOne = () => {
   const [Mobile_No, setMobile_No] = useState(0);
+  const [enable, setEnable] = useState(true);
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const history = useHistory();
   const location = useLocation();
   const { message, type, isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   function handleSubmit(e) {
     e.preventDefault();
-    if (phone.trim() !== "" && password.trim() !== "") {
-      dispatch(
-        logInUserWithNumber({
-          Mobile_No,
-          password,
-        })
-      );
+    console.log(email, enable);
+
+    if (enable) {
+      if (phone.trim() !== "" && password.trim() !== "") {
+        setEmail("");
+        dispatch(
+          logInUserWithEmailOrNumber({
+            emailOrNumber: Mobile_No,
+            password,
+          })
+        );
+      }
+    } else {
+      if (email.trim() !== "" && password.trim() !== "") {
+        setPhone("");
+        dispatch(
+          logInUserWithEmailOrNumber({
+            emailOrNumber: email,
+            password,
+          })
+        );
+      }
     }
   }
-  function handleGoogleSubmit(e) {
-    console.log("call before");
-    const res = window.open(
-      "http://localhost:4000/api/v1/googlelogin",
-      "_self"
-    );
-    console.log("call after");
-  }
+
   useEffect(() => {
     setMobile_No(Number(phone));
   }, [phone]);
@@ -53,131 +67,141 @@ const SignInOne = () => {
     }
   }, [dispatch, isAuthenticated, type, message, redirect, history]);
   return (
-    <section className=" w-[90%] mx-auto   md:w-full h-[100vh] flex items-center justify-center">
-      <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-        <h1 className="text-2xl sm:text-4xl text-center mb-5 font-bold ">
-          Sanskrutinx
-        </h1>
-        <h2 className="text-3xl font-bold leading-tight text-black  sm:text-4xl">
-          Sign in
-        </h2>
-        <div className="mt-2 flex gap-x-2  text-base text-gray-600 ">
-          <p> Don&apos;t have an account?</p>
-          <Link
-            to="/register"
-            className="cursor-pointer font-medium text-indigo-600 transition-all duration-200 hover:text-indigo-700 hover:underline focus:text-indigo-700"
-          >
-            Create a free account
-          </Link>
-        </div>
-
-        <form className="mt-8">
-          <div className="space-y-5">
-            <div>
-              <label
-                htmlFor=""
-                className="text-base font-medium text-gray-900 "
+    <section className="  mx-auto bg-white  md:w-full h-[100vh] flex flex-col items-center justify-center">
+      <div className=" flex-col flex sm:flex-row w-full sm:justify-center">
+        {/* <div className="sm:w-[340px] hidden sm:block sm:h-[500px] ">
+          <img
+            src="https://res.cloudinary.com/dqyvomyqy/image/upload/v1685627565/pexels-evg-kowalievska-1148957_yvciqy.jpg"
+            alt=""
+            className="object-fill h-[500px] "
+          />
+        </div> */}
+        <div className="sm:w-[460px]  min-h-full bg-gray-300 flex justify-center border-2 ">
+          <div className="w-[95%] sm:w-[430px] h-full ">
+            <div className="sm:text-3xl text-2xl  m-5 text-[#58248d]  font-bold flex justify-center">
+              Sanskrutinx Admin Panel
+            </div>
+            <h2 className="text-3xl mb-2 text-center font-bold leading-tight text-black  sm:text-3xl">
+              Sign in
+            </h2>
+            <div className="mt-1 flex gap-x-2  text-base text-gray-600 ">
+              <p> Don&apos;t have an account?</p>
+              <Link
+                to="/register"
+                className="cursor-pointer font-medium text-indigo-600 transition-all duration-200 hover:text-indigo-700 hover:underline focus:text-indigo-700"
               >
-                Phone No
-              </label>
-              <div className="mt-2.5">
-                <input
-                  className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  dark:focus:ring-offset-gray-900"
-                  type="number"
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Enter Your Phone No"
-                  value={phone}
-                ></input>
-              </div>
+                Create a free account
+              </Link>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor=""
-                  className="text-base font-medium text-gray-900 "
-                >
-                  Password
-                </label>
+            <form className="mt-3">
+              <div className="space-y-2">
+                {enable ? (
+                  <div>
+                    <label
+                      htmlFor=""
+                      className="text-base font-medium text-gray-900 "
+                    >
+                      Phone No
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        className="flex h-[35px] w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  dark:focus:ring-offset-gray-900"
+                        type="number"
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="Enter Your Phone No"
+                        value={phone}
+                      ></input>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <label
+                      htmlFor=""
+                      className="text-base font-medium text-gray-900 "
+                    >
+                      Email
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        className="flex h-[35px] w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  dark:focus:ring-offset-gray-900"
+                        type="text"
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter Your email"
+                        value={email}
+                      ></input>
+                    </div>
+                  </div>
+                )}
 
-                <div className="text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:underline focus:text-indigo-700">
-                  Forgot password?
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor=""
+                      className="text-base font-medium text-gray-900 "
+                    >
+                      Password
+                    </label>
+
+                    <div className="text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:underline focus:text-indigo-700">
+                      Forgot password?
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <input
+                      className="flex h-[35px] w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:focus:ring-offset-gray-900"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter Your Password"
+                    ></input>
+                  </div>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    onClick={(e) => handleSubmit(e)}
+                    className="inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-3.5 py-[6px] text-base font-semibold leading-7 text-white hover:bg-indigo-500"
+                  >
+                    Sign In
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      className="ml-2 h-4 w-4"
+                    >
+                      <path d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
+                    </svg>
+                  </button>
                 </div>
               </div>
-              <div className="mt-2.5">
-                <input
-                  className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:focus:ring-offset-gray-900"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter Your Password"
-                ></input>
-              </div>
-            </div>
-            <div>
-              <button
-                type="button"
-                onClick={(e) => handleSubmit(e)}
-                className="inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500"
-              >
-                Sign In
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="ml-2 h-4 w-4"
+            </form>
+            <div className="my-2 space-y-2  ">
+              {enable ? (
+                <button
+                  type="button"
+                  onClick={() => setEnable(!enable)}
+                  className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-2 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
                 >
-                  <path d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
-                </svg>
-              </button>
+                  <div className="absolute inset-y-0 left-0 p-2">
+                    <MdOutlineEmail size={28} />
+                  </div>
+                  Sign in with Email
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setEnable(!enable)}
+                  className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-2 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
+                >
+                  <div className="absolute inset-y-0 left-0 p-2">
+                    <AiOutlinePhone size={26} />
+                  </div>
+                  Sign in with Phone No
+                </button>
+              )}
             </div>
           </div>
-        </form>
-        <div className="mt-3 space-y-3">
-          <Link to="/emailsignin">
-            <button
-              type="button"
-              className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
-            >
-              <div className="absolute inset-y-0 left-0 p-4">
-                <MdOutlineEmail size={28} />
-              </div>
-              Sign in with Email
-            </button>
-          </Link>
-          <button
-            type="button"
-            onClick={(e) => handleGoogleSubmit(e)}
-            className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
-          >
-            <div className="absolute inset-y-0 left-0 p-4">
-              <svg
-                className="h-6 w-6 text-rose-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"></path>
-              </svg>
-            </div>
-            Sign in with Google
-          </button>
-          <button
-            type="button"
-            className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none "
-          >
-            <div className="absolute inset-y-0 left-0 p-4">
-              <svg
-                className="h-6 w-6 text-[#2563EB]"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"></path>
-              </svg>
-            </div>
-            Sign in with Facebook
-          </button>
         </div>
       </div>
     </section>

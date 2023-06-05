@@ -1,32 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const signUpUserWithEmail = createAsyncThunk(
-  "signUpUserWithEmail",
+export const signUpUser = createAsyncThunk(
+  "signUpUser",
   async (datas, { rejectWithValue }) => {
     try {
-      const response = await fetch("/api/v1/user/emailregister", {
-        method: "POST",
-        body: JSON.stringify(datas),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
-        return rejectWithValue(payload);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-export const signUpUserWithNumber = createAsyncThunk(
-  "signUpUserWithNumber",
-  async (datas, { rejectWithValue }) => {
-    try {
-      const response = await fetch("/api/v1/user/numberregister", {
+      const response = await fetch("/api/v1/user/register", {
         method: "POST",
         body: JSON.stringify(datas),
         headers: { "Content-Type": "application/json" },
@@ -45,11 +23,12 @@ export const signUpUserWithNumber = createAsyncThunk(
   }
 );
 
-export const logInUserWithNumber = createAsyncThunk(
-  "logInUserWithNumber",
+export const logInUserWithEmailOrNumber = createAsyncThunk(
+  "logInUserWithEmailOrNumber",
   async (datas, { rejectWithValue }) => {
+    console.log(datas);
     try {
-      const response = await fetch("/api/v1/user/numberlogin", {
+      const response = await fetch("/api/v1/user/login", {
         method: "POST",
         body: JSON.stringify(datas),
         headers: { "Content-Type": "application/json" },
@@ -68,38 +47,16 @@ export const logInUserWithNumber = createAsyncThunk(
   }
 );
 
-export const logInUserWithEmail = createAsyncThunk(
-  "logInUserWithEmail",
-  async (datas, { rejectWithValue }) => {
-    try {
-      const response = await fetch("/api/v1/user/emaillogin", {
-        method: "POST",
-        body: JSON.stringify(datas),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
-        return rejectWithValue(payload);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const logOutUserWithNumber = createAsyncThunk(
+export const logOutUser = createAsyncThunk(
   "logOutUserWithNumber",
   async (datas, { rejectWithValue }) => {
+    console.log(datas);
     try {
-      const url = "/api/v1/user/numberlogout";
+      const url = "/api/v1/user/logout";
       const token = datas.accessToken;
       const headers = {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json", // You may need to include other headers based on the API requirements
+        "Content-Type": "application/json; charset=utf-8",
       };
       const response = await fetch(url, {
         method: "GET",
@@ -114,6 +71,7 @@ export const logOutUserWithNumber = createAsyncThunk(
       const data = await response.json();
       return data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error.message);
     }
   }
@@ -159,68 +117,33 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     // signUpUserWithEmail
 
-    builder.addCase(signUpUserWithEmail.pending, (state, action) => {
+    builder.addCase(signUpUser.pending, (state, action) => {
       state.loading = true;
       state.message = "";
     });
-    builder.addCase(signUpUserWithEmail.fulfilled, (state, action) => {
+    builder.addCase(signUpUser.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
-    builder.addCase(signUpUserWithEmail.rejected, (state, action) => {
+    builder.addCase(signUpUser.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
-    // signUpUserWithNumber
-
-    builder.addCase(signUpUserWithNumber.pending, (state) => {
+    // logInUserWithEmailOrNumber
+    builder.addCase(logInUserWithEmailOrNumber.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(signUpUserWithNumber.fulfilled, (state, action) => {
-      state.loading = false;
-      state.message = action.payload.message;
-      state.type = action.payload.type;
-    });
-    builder.addCase(signUpUserWithNumber.rejected, (state, action) => {
-      state.loading = false;
-      state.message = action.payload.message;
-      state.type = action.payload.type;
-    });
-
-    // logInUserWithNumber
-    builder.addCase(logInUserWithNumber.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(logInUserWithNumber.fulfilled, (state, action) => {
+    builder.addCase(logInUserWithEmailOrNumber.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
       state.accessToken = action.payload.accessToken;
       state.isAuthenticated = action.payload.isAuthenticated;
     });
-    builder.addCase(logInUserWithNumber.rejected, (state, action) => {
-      state.loading = false;
-      state.message = action.payload.message;
-      state.type = action.payload.type;
-      state.accessToken = action.payload.accessToken;
-      state.isAuthenticated = action.payload.isAuthenticated;
-    });
-
-    // logInUserWithEmail
-    builder.addCase(logInUserWithEmail.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(logInUserWithEmail.fulfilled, (state, action) => {
-      state.loading = false;
-      state.message = action.payload.message;
-      state.type = action.payload.type;
-      state.accessToken = action.payload.accessToken;
-      state.isAuthenticated = action.payload.isAuthenticated;
-    });
-    builder.addCase(logInUserWithEmail.rejected, (state, action) => {
+    builder.addCase(logInUserWithEmailOrNumber.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
@@ -228,17 +151,17 @@ const userSlice = createSlice({
       state.isAuthenticated = action.payload.isAuthlogInUserWithEmail;
     });
     // logOutUserWithNumber
-    builder.addCase(logOutUserWithNumber.pending, (state) => {
+    builder.addCase(logOutUser.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(logOutUserWithNumber.fulfilled, (state, action) => {
+    builder.addCase(logOutUser.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
-      state.accessToken = action.payload.accessToken;
-      state.isAuthenticated = action.payload.isAuthenticated;
+      state.accessToken = "";
+      state.isAuthenticated = false;
     });
-    builder.addCase(logOutUserWithNumber.rejected, (state, action) => {
+    builder.addCase(logOutUser.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;

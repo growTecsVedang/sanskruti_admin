@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
@@ -6,26 +6,51 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loadAllSubCategories } from "../../Redux/slices/SubCategorySlice";
 
 const SubCategories = () => {
+  const dispatch = useDispatch();
+  const { subCategories } = useSelector((state) => state.subcategories);
+  useEffect(() => {
+    function getCookie() {
+      var name = "connect.sid".concat("=");
+      var decodedCookie = document.cookie;
+      var cookieArray = decodedCookie.split(";");
+
+      for (var i = 0; i < cookieArray.length; i++) {
+        var cookie = cookieArray[i].trim();
+        if (cookie.startsWith(name)) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+      return null; // Cookie not found
+    }
+    const cookie = getCookie();
+    dispatch(
+      loadAllSubCategories({
+        cookie,
+      })
+    );
+  }, [dispatch]);
+
   const columns = [
     { field: "id", headerName: "Category ID", minWidth: 200, flex: 0.5 },
 
     {
-      field: "Sub Category",
+      field: "Title",
       headerName: "Sub Category",
       minWidth: 180,
       flex: 0.3,
     },
-
     {
-      field: " Category",
-      headerName: " Category",
+      field: "Category",
+      headerName: "Category",
       minWidth: 180,
-      flex: 0.5,
+      flex: 0.3,
     },
     {
-      field: "Created At",
+      field: "Created_At",
       headerName: "Created At",
       minWidth: 200,
       flex: 0.5,
@@ -51,6 +76,19 @@ const SubCategories = () => {
     },
   ];
   const rows = [];
+
+  subCategories &&
+    subCategories.forEach((item, key) => {
+      if (item._id.trim() !== "" && item.Title.trim() !== "") {
+        rows.push({
+          id: item._id,
+          Title: item.Title,
+          Category: item.Category,
+          Created_At: item.created_at,
+        });
+      }
+    });
+
   return (
     <div>
       <Navbar />

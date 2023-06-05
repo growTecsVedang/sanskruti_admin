@@ -4,7 +4,6 @@ import { Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
-import { Link } from "react-router-dom";
 
 const Orders = () => {
   const columns = [

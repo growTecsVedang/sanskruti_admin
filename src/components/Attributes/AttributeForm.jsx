@@ -2,12 +2,51 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../Home/Navbar";
 import Sidebar from "../Home/Sidebar";
 import { AiOutlineDelete } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import {
+  addAndUpdateVarient,
+  clearState,
+} from "../../Redux/slices/VarientSlice";
 
 const AttributeForm = () => {
   const [title, setTitle] = useState("");
-  const [val, setVal] = useState("");
+  const { message, type } = useSelector((state) => state.varients);
+  const { accessToken } = useSelector((state) => state.user);
+  const [varientName, setVarientName] = useState("");
   const [arr, setArr] = useState([]);
+  const dispatch = useDispatch();
   useEffect(() => {}, [arr]);
+
+  const varientSubmitHandler = (e) => {
+    e.preventDefault();
+    console.log(title, arr);
+
+    if (title !== "" && arr.length !== 0) {
+      dispatch(
+        addAndUpdateVarient({
+          accessToken,
+          varientName: title,
+          value: arr,
+        })
+      );
+      setArr([]);
+      setTitle("");
+    }
+  };
+
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+      } else {
+        notify(message);
+        dispatch(clearState());
+      }
+    }
+  }, [dispatch, type, message]);
 
   function deleteAttribute(k) {
     setArr(
@@ -18,17 +57,17 @@ const AttributeForm = () => {
   }
 
   function addAttribute() {
-    if (val !== "") {
+    if (varientName !== "") {
       var noDuplicate = false;
       arr.forEach((i) => {
-        if (i === val) {
+        if (i === varientName) {
           noDuplicate = true;
         }
       });
       if (noDuplicate === false) {
-        arr.push(val);
+        arr.push(varientName.trim().toUpperCase());
         setArr(arr);
-        setVal("");
+        setVarientName("");
       }
     }
     console.log(arr.length);
@@ -45,7 +84,7 @@ const AttributeForm = () => {
             </h1>
           </div>
           <div className="w-[97%] mx-auto mt-1  min-h-[300px] bg-white  rounded-md flex flex-col    shadow-md ">
-            <form>
+            <form onSubmit={varientSubmitHandler}>
               <div className="flex flex-col w-[95%] h-full mx-auto mt-6 ">
                 <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
                   Title
@@ -54,7 +93,7 @@ const AttributeForm = () => {
                   value={title}
                   type="text"
                   onChange={(e) =>
-                    setTitle(e.target.value.trim().toLowerCase())
+                    setTitle(e.target.value.trim().toUpperCase())
                   }
                   className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
                   placeholder="Title"
@@ -75,7 +114,7 @@ const AttributeForm = () => {
                           key={key}
                           type="text"
                           value={items}
-                          className=" w-[60px] h-[35px] rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 mr-1 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700"
+                          className=" min-w-[40px] h-[35px] rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 mr-1 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700"
                           placeholder="value"
                         />
                         <span
@@ -89,12 +128,10 @@ const AttributeForm = () => {
                     );
                   })}
                   <input
-                    value={val}
-                    onChange={(e) =>
-                      setVal(e.target.value.trim().toLowerCase())
-                    }
+                    value={varientName}
+                    onChange={(e) => setVarientName(e.target.value)}
                     type="text"
-                    className=" w-[60px] h-[35px] rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700"
+                    className=" min-w-[60px] h-[35px] rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700"
                     placeholder="value"
                   />
                 </div>
@@ -105,12 +142,12 @@ const AttributeForm = () => {
                   Add attribute value
                 </div>
                 <div className="w-full h-[60px] flex items-center justify-end  ">
-                  <div
+                  <button
                     type="submit"
                     className="w-[150px] h-[45px] bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
                   >
                     Save & edit
-                  </div>
+                  </button>
                 </div>
               </div>
             </form>
