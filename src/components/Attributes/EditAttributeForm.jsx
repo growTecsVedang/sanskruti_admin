@@ -4,32 +4,49 @@ import Sidebar from "../Home/Sidebar";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { addVarient, clearState } from "../../Redux/slices/VarientSlice";
+import { clearState, updateVarient } from "../../Redux/slices/VarientSlice";
 
-const AttributeForm = () => {
+const EditAttributeForm = (props) => {
   const [title, setTitle] = useState("");
-  const { message, type } = useSelector((state) => state.varients);
+  const [id, setId] = useState("");
+  const { varients, message, type } = useSelector((state) => state.varients);
   const [varientName, setVarientName] = useState("");
   const [arr, setArr] = useState([]);
+  const [duplicateArray, setDuplicateArray] = useState([]);
   const dispatch = useDispatch();
-  useEffect(() => {}, [arr]);
+
+  useEffect(() => {}, [varients, props]);
+
+  useEffect(() => {
+    varients.forEach((item) => {
+      if (item._id === props.match.params.id) {
+        console.log(item);
+        setId(item._id);
+        setTitle(item.varientName);
+        setDuplicateArray(item.value);
+        setArr(item.value);
+      }
+    });
+  }, []);
 
   const varientSubmitHandler = (e) => {
     e.preventDefault();
 
     if (title !== "" && arr.length !== 0) {
       dispatch(
-        addVarient({
-          varientName: title,
-          value: arr,
+        updateVarient({
+          id,
+          body: {
+            varientName: title,
+            value: arr,
+          },
         })
       );
-      setArr([]);
-      setTitle("");
     }
   };
 
   useEffect(() => {
+    console.log(duplicateArray, arr);
     const notify = (arg) => toast(`${arg}`);
     if (message && type) {
       if (type === "success") {
@@ -40,7 +57,7 @@ const AttributeForm = () => {
         dispatch(clearState());
       }
     }
-  }, [dispatch, type, message]);
+  }, [dispatch, type, message, arr, props, varients, duplicateArray]);
 
   function deleteAttribute(k) {
     setArr(
@@ -59,12 +76,10 @@ const AttributeForm = () => {
         }
       });
       if (noDuplicate === false) {
-        arr.push(varientName.trim().toLowerCase());
-        setArr(arr);
+        setArr([...arr, varientName.trim().toLowerCase()]);
         setVarientName("");
       }
     }
-    console.log(arr.length);
   }
   return (
     <div>
@@ -101,26 +116,27 @@ const AttributeForm = () => {
                   Attribute values
                 </label>
                 <div className="w-full h-[60px] flex flex-row items-center overflow-x-scroll ">
-                  {arr.map((items, key) => {
-                    return (
-                      <div className="flex mr-3 ">
-                        <input
-                          key={key}
-                          type="text"
-                          value={items}
-                          className=" min-w-[40px] h-[35px] rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 mr-1 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700"
-                          placeholder="value"
-                        />
-                        <span
-                          key={key}
-                          onClick={() => deleteAttribute(key)}
-                          className="flex items-center bg-slate-100 active:bg-slate-300  rounded-md w-[30px] h-[35px] "
-                        >
-                          {<AiOutlineDelete size={28} />}
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {arr &&
+                    arr.map((items, key) => {
+                      return (
+                        <div key={key} className="flex mr-3 ">
+                          <input
+                            key={key}
+                            type="text"
+                            value={items}
+                            className=" min-w-[40px] h-[35px] rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 mr-1 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700"
+                            placeholder="value"
+                          />
+                          <span
+                            key={key}
+                            onClick={() => deleteAttribute(key)}
+                            className="flex items-center bg-slate-100 active:bg-slate-300  rounded-md w-[30px] h-[35px] "
+                          >
+                            {<AiOutlineDelete size={28} />}
+                          </span>
+                        </div>
+                      );
+                    })}
                   <input
                     value={varientName}
                     onChange={(e) => setVarientName(e.target.value)}
@@ -152,4 +168,4 @@ const AttributeForm = () => {
   );
 };
 
-export default AttributeForm;
+export default EditAttributeForm;

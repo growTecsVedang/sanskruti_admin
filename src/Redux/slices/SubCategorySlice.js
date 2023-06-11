@@ -31,14 +31,71 @@ export const addSubCategory = createAsyncThunk(
   }
 );
 
+export const updateSubCategory = createAsyncThunk(
+  "updateSubCategory",
+  async (datas, { rejectWithValue }) => {
+    console.log(datas);
+    try {
+      const url = `/api/v1/admin/updateSubCategory?id=${datas.id}`;
+      const headers = {
+        "Content-Type": "application/json; charset=utf-8",
+      };
+      const response = await fetch(url, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify(datas.body),
+      });
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = await response.json();
+        return rejectWithValue(payload);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deleteSubCategory = createAsyncThunk(
+  "deleteSubCategory",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `/api/v1/admin/deleteSubCategory?id=${datas.id}`;
+      const headers = {
+        "Content-Type": "application/json; charset=utf-8",
+      };
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers,
+      });
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = await response.json();
+        return rejectWithValue(payload);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const loadAllSubCategories = createAsyncThunk(
   "loadAllSubCategories",
-  async ({ rejectWithValue }) => {
+  async (datas, { rejectWithValue }) => {
     try {
-      const response = await fetch("/api/v1/user/subcategories", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `/api/v1/user/subcategories?Category=${datas.id}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = await response.json();
@@ -82,6 +139,36 @@ const subCategorySlice = createSlice({
       state._id = action.payload._id;
     });
     builder.addCase(addSubCategory.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+
+    // updateCategory
+    builder.addCase(updateSubCategory.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(updateSubCategory.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(updateSubCategory.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+
+    // deleteCategory
+    builder.addCase(deleteSubCategory.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteSubCategory.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(deleteSubCategory.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;

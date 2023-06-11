@@ -12,8 +12,28 @@ import { logOutUser } from "../../Redux/slices/UserSlice";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
-  const { accessToken } = useSelector((state) => state.user);
   const [prod, setProd] = useState(false);
+  function getCookie() {
+    var name = "accessToken".concat("=");
+    var decodedCookie = document.cookie;
+    var cookieArray = decodedCookie.split(";");
+
+    for (var i = 0; i < cookieArray.length; i++) {
+      var cookie = cookieArray[i].trim();
+      if (cookie.startsWith(name)) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return null; // Cookie not found
+  }
+  function handleLogout() {
+    const accessToken = getCookie();
+    dispatch(
+      logOutUser({
+        cookie: accessToken,
+      })
+    );
+  }
 
   return (
     <div
@@ -83,13 +103,7 @@ const Sidebar = () => {
           <div className="mx-5">Users</div>
         </div>
       </Link>
-      <hr className="text-black h-2" />
-      <Link to="/reviews">
-        <div className="h-[40px] flex my-3  w-[200px] pl-5 text-xl">
-          <BiCalendarStar size={30} />
-          <div className="mx-5">Reviews</div>
-        </div>
-      </Link>
+
       <hr className="text-black h-2" />
       <Link to="/permissions">
         <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
@@ -104,20 +118,6 @@ const Sidebar = () => {
           <div className="mx-5">Profile</div>
         </div>
       </Link>
-      <hr className="text-black h-2" />
-      <div
-        onClick={() =>
-          dispatch(
-            logOutUser({
-              accessToken,
-            })
-          )
-        }
-        className=" cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-xl"
-      >
-        <FiLogOut size={30} />
-        <div className="mx-5">Logout</div>
-      </div>
       <hr className="text-black h-2" />
     </div>
   );

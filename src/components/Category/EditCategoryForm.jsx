@@ -2,39 +2,43 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Home/Navbar";
 import Sidebar from "../Home/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
+import { AiOutlineDelete } from "react-icons/ai";
 import {
-  addCategory,
+  updateCategory,
   addCategoryImage,
   clearState,
 } from "../../Redux/slices/CategorySlice";
 import { toast } from "react-toastify";
-const CategoryForm = () => {
-  const { message, type, _id } = useSelector((state) => state.categories);
+const EditCategoryForm = (props) => {
+  const { categories, message, type } = useSelector(
+    (state) => state.categories
+  );
   const dispatch = useDispatch();
+  const [id, setId] = useState("");
+  const [path, setPath] = useState("");
   const [images, setImages] = useState({});
   const [Title, setTitle] = useState("");
   const [Slug, setSlug] = useState("");
   const [Meta_Title, setMeta_Title] = useState("");
   const [Meta_Description, setMeta_Description] = useState("");
 
+  useEffect(() => {
+    categories.forEach((item) => {
+      if (item._id === props.match.params.id) {
+        setId(item._id);
+        setTitle(item.Title);
+        setSlug(item.Slug);
+        setPath(item.Image);
+        setMeta_Title(item.Meta_Title);
+        setMeta_Description(item.Meta_Description);
+      }
+    });
+  }, [categories, props]);
+
   const createImageChange = (e) => {
     let temp = e.target.files[0];
     setImages(temp);
   };
-
-  function getCookie() {
-    var name = "accessToken".concat("=");
-    var decodedCookie = document.cookie;
-    var cookieArray = decodedCookie.split(";");
-
-    for (var i = 0; i < cookieArray.length; i++) {
-      var cookie = cookieArray[i].trim();
-      if (cookie.startsWith(name)) {
-        return cookie.substring(name.length, cookie.length);
-      }
-    }
-    return null; // Cookie not found
-  }
 
   const createCategorySubmitHandler = (e) => {
     e.preventDefault();
@@ -45,37 +49,25 @@ const CategoryForm = () => {
       Meta_Description.trim() !== "" &&
       Meta_Title.trim() !== ""
     ) {
-      const accessToken = getCookie();
       dispatch(
-        addCategory({
-          cookie: accessToken,
-          Title,
-          Slug,
-          Meta_Title,
-          Meta_Description,
+        updateCategory({
+          id,
+          body: {
+            Title,
+            Slug,
+            Meta_Title,
+            Meta_Description,
+          },
         })
       );
-      setTitle("");
-      setSlug("");
-      setMeta_Title("");
-      setMeta_Description("");
     }
   };
+
   const createCategoryImageSubmitHandler = (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("image", images);
-    if (images !== {}) {
-      const accessToken = getCookie();
-      dispatch(
-        addCategoryImage({
-          _id,
-          formData,
-          cookie: accessToken,
-        })
-      );
-      setImages({});
-    }
+    setImages({});
   };
 
   useEffect(() => {
@@ -100,7 +92,7 @@ const CategoryForm = () => {
         <div className=" flex flex-col overflow-y-scroll   h-[100vh] w-[100%] lg:w-[80%] no-scroll ">
           <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
             <h1 className="text-black lg:text-3xl text-2xl   pl-4 ">
-              Category Form
+              Edit Category
             </h1>
           </div>
           <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
@@ -115,7 +107,9 @@ const CategoryForm = () => {
                 <input
                   type="text"
                   value={Title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) =>
+                    setTitle(e.target.value.trim().toLowerCase())
+                  }
                   placeholder="Title"
                   className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
                 />
@@ -165,6 +159,29 @@ const CategoryForm = () => {
                 </button>
               </div>
             </form>
+
+            {/* tab */}
+            <div>
+              <h2 className="text-lg font-bold mt-5  mx-4 ">Image</h2>
+              <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[430px] overflow-y-hidden  ">
+                <div className="">
+                  <div className="w-[300px] h-[350px] border-2 border-gray-200 ">
+                    {path ? (
+                      <img
+                        src={path}
+                        className="w-[300px] h-[350px]"
+                        alt="imgPath"
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div className="w-[300px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 ">
+                    <span>{<AiOutlineDelete size={30} />}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <form
               onSubmit={createCategoryImageSubmitHandler}
@@ -224,4 +241,4 @@ const CategoryForm = () => {
   );
 };
 
-export default CategoryForm;
+export default EditCategoryForm;

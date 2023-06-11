@@ -1,18 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const addAndUpdateVarient = createAsyncThunk(
-  "addAndUpdateVarient",
+export const addVarient = createAsyncThunk(
+  "addVarient",
   async (datas, { rejectWithValue }) => {
     try {
       console.log(datas);
-      const url = "/api/v1/admin/updateVarient";
-      const token = datas.accessToken;
+      const url = "/api/v1/admin/addVarient";
+
       const headers = {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json", // You may need to include other headers based on the API requirements
       };
       const response = await fetch(url, {
-        method: "PUT",
+        method: "POST",
         headers,
         body: JSON.stringify(datas),
       });
@@ -53,6 +52,59 @@ export const loadAllVarients = createAsyncThunk(
   }
 );
 
+export const updateVarient = createAsyncThunk(
+  "updateVarient",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `/api/v1/admin/updateVarient?id=${datas.id}`;
+      const headers = {
+        "Content-Type": "application/json; charset=utf-8",
+      };
+      const response = await fetch(url, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify(datas.body),
+      });
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = await response.json();
+        return rejectWithValue(payload);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deleteVarient = createAsyncThunk(
+  "deleteVarient",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `/api/v1/admin/deleteVarient?id=${datas.id}`;
+      const headers = {
+        "Content-Type": "application/json; charset=utf-8",
+      };
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers,
+      });
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = await response.json();
+        return rejectWithValue(payload);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const varientSlice = createSlice({
   name: "varient",
   initialState: {
@@ -70,17 +122,47 @@ const varientSlice = createSlice({
   extraReducers: (builder) => {
     // addCategory
 
-    builder.addCase(addAndUpdateVarient.pending, (state, action) => {
+    builder.addCase(addVarient.pending, (state, action) => {
       state.loading = true;
       state.message = "";
     });
-    builder.addCase(addAndUpdateVarient.fulfilled, (state, action) => {
+    builder.addCase(addVarient.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
       state._id = action.payload._id;
     });
-    builder.addCase(addAndUpdateVarient.rejected, (state, action) => {
+    builder.addCase(addVarient.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+
+    // deleteVarient
+    builder.addCase(deleteVarient.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteVarient.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(deleteVarient.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+
+    // updateVarient
+    builder.addCase(updateVarient.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(updateVarient.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(updateVarient.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;

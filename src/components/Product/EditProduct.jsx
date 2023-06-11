@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadAllCategories } from "../../Redux/slices/CategorySlice";
 import { loadAllSubCategories } from "../../Redux/slices/SubCategorySlice";
 import { addProduct, clearState } from "../../Redux/slices/ProductSlice";
+import { loadAllVarients } from "../../Redux/slices/VarientSlice";
 
-const AddProduct = () => {
+const EditProduct = (props) => {
   const dispatch = useDispatch();
   const initialValues = {
+    id: "",
     name: "",
     description: "",
     gst_price: 0,
@@ -27,12 +29,42 @@ const AddProduct = () => {
   const [values, setValues] = useState(initialValues);
   const [MainCategory, setMainCategory] = useState("");
   const [SubCategory, setSubCategory] = useState("");
+  const [duplicateVarient, setDuplicateVarient] = useState([]);
   const [duplicateCategory, setDuplicateCategory] = useState([]);
   const [duplicateSubCategory, setDuplicateSubCategory] = useState([]);
-
   const { subCategories } = useSelector((state) => state.subcategories);
   const { categories } = useSelector((state) => state.categories);
-  const { message, type } = useSelector((state) => state.products);
+  const { varients } = useSelector((state) => state.varients);
+  const { products, message, type } = useSelector((state) => state.products);
+
+  useEffect(() => {
+    products.forEach((item) => {
+      if (item._id === props.match.params.id) {
+        setValues({
+          id: item._id,
+          name: item.name,
+          description: item.description,
+          gst_price: item.gst_price,
+          sale_price: item.sale_price,
+          brand_name: item.brand_name,
+          is_featured: item.is_featured,
+          is_new_arrival: item.is_new_arrival,
+          is_best_seller: item.is_best_seller,
+          slug: item.slug,
+          meta_tittle: item.meta_tittle,
+          meta_description: item.meta_description,
+          meta_keyword: item.meta_keyword,
+        });
+        setMainCategory(item.MainCategory);
+        setSubCategory(item.SubCategory);
+      }
+    });
+
+    setDuplicateVarient(varients);
+    setDuplicateCategory(categories);
+    setDuplicateSubCategory(subCategories);
+  }, []);
+
   function getCookie() {
     var name = "connect.sid".concat("=");
     var decodedCookie = document.cookie;
@@ -77,7 +109,6 @@ const AddProduct = () => {
 
   const handleCategoryChange = (event) => {
     setMainCategory(event.target.value);
-    setSubCategory("");
   };
   const handleSubCategoryChange = (event) => {
     setSubCategory(event.target.value);
@@ -100,29 +131,12 @@ const AddProduct = () => {
       MainCategory,
       SubCategory,
     };
-    console.log(body);
     dispatch(
       addProduct({
         body,
       })
     );
   };
-
-  useEffect(() => {
-    const cookie = getCookie();
-    dispatch(
-      loadAllCategories({
-        cookie,
-      })
-    );
-    dispatch(
-      loadAllSubCategories({
-        cookie,
-      })
-    );
-    setDuplicateCategory(categories);
-    setDuplicateSubCategory(subCategories);
-  }, []);
 
   useEffect(() => {
     const notify = (arg) => toast(`${arg}`);
@@ -267,6 +281,7 @@ const AddProduct = () => {
                   </label>
                   <input
                     type="checkbox"
+                    checked={values.is_featured}
                     style={{
                       width: "20px",
                       height: "20px",
@@ -285,6 +300,7 @@ const AddProduct = () => {
                   </label>
                   <input
                     type="checkbox"
+                    checked={values.is_new_arrival}
                     style={{
                       width: "20px",
                       height: "20px",
@@ -303,6 +319,7 @@ const AddProduct = () => {
                   </label>
                   <input
                     type="checkbox"
+                    checked={values.is_best_seller}
                     style={{
                       width: "20px",
                       height: "20px",
@@ -391,6 +408,46 @@ const AddProduct = () => {
                   placeholder="Meta Description"
                 />
               </div>
+              <div className="w-[95%] my-5 min-h-[200px]  mx-auto">
+                <h1 className="text-black lg:text-xl text-xl font-semibold  pl-3">
+                  Product Inventory
+                </h1>
+                <hr className="w-full  h-[2px] " />
+                <div className="w-full min-h-[150px] my-3 ">
+                  {duplicateVarient &&
+                    duplicateVarient.map((item, key) => {
+                      return (
+                        <div className="flex bg-gray-100 text-lg ">
+                          <div className="min-w-[140px] min-h-[50px]  flex items-center  ">
+                            <div className="ml-1">
+                              <input
+                                type="checkbox"
+                                className="w-[18px] h-[18px] "
+                              ></input>
+                              <span className="ml-2 font-semibold text-xl ">
+                                {item.varientName}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex-grow  gap-x-3 gap-1  flex-wrap  w-full overflow-x-hidden  min-h-[50px]  flex items-center ">
+                            {item.value &&
+                              item.value.map((i, key) => {
+                                return (
+                                  <div className=" h-[40px] flex items-center ">
+                                    <input
+                                      type="checkbox"
+                                      className="w-[18px] h-[18px] "
+                                    ></input>
+                                    <span className="ml-2">{i}</span>
+                                  </div>
+                                );
+                              })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
 
               <div className="w-full pr-4 mt-3 h-[60px] flex items-center justify-end  ">
                 <button
@@ -465,4 +522,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;

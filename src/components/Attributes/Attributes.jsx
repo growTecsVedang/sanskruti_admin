@@ -1,31 +1,55 @@
 import React, { Fragment, useEffect } from "react";
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
-import { loadAllVarients } from "../../Redux/slices/VarientSlice";
+import { toast } from "react-toastify";
+import {
+  deleteVarient,
+  loadAllVarients,
+  clearState,
+} from "../../Redux/slices/VarientSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const Attributes = () => {
   const dispatch = useDispatch();
-  const { varients } = useSelector((state) => state.varients);
+  const { varients, message, type } = useSelector((state) => state.varients);
+
+  function getCookie() {
+    var name = "connect.sid".concat("=");
+    var decodedCookie = document.cookie;
+    var cookieArray = decodedCookie.split(";");
+
+    for (var i = 0; i < cookieArray.length; i++) {
+      var cookie = cookieArray[i].trim();
+      if (cookie.startsWith(name)) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return null; // Cookie not found
+  }
+  const deleteVarientHandler = (id) => {
+    dispatch(
+      deleteVarient({
+        id,
+      })
+    );
+  };
 
   useEffect(() => {
-    function getCookie() {
-      var name = "connect.sid".concat("=");
-      var decodedCookie = document.cookie;
-      var cookieArray = decodedCookie.split(";");
-
-      for (var i = 0; i < cookieArray.length; i++) {
-        var cookie = cookieArray[i].trim();
-        if (cookie.startsWith(name)) {
-          return cookie.substring(name.length, cookie.length);
-        }
+    const notify = (arg) => toast(`${arg}`);
+    console.log(type, message);
+    if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+      } else {
+        notify(message);
+        dispatch(clearState());
       }
-      return null; // Cookie not found
     }
     const cookie = getCookie();
     dispatch(
@@ -33,7 +57,7 @@ const Attributes = () => {
         cookie,
       })
     );
-  }, [dispatch]);
+  }, [dispatch, type, message]);
 
   const columns = [
     { field: "id", headerName: "ID", minWidth: 200, flex: 0.5 },
@@ -68,8 +92,10 @@ const Attributes = () => {
       renderCell: (params) => {
         return (
           <Fragment>
-            <EditIcon />
-            <Button>
+            <Link to={`/editattribute/${params.id}`}>
+              <EditIcon />
+            </Link>
+            <Button onClick={() => deleteVarientHandler(params.id)}>
               <DeleteIcon />
             </Button>
           </Fragment>
@@ -111,14 +137,17 @@ const Attributes = () => {
             </div>
             <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
           </div>
-
           <DataGrid
             rows={rows}
             columns={columns}
-            pageSize={10}
             disableSelectionOnClick
             className="productListTable"
-            autoHeight
+            rowHeight={60}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 5, page: 0 },
+              },
+            }}
           />
         </div>
       </div>

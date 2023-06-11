@@ -1,22 +1,55 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
+import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserDetails } from "../../Redux/slices/UserSlice";
-const ViewUser = (props, ID) => {
+import {
+  logOutUser,
+  userProfile,
+  clearState,
+} from "../../Redux/slices/UserSlice";
+import { clearIsAuthenticate } from "../../Redux/slices/LoadUserSlice";
+const MyProfile = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  const { user, message, type, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
+
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+        history.push("/");
+      } else {
+        notify(message);
+        console.log("called");
+        dispatch(clearState());
+      }
+      dispatch(clearIsAuthenticate());
+    }
+  }, [dispatch, isAuthenticated, type, message, history]);
   useEffect(() => {
     const cookie = getCookie();
-    const id = props.match.params.id;
-    console.log(id);
     dispatch(
-      getUserDetails({
+      userProfile({
         cookie,
-        id,
       })
     );
+    console.log(user);
   }, []);
+
+  function handleLogout() {
+    const accessToken = getCookie();
+    dispatch(
+      logOutUser({
+        cookie: accessToken,
+      })
+    );
+  }
 
   function getCookie() {
     var name = "connect.sid".concat("=");
@@ -186,6 +219,14 @@ const ViewUser = (props, ID) => {
                       className="h-[100px] w-full pl-3 my-1  rounded-md border text-black border-gray-300"
                     />
                   </div>
+                  <div className="mx-2 my-2 ">
+                    <button
+                      onClick={handleLogout}
+                      className="text-xl   h-[45px] w-[120px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-black text-white"
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -196,4 +237,4 @@ const ViewUser = (props, ID) => {
   );
 };
 
-export default ViewUser;
+export default MyProfile;

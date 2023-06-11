@@ -1,20 +1,56 @@
-import React, { Fragment } from "react";
-import { DataGrid } from "@material-ui/data-grid";
-// import { Button } from "@material-ui/core";
+import React, { Fragment, useEffect, useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@material-ui/icons/Edit";
 import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  loadAllUsers,
+  clearState,
+  deleteUser,
+} from "../../Redux/slices/UserSlice";
+import { toast } from "react-toastify";
+import getRole from "../../helper/getRole";
 
-const Permission = () => {
-  const users = [
-    {
-      id: 23322344222443,
-      username: "localadmin",
-      email: "localadmin123@gmail.com",
-      createdAt: "03/05/2023",
-    },
-  ];
+const Users = () => {
+  const [Role, setRole] = useState("");
+  const dispatch = useDispatch();
+  const { users, message, type } = useSelector((state) => state.user);
+
+  function getCookie() {
+    var name = "accessToken".concat("=");
+    var decodedCookie = document.cookie;
+    var cookieArray = decodedCookie.split(";");
+
+    for (var i = 0; i < cookieArray.length; i++) {
+      var cookie = cookieArray[i].trim();
+      if (cookie.startsWith(name)) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return null; // Cookie not found
+  }
+
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+      } else {
+        notify(message);
+        dispatch(clearState());
+      }
+    }
+    const cookie = getCookie();
+    dispatch(
+      loadAllUsers({
+        cookie,
+      })
+    );
+  }, [dispatch, type, message]);
+
   const columns = [
     { field: "id", headerName: "id", minWidth: 200, flex: 0.5 },
 
@@ -33,10 +69,30 @@ const Permission = () => {
     },
 
     {
-      field: "Created At",
-      headerName: "Created At",
+      field: "Provider",
+      headerName: "Provider",
       minWidth: 180,
       flex: 0.5,
+    },
+    {
+      field: "Mobile_No",
+      headerName: "Mobile_No",
+      minWidth: 100,
+      flex: 0.5,
+    },
+
+    {
+      field: "Role",
+      headerName: "Role",
+      minWidth: 150,
+      flex: 0.3,
+    },
+
+    {
+      field: "BANNED_USER",
+      headerName: "Banned",
+      minWidth: 150,
+      flex: 0.3,
     },
 
     {
@@ -49,7 +105,7 @@ const Permission = () => {
       renderCell: (params) => {
         return (
           <Fragment>
-            <Link to="/editpermission">
+            <Link to={`/editpermission/${params.id}`}>
               <EditIcon />
             </Link>
           </Fragment>
@@ -61,10 +117,13 @@ const Permission = () => {
   users &&
     users.forEach((item) => {
       rows.push({
-        id: item.id,
+        id: item._id,
         Username: item.username,
         Email: item.email,
-        Created_At: item.createdAt,
+        Provider: item.provider,
+        Mobile_No: item.Mobile_No,
+        Role: getRole(item.role),
+        BANNED_USER: item.is_Banned_User ? "YES" : "NO",
       });
     });
   return (
@@ -92,10 +151,14 @@ const Permission = () => {
           <DataGrid
             rows={rows}
             columns={columns}
-            pageSize={10}
             disableSelectionOnClick
             className="productListTable"
-            autoHeight
+            rowHeight={60}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 5, page: 0 },
+              },
+            }}
           />
         </div>
       </div>
@@ -103,4 +166,4 @@ const Permission = () => {
   );
 };
 
-export default Permission;
+export default Users;

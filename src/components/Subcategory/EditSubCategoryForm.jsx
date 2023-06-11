@@ -6,10 +6,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { loadAllCategories } from "../../Redux/slices/CategorySlice";
 import {
   clearState,
-  addSubCategory,
+  updateSubCategory,
 } from "../../Redux/slices/SubCategorySlice";
 
-const SubCategoryForm = () => {
+const EditSubCategoryForm = (props) => {
   const { categories } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -34,33 +34,36 @@ const SubCategoryForm = () => {
     );
   }, [dispatch]);
 
-  const { message, type } = useSelector((state) => state.subcategories);
+  const { subCategories, message, type } = useSelector(
+    (state) => state.subcategories
+  );
   const [Title, setTitle] = useState("");
   const [Slug, setSlug] = useState("");
   const [Meta_Title, setMeta_Title] = useState("");
   const [Meta_Description, setMeta_Description] = useState("");
   const [Category, setCategory] = useState("");
+  const [id, setId] = useState("");
+
+  useEffect(() => {
+    subCategories.forEach((item) => {
+      if (item._id === props.match.params.id) {
+        setId(item._id);
+        setTitle(item.Title);
+        setSlug(item.Slug);
+        setCategory(item.Category);
+        setMeta_Title(item.Meta_Title);
+        setMeta_Description(item.Meta_Description);
+      }
+    });
+  }, [subCategories, props]);
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
   };
 
-  function getCookie() {
-    var name = "accessToken".concat("=");
-    var decodedCookie = document.cookie;
-    var cookieArray = decodedCookie.split(";");
-
-    for (var i = 0; i < cookieArray.length; i++) {
-      var cookie = cookieArray[i].trim();
-      if (cookie.startsWith(name)) {
-        return cookie.substring(name.length, cookie.length);
-      }
-    }
-    return null; // Cookie not found
-  }
-
   const createSubCategorySubmitHandler = (e) => {
     e.preventDefault();
+    console.log(Title, Category, Slug, Meta_Description, Meta_Title);
 
     if (
       Title.trim() !== "" &&
@@ -68,21 +71,18 @@ const SubCategoryForm = () => {
       Meta_Description.trim() !== "" &&
       Meta_Title.trim() !== ""
     ) {
-      const accessToken = getCookie();
       dispatch(
-        addSubCategory({
-          cookie: accessToken,
-          Title,
-          Category,
-          Slug,
-          Meta_Title,
-          Meta_Description,
+        updateSubCategory({
+          id,
+          body: {
+            Title,
+            Category,
+            Slug,
+            Meta_Title,
+            Meta_Description,
+          },
         })
       );
-      setTitle("");
-      setSlug("");
-      setMeta_Title("");
-      setMeta_Description("");
     }
   };
 
@@ -108,7 +108,7 @@ const SubCategoryForm = () => {
         <div className=" flex flex-col overflow-y-scroll   h-[100vh] w-[100%] lg:w-[80%] no-scroll ">
           <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
             <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
-              Sub Category Form
+              Edit Sub Category
             </h1>
           </div>
           <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
@@ -120,7 +120,9 @@ const SubCategoryForm = () => {
                 <input
                   type="text"
                   value={Title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) =>
+                    setTitle(e.target.value.trim().toLowerCase())
+                  }
                   className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
                   placeholder="Title"
                 />
@@ -198,4 +200,4 @@ const SubCategoryForm = () => {
   );
 };
 
-export default SubCategoryForm;
+export default EditSubCategoryForm;

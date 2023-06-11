@@ -1,31 +1,100 @@
-import React, { Fragment } from "react";
-import { DataGrid } from "@material-ui/data-grid";
+import React, { Fragment, useEffect } from "react";
+import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
-
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  loadAllProducts,
+  clearState,
+  deleteProduct,
+} from "../../Redux/slices/ProductSlice";
+import { loadAllVarients } from "../../Redux/slices/VarientSlice";
+import { loadAllCategories } from "../../Redux/slices/CategorySlice";
+import { loadAllSubCategories } from "../../Redux/slices/SubCategorySlice";
 const Products = () => {
+  const { products, message, type } = useSelector((state) => state.products);
+  const dispatch = useDispatch();
+
+  function getCookie() {
+    var name = "accessToken".concat("=");
+    var decodedCookie = document.cookie;
+    var cookieArray = decodedCookie.split(";");
+
+    for (var i = 0; i < cookieArray.length; i++) {
+      var cookie = cookieArray[i].trim();
+      if (cookie.startsWith(name)) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return null; // Cookie not found
+  }
+
+  const handleDeleteProduct = (id) => {
+    const cookie = getCookie();
+    dispatch(
+      deleteProduct({
+        id,
+        cookie,
+      })
+    );
+  };
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+      } else {
+        notify(message);
+        dispatch(clearState());
+      }
+    }
+    const cookie = getCookie();
+    dispatch(
+      loadAllProducts({
+        cookie,
+      })
+    );
+    dispatch(
+      loadAllVarients({
+        cookie,
+      })
+    );
+    dispatch(
+      loadAllCategories({
+        cookie,
+      })
+    );
+    dispatch(
+      loadAllSubCategories({
+        cookie,
+      })
+    );
+  }, [dispatch, type, message]);
+
   const columns = [
     { field: "id", headerName: "Product ID", minWidth: 200, flex: 0.5 },
 
     {
-      field: "name",
+      field: "Name",
       headerName: "Name",
-      minWidth: 350,
-      flex: 1,
-    },
-    {
-      field: "Category",
-      headerName: "Category",
       minWidth: 180,
       flex: 0.3,
     },
+    {
+      field: "Main_Category",
+      headerName: "Main Category",
+      minWidth: 180,
+      flex: 0.5,
+    },
 
     {
-      field: "Sub Category",
+      field: "Sub_Category",
       headerName: "Sub Category",
       minWidth: 180,
       flex: 0.5,
@@ -33,23 +102,27 @@ const Products = () => {
     {
       field: "Varients",
       headerName: "Varients",
-      type: "number",
-      minWidth: 70,
-      flex: 0.5,
+      minWidth: 80,
+      flex: 0.3,
     },
 
     {
       field: "actions",
-      flex: 0.3,
+      flex: 0.7,
       headerName: "Actions",
-      minWidth: 150,
+      minWidth: 180,
       type: "number",
       sortable: false,
       renderCell: (params) => {
         return (
           <Fragment>
-            <EditIcon />
-            <Button>
+            <button className="mx-5 w-[65px]  bg-[#caf0f8] p-2 rounded-md   ">
+              <Link to="/viewuser">Reviews</Link>
+            </button>
+            <Link to={`/editproduct/${params.id}`}>
+              <EditIcon />
+            </Link>
+            <Button onClick={() => handleDeleteProduct(params.id)}>
               <DeleteIcon />
             </Button>
           </Fragment>
@@ -58,6 +131,18 @@ const Products = () => {
     },
   ];
   const rows = [];
+
+  products &&
+    products.forEach((item) => {
+      rows.push({
+        id: item._id,
+        Name: item.name,
+        Main_Category: item.MainCategory,
+        Sub_Category: item.SubCategory,
+        Varients: item.varients.length,
+      });
+    });
+
   return (
     <div>
       <Navbar />
@@ -84,14 +169,17 @@ const Products = () => {
             </div>
             <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
           </div>
-
           <DataGrid
             rows={rows}
             columns={columns}
-            pageSize={10}
             disableSelectionOnClick
             className="productListTable"
-            autoHeight
+            rowHeight={60}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 5, page: 0 },
+              },
+            }}
           />
         </div>
       </div>

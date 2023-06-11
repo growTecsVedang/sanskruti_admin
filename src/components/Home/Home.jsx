@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 import { clearState } from "../../Redux/slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
+
 const Home = () => {
   const history = useHistory();
   const dispatch = useDispatch();

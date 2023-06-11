@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import SignInOne from "./components/SignInOne";
-import SignUpOne from "./components/SignUpOne";
+// import SignUpOne from "./components/SignUpOne";
 import Home from "./components/Home/Home";
 import Products from "./components/Product/Products";
 import Categories from "./components/Category/Categories";
@@ -20,44 +20,35 @@ import ViewUser from "./components/User/ViewUser";
 import Users from "./components/User/Users";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import EditCategoryForm from "./components/Category/EditCategoryForm";
+import EditSubCategoryForm from "./components/Subcategory/EditSubCategoryForm";
+import EditAttributeForm from "./components/Attributes/EditAttributeForm";
+import EditProduct from "./components/Product/EditProduct";
+import MyProfile from "./components/profile/MyProfile";
 import { useSelector, useDispatch } from "react-redux";
-import { loadUser } from "./Redux/slices/UserSlice";
-import { useHistory } from "react-router-dom";
+import { loadUser } from "./Redux/slices/LoadUserSlice";
+import getRole from "./helper/getRole";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { loaduser, isAuthenticate, loading } = useSelector(
+    (state) => state.loaduser
+  );
 
-  const { isAuthenticated } = useSelector((state) => state.user);
+  function getCookie() {
+    var name = "connect.sid".concat("=");
+    var decodedCookie = document.cookie;
+    var cookieArray = decodedCookie.split(";");
 
-  useEffect(() => {
-    function getCookie() {
-      var name = "connect.sid".concat("=");
-      var decodedCookie = document.cookie;
-      var cookieArray = decodedCookie.split(";");
-
-      for (var i = 0; i < cookieArray.length; i++) {
-        var cookie = cookieArray[i].trim();
-        if (cookie.startsWith(name)) {
-          return cookie.substring(name.length, cookie.length);
-        }
+    for (var i = 0; i < cookieArray.length; i++) {
+      var cookie = cookieArray[i].trim();
+      if (cookie.startsWith(name)) {
+        return cookie.substring(name.length, cookie.length);
       }
-      return null; // Cookie not found
     }
-    const cookie = getCookie();
-    if (cookie) {
-      dispatch(
-        loadUser({
-          cookie,
-        })
-      );
-    }
-  }, [dispatch, isAuthenticated, history]);
-
-  if (isAuthenticated) {
-    history.push("/home");
-  } else {
-    history.push("/");
+    return null; // Cookie not found
   }
 
   return (
@@ -65,23 +56,47 @@ function App() {
       <ToastContainer autoClose={2000} />
       <Switch>
         <Route exact path="/" component={SignInOne} />
-        <Route exact path="/register" component={SignUpOne} />
-        <Route exact path="/home" component={Home} />
-        <Route exact path="/products" component={Products} />
-        <Route exact path="/categories" component={Categories} />
-        <Route exact path="/attributes" component={Attributes} />
-        <Route exact path="/attributeform" component={AttributeForm} />
-        <Route exact path="/addproduct" component={AddProduct} />
-        <Route exact path="/categoryform" component={CategoryForm} />
-        <Route exact path="/subcategories" component={SubCategories} />
-        <Route exact path="/subcategoryform" component={SubCategoryForm} />
-        <Route exact path="/banner" component={Banner} />
-        <Route exact path="/bannerform" component={BannerForm} />
-        <Route exact path="/users" component={Users} />
-        <Route exact path="/permissions" component={Permission} />
-        <Route exact path="/editpermission" component={EditPermission} />
-        <Route exact path="/viewuser" component={ViewUser} />
-        <Route exact path="/orders" component={Orders} />
+        <ProtectedRoute exact path="/home" isAdmin={true} component={Home} />
+        <ProtectedRoute exact path="/profile" component={MyProfile} />
+        <ProtectedRoute exact path="/products" component={Products} />
+        <ProtectedRoute exact path="/editproduct/:id" component={EditProduct} />
+        <ProtectedRoute exact path="/categories" component={Categories} />
+        <ProtectedRoute exact path="/attributes" component={Attributes} />
+        <ProtectedRoute exact path="/attributeform" component={AttributeForm} />
+        <ProtectedRoute
+          exact
+          path="/editattribute/:id"
+          component={EditAttributeForm}
+        />
+        <ProtectedRoute exact path="/addproduct" component={AddProduct} />
+        <ProtectedRoute exact path="/categoryform" component={CategoryForm} />
+        <ProtectedRoute
+          exact
+          path="/editcategory/:id"
+          component={EditCategoryForm}
+        />
+        <ProtectedRoute exact path="/subcategories" component={SubCategories} />
+        <ProtectedRoute
+          exact
+          path="/subcategoryform"
+          component={SubCategoryForm}
+        />
+        <ProtectedRoute
+          exact
+          path="/editsubcategory/:id"
+          component={EditSubCategoryForm}
+        />
+        <ProtectedRoute exact path="/banner" component={Banner} />
+        <ProtectedRoute exact path="/bannerform" component={BannerForm} />
+        <ProtectedRoute exact path="/users" component={Users} />
+        <ProtectedRoute exact path="/permissions" component={Permission} />
+        <ProtectedRoute
+          exact
+          path="/editpermission/:id"
+          component={EditPermission}
+        />
+        <ProtectedRoute exact path="/viewuser/:id" component={ViewUser} />
+        <ProtectedRoute exact path="/orders" component={Orders} />
       </Switch>
     </div>
   );
