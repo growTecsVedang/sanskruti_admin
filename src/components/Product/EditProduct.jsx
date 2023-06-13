@@ -4,10 +4,13 @@ import Sidebar from "../Home/Sidebar";
 import { toast } from "react-toastify";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { loadAllCategories } from "../../Redux/slices/CategorySlice";
-import { loadAllSubCategories } from "../../Redux/slices/SubCategorySlice";
-import { addProduct, clearState } from "../../Redux/slices/ProductSlice";
-import { loadAllVarients } from "../../Redux/slices/VarientSlice";
+import { clearState } from "../../Redux/slices/ProductSlice";
+import { updateProduct } from "../../Redux/slices/ProductSlice";
+import {
+  generateCombinations,
+  generateResponse,
+  takeObj,
+} from "../../helper/combinations";
 
 const EditProduct = (props) => {
   const dispatch = useDispatch();
@@ -22,11 +25,41 @@ const EditProduct = (props) => {
     is_new_arrival: false,
     is_best_seller: false,
     slug: "",
+    varients: [],
     meta_tittle: "",
     meta_description: "",
     meta_keyword: "",
   };
+  const attributes = [
+    {
+      name: "",
+      state: false,
+      childern: [
+        {
+          state: false,
+          value: "",
+        },
+      ],
+    },
+  ];
+
+  const finalAttributes = [];
+  const result = [finalAttributes];
+
+  const arrayOfArray = [
+    {
+      Title: "",
+      values: [],
+    },
+  ];
+  const [combinations, setCombinations] = useState([]);
+  const [dynamicArray, setDynamicArray] = useState([]);
   const [values, setValues] = useState(initialValues);
+  const [res, setRes] = useState(result);
+  const [count, setCount] = useState(0);
+  const [atr, setAtr] = useState(attributes);
+  const [fatr, setFatr] = useState(finalAttributes);
+  const [aoa, setAoa] = useState(arrayOfArray);
   const [MainCategory, setMainCategory] = useState("");
   const [SubCategory, setSubCategory] = useState("");
   const [duplicateVarient, setDuplicateVarient] = useState([]);
@@ -36,6 +69,71 @@ const EditProduct = (props) => {
   const { categories } = useSelector((state) => state.categories);
   const { varients } = useSelector((state) => state.varients);
   const { products, message, type } = useSelector((state) => state.products);
+  const [quantity, setQuantity] = useState(0);
+  const [price, setprice] = useState(0);
+
+  const handleAttributeNameChange = (e) => {
+    const { name, value } = e.target;
+    const updatedArray = atr.map((item) => {
+      if (item.name === name) {
+        if (value === "false") {
+          return {
+            ...item,
+            state: true,
+            childern: item.childern.map((item) => {
+              return {
+                ...item,
+                state: true,
+              };
+            }),
+          };
+        } else {
+          return {
+            ...item,
+            state: false,
+            childern: item.childern.map((item) => {
+              return {
+                ...item,
+                state: false,
+              };
+            }),
+          };
+        }
+      }
+      return item;
+    });
+    setAtr(updatedArray);
+  };
+
+  const handleAttributeChildrenNameChange = (e, parent) => {
+    const { name, value } = e.target;
+    const updatedArray = atr.map((item) => {
+      if (parent === item.name) {
+        return {
+          ...item,
+          state: false,
+          childern: item.childern.map((i) => {
+            if (i.value === name) {
+              if (value === "false") {
+                return {
+                  ...i,
+                  state: true,
+                };
+              } else {
+                return {
+                  ...i,
+                  state: false,
+                };
+              }
+            }
+            return i;
+          }),
+        };
+      }
+      return item;
+    });
+    setAtr(updatedArray);
+  };
 
   useEffect(() => {
     products.forEach((item) => {
@@ -51,6 +149,7 @@ const EditProduct = (props) => {
           is_new_arrival: item.is_new_arrival,
           is_best_seller: item.is_best_seller,
           slug: item.slug,
+          varients: item.varients,
           meta_tittle: item.meta_tittle,
           meta_description: item.meta_description,
           meta_keyword: item.meta_keyword,
@@ -63,7 +162,51 @@ const EditProduct = (props) => {
     setDuplicateVarient(varients);
     setDuplicateCategory(categories);
     setDuplicateSubCategory(subCategories);
+
+    const keys = [];
+    varients.forEach((i, key) => {
+      keys.push(varients[key].varientName || null);
+    });
+    setFatr([...keys, "quantity", "price"]);
   }, []);
+
+  useEffect(() => {
+    if (varients && count < varients.length) {
+      setAoa([
+        ...aoa,
+        {
+          Title: varients[count].varientName,
+          value: [],
+        },
+      ]);
+      setAtr([
+        ...atr,
+        {
+          name: varients[count].varientName,
+          state: false,
+          childern: varients[count].value.map((i, key) => {
+            return {
+              state: false,
+              value: i,
+            };
+          }),
+        },
+      ]);
+      setCount(count + 1);
+    }
+  }, [count]);
+
+  useEffect(() => {
+    setRes(generateResponse(combinations, fatr));
+  }, [combinations, fatr]);
+
+  useEffect(() => {
+    setDynamicArray(takeObj({ ...atr }));
+  }, [atr]);
+
+  useEffect(() => {
+    setCombinations(generateCombinations(...dynamicArray));
+  }, [dynamicArray]);
 
   function getCookie() {
     var name = "connect.sid".concat("=");
@@ -78,6 +221,19 @@ const EditProduct = (props) => {
     }
     return null; // Cookie not found
   }
+
+  const handleChangePrice = (event) => {
+    const { name, value } = event.target;
+    const newInputValues = [...res];
+    newInputValues[name].price = event.target.value;
+    setRes(newInputValues);
+  };
+
+  const handleChangeQuantity = (index, event) => {
+    const newInputValues = [...res];
+    newInputValues[index].quantity = event.target.value;
+    setRes(newInputValues);
+  };
 
   const handleInputChange = (e) => {
     //const name = e.target.name
@@ -113,7 +269,7 @@ const EditProduct = (props) => {
   const handleSubCategoryChange = (event) => {
     setSubCategory(event.target.value);
   };
-  const addProductHandler = (e) => {
+  const updateProductHandler = (e) => {
     e.preventDefault();
     let body = {
       name: values.name,
@@ -130,9 +286,11 @@ const EditProduct = (props) => {
       meta_description: values.meta_description,
       MainCategory,
       SubCategory,
+      varients: res,
     };
     dispatch(
-      addProduct({
+      updateProduct({
+        id: values.id,
         body,
       })
     );
@@ -163,7 +321,7 @@ const EditProduct = (props) => {
             </h1>
           </div>
           <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
-            <form onSubmit={addProductHandler}>
+            <form onSubmit={updateProductHandler}>
               <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
                 <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
                   Name
@@ -408,44 +566,188 @@ const EditProduct = (props) => {
                   placeholder="Meta Description"
                 />
               </div>
+
               <div className="w-[95%] my-5 min-h-[200px]  mx-auto">
+                <label
+                  htmlFor=""
+                  className="ml-4 mr-3 w-[120px] text-2xl  text-gray-400 lg:flex lg:h-[50px] lg:items-center"
+                >
+                  Varients
+                </label>
+                <div className=" min-h-[100px] mt-2 mb-10  ">
+                  <div className="w-full h-[50px] bg-slate-700 text-white opacity-75 flex text-lg  sm:text-xl  items-center  font-semibold  justify-between  ">
+                    <h1 className="ml-5 w-[50%] flex-grow  ">Attributes</h1>
+                    <div className="flex gap-1  sm:gap-x-5 w-[50%] justify-end  ">
+                      <div className="sm:mr-5 mr-2  sm:w-[80px] w-[70px]  flex  ">
+                        Price
+                      </div>
+                      <div className="sm:mr-5 mr-2 ">Quantity</div>
+                    </div>
+                  </div>
+                  {values.varients.length > 0 ? (
+                    values.varients.map((item, key) => {
+                      return (
+                        <div className="w-full min-h-[50px] bg-gray-100 opacity-75 flex  text-xl  items-center  font-semibold  justify-between  ">
+                          <section className="flex flex-wrap ml-5 text-xl my-2 w-[50%]  min-h-[30px]  ">
+                            {item.combinationString &&
+                              item.combinationString.map((i, key) => {
+                                var a = item.combinationString.length;
+                                return (
+                                  <div className="mx-1">
+                                    {i}
+                                    <span
+                                      className={
+                                        a - key === 1
+                                          ? "hidden"
+                                          : "visible mx-1"
+                                      }
+                                    >
+                                      +
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                          </section>
+                          <div className="flex  gap-1  sm:gap-x-5 w-[50%] justify-end  ">
+                            <input
+                              type="number"
+                              name={key}
+                              value={item.price}
+                              readOnly
+                              className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
+                            />
+                            <input
+                              type="number"
+                              key={key}
+                              readOnly
+                              value={item.quantity}
+                              className="sm:mr-5 border-2 text-center w-[70px] mr-2 sm:w-[80px] border-black   "
+                            />
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <h1 className="text-center h-[40px] flex justify-center items-center font-medium ">
+                      No rows
+                    </h1>
+                  )}
+                </div>
+
                 <h1 className="text-black lg:text-xl text-xl font-semibold  pl-3">
                   Product Inventory
                 </h1>
                 <hr className="w-full  h-[2px] " />
                 <div className="w-full min-h-[150px] my-3 ">
-                  {duplicateVarient &&
-                    duplicateVarient.map((item, key) => {
-                      return (
-                        <div className="flex bg-gray-100 text-lg ">
-                          <div className="min-w-[140px] min-h-[50px]  flex items-center  ">
-                            <div className="ml-1">
-                              <input
-                                type="checkbox"
-                                className="w-[18px] h-[18px] "
-                              ></input>
-                              <span className="ml-2 font-semibold text-xl ">
-                                {item.varientName}
-                              </span>
+                  {atr &&
+                    atr
+                      .filter((item, key) => key !== 0)
+                      .map((item, key) => {
+                        return (
+                          <div className="flex bg-gray-100 text-lg ">
+                            <div className="min-w-[140px] min-h-[50px]  flex items-center  ">
+                              <div className="ml-1">
+                                <input
+                                  type="checkbox"
+                                  onChange={handleAttributeNameChange}
+                                  checked={item.state}
+                                  value={item.state}
+                                  name={item.name}
+                                  className="w-[18px] h-[18px] "
+                                ></input>
+                                <span className="ml-2 font-semibold text-xl ">
+                                  {item.name}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex-grow  gap-x-3 gap-1  flex-wrap  w-full overflow-x-hidden  min-h-[50px]  flex items-center ">
+                              {item.childern &&
+                                item.childern.map((i, key) => {
+                                  return (
+                                    <div className=" h-[40px] flex items-center ">
+                                      <input
+                                        type="checkbox"
+                                        name={i.value}
+                                        value={i.state}
+                                        checked={i.state}
+                                        onChange={(e) =>
+                                          handleAttributeChildrenNameChange(
+                                            e,
+                                            item.name
+                                          )
+                                        }
+                                        className="w-[18px] h-[18px] "
+                                      ></input>
+                                      <span className="ml-2">{i.value}</span>
+                                    </div>
+                                  );
+                                })}
+                              <hr className="w-full text-black   h-[3px] " />
                             </div>
                           </div>
-                          <div className="flex-grow  gap-x-3 gap-1  flex-wrap  w-full overflow-x-hidden  min-h-[50px]  flex items-center ">
-                            {item.value &&
-                              item.value.map((i, key) => {
+                        );
+                      })}
+                </div>
+                <div className=" min-h-[100px] ">
+                  <div className="w-full h-[50px] bg-blue-200 opacity-75 flex text-lg  sm:text-xl  items-center  font-semibold  justify-between  ">
+                    <h1 className="ml-5 w-[50%] flex-grow  ">Attributes</h1>
+                    <div className="flex gap-1  sm:gap-x-5 w-[50%] justify-end  ">
+                      <div className="sm:mr-5 mr-2  sm:w-[80px] w-[70px]  flex  ">
+                        Price
+                      </div>
+                      <div className="sm:mr-5 mr-2 ">Quantity</div>
+                    </div>
+                  </div>
+                  {res.length > 0 ? (
+                    res.map((item, key) => {
+                      return (
+                        <div className="w-full min-h-[50px] bg-gray-100 opacity-75 flex  text-xl  items-center  font-semibold  justify-between  ">
+                          <section className="flex flex-wrap ml-5 text-xl my-2 w-[50%]  min-h-[30px]  ">
+                            {item.combinationString &&
+                              item.combinationString.map((i, key) => {
+                                var a = item.combinationString.length;
                                 return (
-                                  <div className=" h-[40px] flex items-center ">
-                                    <input
-                                      type="checkbox"
-                                      className="w-[18px] h-[18px] "
-                                    ></input>
-                                    <span className="ml-2">{i}</span>
+                                  <div className="mx-1">
+                                    {i}
+                                    <span
+                                      className={
+                                        a - key === 1
+                                          ? "hidden"
+                                          : "visible mx-1"
+                                      }
+                                    >
+                                      +
+                                    </span>
                                   </div>
                                 );
                               })}
+                          </section>
+                          <div className="flex  gap-1  sm:gap-x-5 w-[50%] justify-end  ">
+                            <input
+                              type="number"
+                              name={key}
+                              value={item.price}
+                              onChange={(event) => handleChangePrice(event)}
+                              className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
+                            />
+                            <input
+                              type="number"
+                              key={key}
+                              value={item.quantity}
+                              onChange={(event) =>
+                                handleChangeQuantity(key, event)
+                              }
+                              className="sm:mr-5 border-2 text-center w-[70px] mr-2 sm:w-[80px] border-black   "
+                            />
                           </div>
                         </div>
                       );
-                    })}
+                    })
+                  ) : (
+                    <h1 className="text-center h-[40px] flex justify-center items-center font-medium ">
+                      No rows
+                    </h1>
+                  )}
                 </div>
               </div>
 

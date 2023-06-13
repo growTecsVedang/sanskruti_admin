@@ -4,7 +4,6 @@ export const addVarient = createAsyncThunk(
   "addVarient",
   async (datas, { rejectWithValue }) => {
     try {
-      console.log(datas);
       const url = "/api/v1/admin/addVarient";
 
       const headers = {
@@ -24,7 +23,6 @@ export const addVarient = createAsyncThunk(
       const data = await response.json();
       return data;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error.message);
     }
   }

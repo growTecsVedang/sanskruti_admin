@@ -4,7 +4,6 @@ export const addSubCategory = createAsyncThunk(
   "addSubCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      console.log(datas);
       const url = "/api/v1/admin/addSubCategory";
       const token = datas.accessToken;
       const headers = {
@@ -25,7 +24,6 @@ export const addSubCategory = createAsyncThunk(
       const data = await response.json();
       return data;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error.message);
     }
   }
@@ -34,7 +32,6 @@ export const addSubCategory = createAsyncThunk(
 export const updateSubCategory = createAsyncThunk(
   "updateSubCategory",
   async (datas, { rejectWithValue }) => {
-    console.log(datas);
     try {
       const url = `/api/v1/admin/updateSubCategory?id=${datas.id}`;
       const headers = {

@@ -64,7 +64,6 @@ const AttributeForm = () => {
         setVarientName("");
       }
     }
-    console.log(arr.length);
   }
   return (
     <div>

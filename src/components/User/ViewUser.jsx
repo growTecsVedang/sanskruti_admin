@@ -9,7 +9,6 @@ const ViewUser = (props, ID) => {
   useEffect(() => {
     const cookie = getCookie();
     const id = props.match.params.id;
-    console.log(id);
     dispatch(
       getUserDetails({
         cookie,

@@ -22,7 +22,6 @@ const Home = () => {
         history.push("/");
       } else {
         notify(message);
-        console.log("called");
         dispatch(clearState());
       }
     }

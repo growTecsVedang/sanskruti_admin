@@ -100,7 +100,6 @@ const AddProduct = () => {
       MainCategory,
       SubCategory,
     };
-    console.log(body);
     dispatch(
       addProduct({
         body,

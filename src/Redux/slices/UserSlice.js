@@ -102,7 +102,6 @@ export const logOutUser = createAsyncThunk(
       const data = await response.json();
       return data;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error.message);
     }
   }
@@ -148,7 +147,6 @@ export const getUserDetails = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);

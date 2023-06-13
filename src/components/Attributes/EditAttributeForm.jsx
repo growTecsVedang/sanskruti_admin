@@ -20,7 +20,6 @@ const EditAttributeForm = (props) => {
   useEffect(() => {
     varients.forEach((item) => {
       if (item._id === props.match.params.id) {
-        console.log(item);
         setId(item._id);
         setTitle(item.varientName);
         setDuplicateArray(item.value);
@@ -46,7 +45,6 @@ const EditAttributeForm = (props) => {
   };
 
   useEffect(() => {
-    console.log(duplicateArray, arr);
     const notify = (arg) => toast(`${arg}`);
     if (message && type) {
       if (type === "success") {

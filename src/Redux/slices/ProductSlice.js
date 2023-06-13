@@ -50,6 +50,34 @@ export const addProduct = createAsyncThunk(
   }
 );
 
+export const updateProduct = createAsyncThunk(
+  "updateProduct",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `/api/v1/admin/updateProduct?id=${datas.id}`;
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const response = await fetch(url, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify(datas.body),
+        credentials: "include",
+      });
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = await response.json();
+        return rejectWithValue(payload);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const deleteProduct = createAsyncThunk(
   "deleteProduct",
   async (datas, { rejectWithValue }) => {
@@ -121,6 +149,21 @@ const productSlice = createSlice({
       state._id = action.payload._id;
     });
     builder.addCase(addProduct.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+
+    // updateProduct
+    builder.addCase(updateProduct.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(updateProduct.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(updateProduct.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;

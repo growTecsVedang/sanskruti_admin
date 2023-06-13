@@ -63,7 +63,6 @@ const EditSubCategoryForm = (props) => {
 
   const createSubCategorySubmitHandler = (e) => {
     e.preventDefault();
-    console.log(Title, Category, Slug, Meta_Description, Meta_Title);
 
     if (
       Title.trim() !== "" &&

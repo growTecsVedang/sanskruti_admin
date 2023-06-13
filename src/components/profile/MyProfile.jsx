@@ -26,7 +26,6 @@ const MyProfile = () => {
         history.push("/");
       } else {
         notify(message);
-        console.log("called");
         dispatch(clearState());
       }
       dispatch(clearIsAuthenticate());
@@ -39,7 +38,6 @@ const MyProfile = () => {
         cookie,
       })
     );
-    console.log(user);
   }, []);
 
   function handleLogout() {

@@ -41,7 +41,6 @@ const Attributes = () => {
 
   useEffect(() => {
     const notify = (arg) => toast(`${arg}`);
-    console.log(type, message);
     if (message && type) {
       if (type === "success") {
         notify(message);

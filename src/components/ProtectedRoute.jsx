@@ -6,7 +6,6 @@ import { loadUser } from "../Redux/slices/LoadUserSlice";
 import SignInOne from "./SignInOne";
 
 const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
-  console.log("executed");
   const dispatch = useDispatch();
   const { isAuthenticate, loading, loaduser } = useSelector(
     (state) => state.loaduser
@@ -31,7 +30,6 @@ const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
       })
     );
   }, []);
-  console.log(loaduser, loading, isAuthenticate);
   return (
     <Fragment>
       {loading === false &&
