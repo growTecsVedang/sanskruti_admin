@@ -62,7 +62,7 @@ export const logInUserWithEmailOrNumber = createAsyncThunk(
         {
           method: "POST",
           body: JSON.stringify(datas),
-          mode: "cors",
+          mode: "no-cors",
           headers: {
             "Content-Type": "application/json",
           },
