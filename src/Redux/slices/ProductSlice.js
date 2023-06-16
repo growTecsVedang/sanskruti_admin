@@ -5,7 +5,7 @@ export const loadAllProducts = createAsyncThunk(
   async ({ rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${process.env.ENDPOINT}/api/v1/user/getallProducts`,
+        `https://sanskruti.onrender.com/api/v1/user/getallProducts`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -29,7 +29,7 @@ export const addProduct = createAsyncThunk(
   "addProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `${process.env.ENDPOINT}/api/v1/admin/newProduct`;
+      const url = `https://sanskruti.onrender.com/api/v1/admin/newProduct`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -57,7 +57,7 @@ export const updateProduct = createAsyncThunk(
   "updateProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `${process.env.ENDPOINT}/api/v1/admin/updateProduct?id=${datas.id}`;
+      const url = `https://sanskruti.onrender.com/api/v1/admin/updateProduct?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -85,7 +85,7 @@ export const deleteProduct = createAsyncThunk(
   "deleteProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `${process.env.ENDPOINT}/api/v1/admin/delete?id=${datas.id}`;
+      const url = `https://sanskruti.onrender.com/api/v1/admin/delete?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };

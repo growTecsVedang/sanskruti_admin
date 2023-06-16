@@ -4,7 +4,7 @@ export const addSubCategory = createAsyncThunk(
   "addSubCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `${process.env.ENDPOINT}/api/v1/admin/addSubCategory`;
+      const url = `https://sanskruti.onrender.com/api/v1/admin/addSubCategory`;
       const token = datas.accessToken;
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -33,7 +33,7 @@ export const updateSubCategory = createAsyncThunk(
   "updateSubCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `${process.env.ENDPOINT}/api/v1/admin/updateSubCategory?id=${datas.id}`;
+      const url = `https://sanskruti.onrender.com/api/v1/admin/updateSubCategory?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -60,7 +60,7 @@ export const deleteSubCategory = createAsyncThunk(
   "deleteSubCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `${process.env.ENDPOINT}/api/v1/admin/deleteSubCategory?id=${datas.id}`;
+      const url = `https://sanskruti.onrender.com/api/v1/admin/deleteSubCategory?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -87,7 +87,7 @@ export const loadAllSubCategories = createAsyncThunk(
   async (datas, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${process.env.ENDPOINT}/api/v1/user/subcategories?Category=${datas.id}`,
+        `https://sanskruti.onrender.com/api/v1/user/subcategories?Category=${datas.id}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
