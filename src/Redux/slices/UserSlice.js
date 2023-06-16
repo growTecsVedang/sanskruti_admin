@@ -4,7 +4,7 @@ export const deleteUser = createAsyncThunk(
   "deleteUser",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/deleteuser?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/deleteuser?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -30,7 +30,7 @@ export const updateUser = createAsyncThunk(
   "updateUser",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/superadmin/banAndEditUser?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/superadmin/banAndEditUser?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -57,15 +57,18 @@ export const logInUserWithEmailOrNumber = createAsyncThunk(
   "logInUserWithEmailOrNumber",
   async (datas, { rejectWithValue }) => {
     try {
-      const response = await fetch("/api/v1/user/login", {
-        method: "POST",
-        body: JSON.stringify(datas),
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${process.env.ENDPOINT}/api/v1/user/login`,
+        {
+          method: "POST",
+          body: JSON.stringify(datas),
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = await response.json();
@@ -84,7 +87,7 @@ export const logOutUser = createAsyncThunk(
   "logOutUserWithNumber",
   async ({ rejectWithValue }) => {
     try {
-      const url = "/api/v1/user/logout";
+      const url = `${process.env.ENDPOINT}/api/v1/user/logout`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -111,10 +114,13 @@ export const loadAllUsers = createAsyncThunk(
   "loadAllUsers",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch("/api/v1/admin/getAllUsers", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `${process.env.ENDPOINT}/api/v1/admin/getAllUsers`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = await response.json();
@@ -134,7 +140,7 @@ export const getUserDetails = createAsyncThunk(
   async (datas, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `/api/v1/admin/getUserDetails?id=${datas.id}`,
+        `${process.env.ENDPOINT}/api/v1/admin/getUserDetails?id=${datas.id}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -158,7 +164,7 @@ export const userProfile = createAsyncThunk(
   "userProfile",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch("/api/v1/user", {
+      const response = await fetch(`${process.env.ENDPOINT}/api/v1/user`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });

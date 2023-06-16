@@ -4,10 +4,13 @@ export const loadAllProducts = createAsyncThunk(
   "loadAllProducts",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch("/api/v1/user/getallProducts", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `${process.env.ENDPOINT}/api/v1/user/getallProducts`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = await response.json();
@@ -26,7 +29,7 @@ export const addProduct = createAsyncThunk(
   "addProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = "/api/v1/admin/newProduct";
+      const url = `${process.env.ENDPOINT}/api/v1/admin/newProduct`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -54,7 +57,7 @@ export const updateProduct = createAsyncThunk(
   "updateProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/updateProduct?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/updateProduct?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -82,7 +85,7 @@ export const deleteProduct = createAsyncThunk(
   "deleteProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/delete?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/delete?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };

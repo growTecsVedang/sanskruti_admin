@@ -4,7 +4,7 @@ export const addCategory = createAsyncThunk(
   "addCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = "/api/v1/admin/addCategory";
+      const url = `${process.env.ENDPOINT}/api/v1/admin/addCategory`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -32,7 +32,7 @@ export const addCategoryImage = createAsyncThunk(
   "addCategoryImage",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/addCategoryImage?_id=${datas._id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/addCategoryImage?_id=${datas._id}`;
       const headers = {
         // You may need to include other headers based on the API requirements
       };
@@ -59,10 +59,13 @@ export const loadAllCategories = createAsyncThunk(
   "loadAllCategories",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch("/api/v1/user/categories", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `${process.env.ENDPOINT}/api/v1/user/categories`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = await response.json();
@@ -81,7 +84,7 @@ export const deleteCategory = createAsyncThunk(
   "deleteCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/deleteCategory?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/deleteCategory?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -107,7 +110,7 @@ export const updateCategory = createAsyncThunk(
   "updateCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/updateCategory?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/updateCategory?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -134,7 +137,7 @@ export const searchCategory = createAsyncThunk(
   "searchCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/user/categories?keyword=${datas.value}`;
+      const url = `${process.env.ENDPOINT}/api/v1/user/categories?keyword=${datas.value}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };

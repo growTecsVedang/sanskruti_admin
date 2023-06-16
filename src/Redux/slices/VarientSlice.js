@@ -4,7 +4,7 @@ export const addVarient = createAsyncThunk(
   "addVarient",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = "/api/v1/admin/addVarient";
+      const url = `${process.env.ENDPOINT}/api/v1/admin/addVarient`;
 
       const headers = {
         "Content-Type": "application/json", // You may need to include other headers based on the API requirements
@@ -32,10 +32,13 @@ export const loadAllVarients = createAsyncThunk(
   "loadAllVarients",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch("/api/v1/user/getVarients", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `${process.env.ENDPOINT}/api/v1/user/getVarients`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = await response.json();
@@ -54,7 +57,7 @@ export const updateVarient = createAsyncThunk(
   "updateVarient",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/updateVarient?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/updateVarient?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -81,7 +84,7 @@ export const deleteVarient = createAsyncThunk(
   "deleteVarient",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/deleteVarient?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/deleteVarient?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };

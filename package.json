@@ -55,6 +55,5 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.3.1"
-  },
-  "proxy": "https://sanskruti.onrender.com/"
+  }
 }
