@@ -4,13 +4,10 @@ export const loadUser = createAsyncThunk(
   "loadUser",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `https://sanskruti.onrender.com/api/v1/user`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await fetch(`/api/v1/user`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
 
       if (response.status === 409 || response.status === 404) {
         const payload = await response.json();
