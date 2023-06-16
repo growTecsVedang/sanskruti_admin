@@ -4,7 +4,7 @@ export const loadUser = createAsyncThunk(
   "loadUser",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/v1/user`, {
+      const response = await fetch(`http://locahost:4000/api/v1/user`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
