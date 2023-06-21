@@ -1,30 +1,29 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+import axios from "axios";
+
 export const addSubCategory = createAsyncThunk(
   "addSubCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://sanskruti.onrender.com/api/v1/admin/addSubCategory`;
-      const token = datas.accessToken;
+      const url = `/api/v1/admin/addSubCategory`;
       const headers = {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json", // You may need to include other headers based on the API requirements
       };
-      const response = await fetch(url, {
-        method: "POST",
+      const response = await axios.post(url, datas, {
         headers,
-        body: JSON.stringify(datas),
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -33,25 +32,24 @@ export const updateSubCategory = createAsyncThunk(
   "updateSubCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://sanskruti.onrender.com/api/v1/admin/updateSubCategory?id=${datas.id}`;
+      const url = `/api/v1/admin/updateSubCategory?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
-      const response = await fetch(url, {
-        method: "PUT",
+      const response = await axios.put(url, datas.body, {
         headers,
-        body: JSON.stringify(datas.body),
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -60,24 +58,24 @@ export const deleteSubCategory = createAsyncThunk(
   "deleteSubCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://sanskruti.onrender.com/api/v1/admin/deleteSubCategory?id=${datas.id}`;
+      const url = `/api/v1/admin/deleteSubCategory?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
-      const response = await fetch(url, {
-        method: "DELETE",
+      const response = await axios.delete(url, {
         headers,
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -86,23 +84,25 @@ export const loadAllSubCategories = createAsyncThunk(
   "loadAllSubCategories",
   async (datas, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `https://sanskruti.onrender.com/api/v1/user/subcategories?Category=${datas.id}`,
+      const response = await axios.get(
+        `/api/v1/user/subcategories?keyword=${
+          datas.keyword === undefined ? "" : datas.keyword
+        }`,
         {
-          method: "GET",
           headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
       );
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -111,6 +111,7 @@ const subCategorySlice = createSlice({
   name: "subCategory",
   initialState: {
     subCategories: [],
+    subCategoriesCount: 0,
     loading: false,
     error: null,
     message: "",
@@ -180,6 +181,7 @@ const subCategorySlice = createSlice({
       state.message = action.payload.message;
       state.type = action.payload.type;
       state.subCategories = action.payload.subCategories;
+      state.subCategoriesCount = action.payload.subCategoriesCount;
     });
     builder.addCase(loadAllSubCategories.rejected, (state, action) => {
       state.loading = false;

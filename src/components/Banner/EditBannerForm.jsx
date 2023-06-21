@@ -4,15 +4,32 @@ import Sidebar from "../Home/Sidebar";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { clearState, addBanner } from "../../Redux/slices/BannerSlice";
+import {
+  clearState,
+  addBanner,
+  updateBanner,
+} from "../../Redux/slices/BannerSlice";
 const MAX_SIZE = 400 * 1024;
-const BannerForm = () => {
+const EditBannerForm = (props) => {
   const ref = useRef("");
   const dispatch = useDispatch();
-  const { message, type } = useSelector((state) => state.banners);
+  const { message, type, banners } = useSelector((state) => state.banners);
   const [base64Image, setBase64Image] = useState("");
   const [Type, setType] = useState("");
   const [checked, setChecked] = useState(false);
+  const [id, setId] = useState(null);
+
+  useEffect(() => {
+    banners.forEach((item) => {
+      if (item._id === props.match.params.id) {
+        setId(item._id);
+        setType(item.type);
+        setChecked(item.isPublished);
+        setBase64Image(item.image);
+      }
+    });
+  }, []);
+
   useEffect(() => {
     const notify = (arg) => toast(`${arg}`);
     if (message && type) {
@@ -80,7 +97,8 @@ const BannerForm = () => {
     e.preventDefault();
     if (Type !== "" && base64Image !== "") {
       dispatch(
-        addBanner({
+        updateBanner({
+          id,
           body: {
             type: Type,
             isPublished: checked,
@@ -99,7 +117,7 @@ const BannerForm = () => {
         <div className=" flex flex-col overflow-y-scroll overflow-x-hidden no-scroll  h-[100vh] w-[100%] lg:w-[80%]">
           <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
             <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
-              Add Banner
+              Update Banner
             </h1>
           </div>
           <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
@@ -211,7 +229,7 @@ const BannerForm = () => {
                   onClick={(e) => createBannerSubmitHandler(e)}
                   className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
                 >
-                  Save
+                  Update
                 </div>
               </div>
             </form>
@@ -222,4 +240,4 @@ const BannerForm = () => {
   );
 };
 
-export default BannerForm;
+export default EditBannerForm;

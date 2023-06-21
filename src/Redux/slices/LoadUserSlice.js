@@ -1,23 +1,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+import axios from "axios";
+
 export const loadUser = createAsyncThunk(
   "loadUser",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch(`http://locahost:4000/api/v1/user`, {
-        method: "GET",
+      const response = await axios.get(`/api/v1/user`, {
         headers: { "Content-Type": "application/json" },
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );

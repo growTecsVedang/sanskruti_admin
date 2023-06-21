@@ -24,6 +24,7 @@ const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
     return null; // Cookie not found
   }
   useEffect(() => {
+    console.log("called");
     dispatch(
       loadUser({
         cookie: getCookie(),
@@ -32,8 +33,7 @@ const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
   }, []);
   return (
     <Fragment>
-      {loading === false &&
-      (isAuthenticate === true || isAuthenticate === undefined) ? (
+      {loading === false && isAuthenticate === true ? (
         <Route
           {...rest}
           render={(props) => {

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 const Attributes = () => {
   const dispatch = useDispatch();
+  const [keyword, setKeyword] = useState("");
   const { varients, message, type } = useSelector((state) => state.varients);
 
   function getCookie() {
@@ -35,6 +36,16 @@ const Attributes = () => {
     dispatch(
       deleteVarient({
         id,
+      })
+    );
+  };
+  const handleSearch = () => {
+    const cookie = getCookie();
+    console.log(keyword);
+    dispatch(
+      loadAllVarients({
+        keyword,
+        cookie,
       })
     );
   };
@@ -123,10 +134,15 @@ const Attributes = () => {
               <div className="mx-auto lg:mx-0  w-[80%] h-[45px] flex mt-5  overflow-hidden ">
                 <input
                   type="text"
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
                   placeholder="Search Category"
                   className="w-[200px] flex-grow rounded-l-3xl border-[1px] border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none  disabled:cursor-not-allowed disabled:opacity-50 "
                 />
-                <div className="cursor-pointer w-[100px] flex justify-center items-center rounded-r-3xl border-[1px] border-gray-300  bg-[#4361ee] text-white">
+                <div
+                  onClick={handleSearch}
+                  className="cursor-pointer w-[100px] flex justify-center items-center rounded-r-3xl border-[1px] border-gray-300  bg-[#4361ee] text-white"
+                >
                   Search
                 </div>
               </div>
@@ -134,7 +150,9 @@ const Attributes = () => {
                 <Link to="/attributeform">Add</Link>
               </button>
             </div>
-            <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
+            <p className="mx-[10%] lg:mx-[1%] my-3">
+              Showing Results {varients.length}
+            </p>
           </div>
           <DataGrid
             rows={rows}

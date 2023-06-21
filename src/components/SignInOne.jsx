@@ -61,30 +61,21 @@ const SignInOne = () => {
 
   useEffect(() => {
     const notify = (arg) => toast(`${arg}`);
-
-    if (isAuthenticate && loading === false && loaduser.role !== "USER") {
-      history.push(redirect);
-    }
-
-    if (isAuthenticated && role !== "USER") {
-      dispatch(
-        loadUser({
-          cookie: getCookie(),
-        })
-      );
-      history.push(redirect);
-    } else {
-      if (message && type) {
-        if (role === "USER") {
-          notify("USER is not allowed");
+    if (message && type) {
+      if (type === "success") {
+        if (isAuthenticated && role !== "USER") {
+          notify(message);
+          history.push(redirect);
           dispatch(clearState());
         } else {
-          notify(message);
-          dispatch(clearState());
+          notify("Role of USER is not allowed !");
         }
+      } else {
+        notify(message);
+        dispatch(clearState());
       }
     }
-  }, [dispatch, isAuthenticated, type, message, redirect, history]);
+  }, [dispatch, type, message, history, isAuthenticate]);
   return (
     <section>
       <div className="flex items-center justify-center w-full h-[100vh]  ">

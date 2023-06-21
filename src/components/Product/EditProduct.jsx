@@ -11,7 +11,7 @@ import {
   generateResponse,
   takeObj,
 } from "../../helper/combinations";
-
+const MAX_SIZE = 400 * 1024;
 const EditProduct = (props) => {
   const dispatch = useDispatch();
   const initialValues = {
@@ -71,6 +71,8 @@ const EditProduct = (props) => {
   const { products, message, type } = useSelector((state) => state.products);
   const [quantity, setQuantity] = useState(0);
   const [price, setprice] = useState(0);
+  const [images, setImages] = useState([]);
+  const [imagePreview, setImagePreview] = useState([]);
 
   const handleAttributeNameChange = (e) => {
     const { name, value } = e.target;
@@ -103,6 +105,40 @@ const EditProduct = (props) => {
       return item;
     });
     setAtr(updatedArray);
+  };
+
+  useEffect(() => {
+    setImagePreview([...imagePreview, ...images]);
+  }, [images]);
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    const imagePromises = files.map((file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64String = reader.result;
+          resolve(base64String);
+        };
+        if (file.size > MAX_SIZE) {
+          alert("file size exceeded");
+          return;
+        }
+
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(imagePromises).then((base64Strings) => {
+      setImages(base64Strings);
+    });
+  };
+
+  const deleteFile = (k) => {
+    const newBase64ImageArray = imagePreview.filter((item, key) => {
+      return k !== key;
+    });
+    setImagePreview(newBase64ImageArray);
   };
 
   const handleAttributeChildrenNameChange = (e, parent) => {
@@ -154,6 +190,7 @@ const EditProduct = (props) => {
           meta_description: item.meta_description,
           meta_keyword: item.meta_keyword,
         });
+        setImagePreview(item.images);
         setMainCategory(item.MainCategory);
         setSubCategory(item.SubCategory);
       }
@@ -287,6 +324,7 @@ const EditProduct = (props) => {
       MainCategory,
       SubCategory,
       varients: res,
+      images: imagePreview,
     };
     dispatch(
       updateProduct({
@@ -750,18 +788,44 @@ const EditProduct = (props) => {
                   )}
                 </div>
               </div>
-
-              <div className="w-full pr-4 mt-3 h-[60px] flex items-center justify-end  ">
-                <button
-                  type="submit"
-                  className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
-                >
-                  Save & edit
-                </button>
-              </div>
-            </form>
-            <form>
-              <div class="  mt-5 flex items-center justify-center   w-[95%]   lg:w-[95%] mx-auto cursor-pointer ">
+              <div class="  mt-5 flex items-center flex-col   justify-center   w-[95%]   lg:w-[95%] mx-auto cursor-pointer ">
+                <div className="w-[100%] mb-8 ">
+                  <h2 className="text-lg font-bold mt-5  mx-4 ">
+                    Product Images
+                  </h2>
+                  <div className=" mt-5  flex overflow-x-scroll w-full gap-x-6 min-h-[225px]  ">
+                    {imagePreview.length !== 0 ? (
+                      imagePreview.map((i, key) => {
+                        return (
+                          <div key={key} className="mb-4">
+                            <div className="w-[280px] h-[350px] border-2 border-gray-200 ">
+                              <img
+                                className="w-[280px] h-[350px]"
+                                src={i}
+                                alt="product_image"
+                              />
+                            </div>
+                            <div
+                              onClick={() => deleteFile(key)}
+                              className="w-[280px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 "
+                            >
+                              <span>{<AiOutlineDelete size={30} />}</span>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="mb-4">
+                        <div className="w-[250px] h-[350px] border-2 border-gray-200 ">
+                          <img src="" alt="add_product_image" />
+                        </div>
+                        <div className="w-[250px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 ">
+                          <span>{<AiOutlineDelete size={30} />}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
                 <label
                   for="dropzone-file"
                   class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800  hover:bg-gray-100 "
@@ -790,33 +854,25 @@ const EditProduct = (props) => {
                       SVG, PNG, JPG or GIF (MAX. 800x400px)
                     </p>
                   </div>
-                  <input id="dropzone-file" type="file" class="hidden" />
+                  <input
+                    id="dropzone-file"
+                    type="file"
+                    class="hidden"
+                    onChange={handleFileChange}
+                    multiple
+                  />
                 </label>
               </div>
+
               <div className="w-full pr-4 mt-3 h-[60px] flex items-center justify-end  ">
                 <button
                   type="submit"
                   className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
                 >
-                  upload
+                  Save & edit
                 </button>
               </div>
             </form>
-            <h2 className="text-lg font-bold mt-5  mx-4 ">Product Images</h2>
-            <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[225px]  ">
-              <div className="">
-                <div className="w-[250px] h-[150px] border-2 border-gray-200 "></div>
-                <div className="w-[250px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 ">
-                  <span>{<AiOutlineDelete size={30} />}</span>
-                </div>
-              </div>
-              <div>
-                <div className="w-[250px] h-[150px] border-2 border-gray-200 "></div>
-                <div className="w-[250px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 ">
-                  <span>{<AiOutlineDelete size={30} />}</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

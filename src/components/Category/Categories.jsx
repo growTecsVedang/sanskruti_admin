@@ -17,7 +17,7 @@ import {
 // import "./Category.css";
 
 const Categories = () => {
-  const { categories, message, type } = useSelector(
+  const { categories, message, type, categoryCount } = useSelector(
     (state) => state.categories
   );
   const dispatch = useDispatch();

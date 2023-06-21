@@ -1,26 +1,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+import axios from "axios";
+
 export const loadAllProducts = createAsyncThunk(
   "loadAllProducts",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `https://sanskruti.onrender.com/api/v1/user/getallProducts`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await axios.get(`/api/v1/user/getallProducts`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -28,27 +27,26 @@ export const loadAllProducts = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "addProduct",
   async (datas, { rejectWithValue }) => {
+    console.log(datas);
     try {
-      const url = `https://sanskruti.onrender.com/api/v1/admin/newProduct`;
+      const url = `http://localhost:4500/api/v1/admin/newProduct`;
       const headers = {
         "Content-Type": "application/json",
       };
-      const response = await fetch(url, {
-        method: "POST",
+      const response = await axios.post(url, datas.body, {
         headers,
-        body: JSON.stringify(datas.body),
-        credentials: "include",
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -57,26 +55,24 @@ export const updateProduct = createAsyncThunk(
   "updateProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://sanskruti.onrender.com/api/v1/admin/updateProduct?id=${datas.id}`;
+      const url = `/api/v1/admin/updateProduct?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json",
       };
-      const response = await fetch(url, {
-        method: "PUT",
+      const response = await axios.put(url, datas.body, {
         headers,
-        body: JSON.stringify(datas.body),
-        credentials: "include",
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -85,24 +81,24 @@ export const deleteProduct = createAsyncThunk(
   "deleteProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://sanskruti.onrender.com/api/v1/admin/delete?id=${datas.id}`;
+      const url = `/api/v1/admin/delete?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
-      const response = await fetch(url, {
-        method: "DELETE",
+      const response = await axios.delete(url, {
         headers,
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -111,6 +107,7 @@ const productSlice = createSlice({
   name: "product",
   initialState: {
     products: [],
+    productCount: 0,
     loading: false,
     error: null,
     message: "",
@@ -132,6 +129,7 @@ const productSlice = createSlice({
       state.message = action.payload.message;
       state.type = action.payload.type;
       state.products = action.payload.products;
+      state.productCount = action.payload.productCount;
     });
     builder.addCase(loadAllProducts.rejected, (state, action) => {
       state.loading = false;

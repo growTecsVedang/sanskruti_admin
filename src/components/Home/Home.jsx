@@ -5,27 +5,58 @@ import BarChart from "../Charts/BarChart";
 import OrderStat from "./OrderStat";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
-import { clearState } from "../../Redux/slices/UserSlice";
+import { clearState, loadAllUsers } from "../../Redux/slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { loadAllProducts } from "../../Redux/slices/ProductSlice";
+import { useState } from "react";
 
 const Home = () => {
+  const [allusers, setAllUsers] = useState(0);
+  const [allproducts, setAllProducts] = useState(0);
   const history = useHistory();
   const dispatch = useDispatch();
-  const { message, type, isAuthenticated } = useSelector((state) => state.user);
+  const { message, type, isAuthenticated, userCount } = useSelector(
+    (state) => state.user
+  );
+  const { productCount } = useSelector((state) => state.products);
+
+  function getCookie() {
+    var name = "connect.sid".concat("=");
+    var decodedCookie = document.cookie;
+    var cookieArray = decodedCookie.split(";");
+
+    for (var i = 0; i < cookieArray.length; i++) {
+      var cookie = cookieArray[i].trim();
+      if (cookie.startsWith(name)) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return null; // Cookie not found
+  }
+
+  useEffect(() => {
+    const cookie = getCookie();
+    dispatch(
+      loadAllUsers({
+        cookie,
+      })
+    );
+    dispatch(
+      loadAllProducts({
+        cookie,
+      })
+    );
+  }, []);
 
   useEffect(() => {
     const notify = (arg) => toast(`${arg}`);
     if (message && type) {
-      if (type === "success") {
-        notify(message);
-        dispatch(clearState());
-        history.push("/");
-      } else {
-        notify(message);
-        dispatch(clearState());
-      }
+      notify(message);
+      dispatch(clearState());
     }
-  }, [dispatch, isAuthenticated, type, message, history]);
+    setAllUsers(userCount);
+    setAllProducts(productCount);
+  }, [dispatch, type, message, history, userCount, productCount]);
   return (
     <div className="">
       <Navbar />
@@ -35,11 +66,11 @@ const Home = () => {
           <div className="flex flex-col lg:flex-row mx-3 mt-3 ">
             <div className="h-[100px] lg:ml-2 bg-[#f5dd90] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
               <h1 className="text-lg ml-5 ">Total products</h1>
-              <p className="font-bold text-xl ml-5">53</p>
+              <p className="font-bold text-xl ml-5">{allproducts}</p>
             </div>
             <div className="h-[100px] lg:ml-2 bg-[#aaa1c8] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
               <h1 className="text-lg ml-5 ">Total users</h1>
-              <p className="font-bold text-xl ml-5">161</p>
+              <p className="font-bold text-xl ml-5">{allusers}</p>
             </div>
             <div className="h-[100px] lg:ml-2 bg-[#74c69d] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
               <h1 className="text-lg ml-5 ">Total orders</h1>

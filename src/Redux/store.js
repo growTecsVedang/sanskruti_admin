@@ -5,6 +5,7 @@ import categoryReducer from "./slices/CategorySlice";
 import subCategoryReducer from "./slices/SubCategorySlice";
 import varientReducer from "./slices/VarientSlice";
 import loaduserReducer from "./slices/LoadUserSlice";
+import bannerReducer from "./slices/BannerSlice";
 const store = configureStore({
   reducer: {
     products: productReducer,
@@ -13,6 +14,7 @@ const store = configureStore({
     categories: categoryReducer,
     subcategories: subCategoryReducer,
     varients: varientReducer,
+    banners: bannerReducer,
   },
 });
 

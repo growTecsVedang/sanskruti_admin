@@ -29,6 +29,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { loadUser } from "./Redux/slices/LoadUserSlice";
 import getRole from "./helper/getRole";
 import ProtectedRoute from "./components/ProtectedRoute";
+import EditBannerForm from "./components/Banner/EditBannerForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -85,6 +86,11 @@ function App() {
           exact
           path="/editsubcategory/:id"
           component={EditSubCategoryForm}
+        />
+        <ProtectedRoute
+          exact
+          path="/editbanner/:id"
+          component={EditBannerForm}
         />
         <ProtectedRoute exact path="/banner" component={Banner} />
         <ProtectedRoute exact path="/bannerform" component={BannerForm} />

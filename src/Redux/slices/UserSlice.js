@@ -1,27 +1,29 @@
+import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const deleteUser = createAsyncThunk(
   "deleteUser",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `http://locahost:4000/api/v1/admin/deleteuser?id=${datas.id}`;
+      const url = `/api/v1/admin/deleteuser?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
-      const response = await fetch(url, {
-        method: "DELETE",
+
+      const response = await axios.delete(url, {
         headers,
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -30,25 +32,25 @@ export const updateUser = createAsyncThunk(
   "updateUser",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `http://locahost:4000/api/v1/superadmin/banAndEditUser?id=${datas.id}`;
+      const url = `/api/v1/superadmin/banAndEditUser?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
-      const response = await fetch(url, {
-        method: "PUT",
+
+      const response = await axios.put(url, datas.body, {
         headers,
-        body: JSON.stringify(datas.body),
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -57,24 +59,24 @@ export const logInUserWithEmailOrNumber = createAsyncThunk(
   "logInUserWithEmailOrNumber",
   async (datas, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://locahost:4000/api/v1/user/login`, {
-        method: "POST",
-        body: JSON.stringify(datas),
+      const response = await axios.post(`/api/v1/user/login`, datas, {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
       });
+      console.log(response.status);
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
+        console.log(payload);
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.log(error.response.data);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -83,25 +85,25 @@ export const logOutUser = createAsyncThunk(
   "logOutUserWithNumber",
   async ({ rejectWithValue }) => {
     try {
-      const url = `http://locahost:4000/api/v1/user/logout`;
+      const url = `/api/v1/user/logout`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
-      const response = await fetch(url, {
-        method: "GET",
+
+      const response = await axios.get(url, {
         headers,
-        credentials: "include",
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -110,23 +112,20 @@ export const loadAllUsers = createAsyncThunk(
   "loadAllUsers",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `http://locahost:4000/api/v1/admin/getAllUsers`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await axios.get(`/api/v1/admin/getAllUsers`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -135,23 +134,23 @@ export const getUserDetails = createAsyncThunk(
   "getUserDetails",
   async (datas, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `http://locahost:4000/api/v1/admin/getUserDetails?id=${datas.id}`,
+      const response = await axios.get(
+        `/api/v1/admin/getUserDetails?id=${datas.id}`,
         {
-          method: "GET",
           headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
       );
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -160,20 +159,20 @@ export const userProfile = createAsyncThunk(
   "userProfile",
   async ({ rejectWithValue }) => {
     try {
-      const response = await fetch(`http://locahost:4000/api/v1/user`, {
-        method: "GET",
+      const response = await axios.get(`/api/v1/user`, {
         headers: { "Content-Type": "application/json" },
+        withCredentials: true,
       });
 
       if (response.status === 409 || response.status === 404) {
-        const payload = await response.json();
+        const payload = response.data;
         return rejectWithValue(payload);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -182,6 +181,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     users: [],
+    userCount: 0,
     user: {},
     message: "",
     role: "",
@@ -268,6 +268,7 @@ const userSlice = createSlice({
       state.message = "";
       state.type = action.payload.type;
       state.users = action.payload.users;
+      state.userCount = action.payload.userCount;
     });
     builder.addCase(loadAllUsers.rejected, (state, action) => {
       state.loading = false;

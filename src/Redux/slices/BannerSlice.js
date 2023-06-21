@@ -2,16 +2,16 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "axios";
 
-export const addVarient = createAsyncThunk(
-  "addVarient",
+export const addBanner = createAsyncThunk(
+  "addBanner",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/addVarient`;
+      const url = `/api/v1/admin/addBanner`;
 
       const headers = {
         "Content-Type": "application/json", // You may need to include other headers based on the API requirements
       };
-      const response = await axios.post(url, datas, {
+      const response = await axios.post(url, datas.body, {
         headers,
         withCredentials: true,
       });
@@ -29,12 +29,12 @@ export const addVarient = createAsyncThunk(
   }
 );
 
-export const loadAllVarients = createAsyncThunk(
-  "loadAllVarients",
+export const loadAllBanners = createAsyncThunk(
+  "loadAllBanners",
   async (datas, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `/api/v1/user/getVarients?keyword=${
+        `/api/v1/user/getAllBanners?keyword=${
           datas.keyword === undefined ? "" : datas.keyword
         }`,
         {
@@ -56,11 +56,12 @@ export const loadAllVarients = createAsyncThunk(
   }
 );
 
-export const updateVarient = createAsyncThunk(
-  "updateVarient",
+export const updateBanner = createAsyncThunk(
+  "updateBanner",
   async (datas, { rejectWithValue }) => {
+    console.log(datas);
     try {
-      const url = `/api/v1/admin/updateVarient?id=${datas.id}`;
+      const url = `/api/v1/admin/updateBanner?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -82,11 +83,11 @@ export const updateVarient = createAsyncThunk(
   }
 );
 
-export const deleteVarient = createAsyncThunk(
-  "deleteVarient",
+export const deleteBanner = createAsyncThunk(
+  "deleteBanner",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/deleteVarient?id=${datas.id}`;
+      const url = `/api/v1/admin/deleteBanner?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -108,10 +109,12 @@ export const deleteVarient = createAsyncThunk(
   }
 );
 
-const varientSlice = createSlice({
-  name: "varient",
+const bannerSlice = createSlice({
+  name: "banner",
   initialState: {
-    varients: [],
+    banners: [],
+    banner: {},
+    bannerCount: 0,
     loading: false,
     error: null,
     message: "",
@@ -123,65 +126,64 @@ const varientSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // addCategory
-
-    builder.addCase(addVarient.pending, (state, action) => {
+    // addBanner
+    builder.addCase(addBanner.pending, (state, action) => {
       state.loading = true;
       state.message = "";
     });
-    builder.addCase(addVarient.fulfilled, (state, action) => {
-      state.loading = false;
-      state.message = action.payload.message;
-      state.type = action.payload.type;
-      state._id = action.payload._id;
-    });
-    builder.addCase(addVarient.rejected, (state, action) => {
+    builder.addCase(addBanner.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
-
-    // deleteVarient
-    builder.addCase(deleteVarient.pending, (state, action) => {
-      state.loading = true;
-    });
-    builder.addCase(deleteVarient.fulfilled, (state, action) => {
-      state.loading = false;
-      state.message = action.payload.message;
-      state.type = action.payload.type;
-    });
-    builder.addCase(deleteVarient.rejected, (state, action) => {
+    builder.addCase(addBanner.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
-    // updateVarient
-    builder.addCase(updateVarient.pending, (state, action) => {
+    // deleteBanner
+    builder.addCase(deleteBanner.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(updateVarient.fulfilled, (state, action) => {
+    builder.addCase(deleteBanner.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
-    builder.addCase(updateVarient.rejected, (state, action) => {
+    builder.addCase(deleteBanner.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
-    // loadAllVarients
-    builder.addCase(loadAllVarients.pending, (state, action) => {
+    // updateBanner
+    builder.addCase(updateBanner.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(loadAllVarients.fulfilled, (state, action) => {
+    builder.addCase(updateBanner.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
-      state.varients = action.payload.varients;
     });
-    builder.addCase(loadAllVarients.rejected, (state, action) => {
+    builder.addCase(updateBanner.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+
+    // loadAllBanners
+    builder.addCase(loadAllBanners.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(loadAllBanners.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+      state.banners = action.payload.banners;
+      state.bannerCount = action.payload.bannerCount;
+    });
+    builder.addCase(loadAllBanners.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
@@ -189,5 +191,5 @@ const varientSlice = createSlice({
   },
 });
 
-export const { addItem, clearState } = varientSlice.actions;
-export default varientSlice.reducer;
+export const { addItem, clearState } = bannerSlice.actions;
+export default bannerSlice.reducer;
