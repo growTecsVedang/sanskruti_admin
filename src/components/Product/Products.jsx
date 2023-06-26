@@ -87,6 +87,12 @@ const Products = () => {
       flex: 0.3,
     },
     {
+      field: "Slug",
+      headerName: "Slug",
+      minWidth: 180,
+      flex: 0.3,
+    },
+    {
       field: "Main_Category",
       headerName: "Main Category",
       minWidth: 180,
@@ -137,9 +143,10 @@ const Products = () => {
       rows.push({
         id: item._id,
         Name: item.name,
+        Slug: item.slug,
         Main_Category: item.MainCategory,
         Sub_Category: item.SubCategory,
-        Varients: item.varients.length,
+        Varients: item.varients.variations.length,
       });
     });
 

@@ -36,7 +36,6 @@ const SubCategoryForm = () => {
 
   const { message, type } = useSelector((state) => state.subcategories);
   const [Title, setTitle] = useState("");
-  const [Slug, setSlug] = useState("");
   const [Meta_Title, setMeta_Title] = useState("");
   const [Meta_Description, setMeta_Description] = useState("");
   const [Category, setCategory] = useState("");
@@ -64,7 +63,6 @@ const SubCategoryForm = () => {
 
     if (
       Title.trim() !== "" &&
-      Slug.trim() !== "" &&
       Meta_Description.trim() !== "" &&
       Meta_Title.trim() !== ""
     ) {
@@ -74,13 +72,11 @@ const SubCategoryForm = () => {
           cookie: accessToken,
           Title,
           Category,
-          Slug,
           Meta_Title,
           Meta_Description,
         })
       );
       setTitle("");
-      setSlug("");
       setMeta_Title("");
       setMeta_Description("");
     }
@@ -145,18 +141,6 @@ const SubCategoryForm = () => {
                       );
                     })}
                 </select>
-              </div>
-              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-                  Slug
-                </label>
-                <input
-                  type="text"
-                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                  placeholder="Slug"
-                  value={Slug}
-                  onChange={(e) => setSlug(e.target.value)}
-                />
               </div>
               <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
                 <label htmlFor="" className="mb-4 text-lg text-gray-400 ">

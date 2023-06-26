@@ -13,13 +13,11 @@ const AddProduct = () => {
   const initialValues = {
     name: "",
     description: "",
-    gst_price: 0,
-    sale_price: 0,
+    gst_percent: 0,
     brand_name: "",
     is_featured: false,
     is_new_arrival: false,
     is_best_seller: false,
-    slug: "",
     meta_tittle: "",
     meta_description: "",
     meta_keyword: "",
@@ -88,13 +86,11 @@ const AddProduct = () => {
     let body = {
       name: values.name,
       description: values.description,
-      gst_price: values.gst_price,
-      sale_price: values.sale_price,
+      gst_percent: Number(values.gst_percent),
       brand_name: values.brand_name,
       is_featured: values.is_featured,
       is_new_arrival: values.is_new_arrival,
       is_best_seller: values.is_best_seller,
-      slug: values.slug,
       meta_tittle: values.meta_tittle,
       meta_keyword: values.meta_keyword,
       meta_description: values.meta_description,
@@ -258,33 +254,16 @@ const AddProduct = () => {
                     htmlFor=""
                     className="mb-1 ml-4 mr-3 text-lg text-gray-400  lg:flex lg:h-[50px] lg:items-center "
                   >
-                    Gst Price
+                    Gst
                   </label>
                   <input
                     type="number"
-                    value={values.gst_price}
+                    value={values.gst_percent}
                     onChange={handleInputChange}
-                    label="Gst_price"
-                    name="gst_price"
+                    label="Gst_percent"
+                    name="gst_percent"
                     className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                    placeholder="Title"
-                  />
-                </div>
-                <div className="flex flex-col lg:flex-row w-[30%]  mt-5 ">
-                  <label
-                    htmlFor=""
-                    className="mb-1 ml-4 mr-3 text-lg text-gray-400 lg:flex lg:h-[50px] lg:items-center"
-                  >
-                    Sale Price
-                  </label>
-                  <input
-                    type="number"
-                    value={values.sale_price}
-                    onChange={handleInputChange}
-                    label="Sale_price"
-                    name="sale_price"
-                    className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                    placeholder="Title"
+                    placeholder="Gst in %"
                   />
                 </div>
               </div>
@@ -346,20 +325,6 @@ const AddProduct = () => {
               </div>
               <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
                 <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-                  Slug
-                </label>
-                <input
-                  type="text"
-                  value={values.slug}
-                  onChange={handleInputChange}
-                  label="Slug"
-                  name="slug"
-                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                  placeholder="Slug"
-                />
-              </div>
-              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
                   Brand Name
                 </label>
                 <input
@@ -369,7 +334,7 @@ const AddProduct = () => {
                   label="Brand_name"
                   name="brand_name"
                   className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                  placeholder="Slug"
+                  placeholder="brand-name"
                 />
               </div>
               <div className="flex flex-col lg:flex-row lg:items-center w-[95%] mx-auto">

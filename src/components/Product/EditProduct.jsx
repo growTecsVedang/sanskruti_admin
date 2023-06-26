@@ -18,14 +18,12 @@ const EditProduct = (props) => {
     id: "",
     name: "",
     description: "",
-    gst_price: 0,
-    sale_price: 0,
+    gst_percent: 0,
     brand_name: "",
     is_featured: false,
     is_new_arrival: false,
     is_best_seller: false,
-    slug: "",
-    varients: [],
+    varients: {},
     meta_tittle: "",
     meta_description: "",
     meta_keyword: "",
@@ -62,7 +60,6 @@ const EditProduct = (props) => {
   const [aoa, setAoa] = useState(arrayOfArray);
   const [MainCategory, setMainCategory] = useState("");
   const [SubCategory, setSubCategory] = useState("");
-  const [duplicateVarient, setDuplicateVarient] = useState([]);
   const [duplicateCategory, setDuplicateCategory] = useState([]);
   const [duplicateSubCategory, setDuplicateSubCategory] = useState([]);
   const { subCategories } = useSelector((state) => state.subcategories);
@@ -110,6 +107,8 @@ const EditProduct = (props) => {
   useEffect(() => {
     setImagePreview([...imagePreview, ...images]);
   }, [images]);
+
+  console.log(res);
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -178,13 +177,11 @@ const EditProduct = (props) => {
           id: item._id,
           name: item.name,
           description: item.description,
-          gst_price: item.gst_price,
-          sale_price: item.sale_price,
+          gst_percent: item.gst_percent,
           brand_name: item.brand_name,
           is_featured: item.is_featured,
           is_new_arrival: item.is_new_arrival,
           is_best_seller: item.is_best_seller,
-          slug: item.slug,
           varients: item.varients,
           meta_tittle: item.meta_tittle,
           meta_description: item.meta_description,
@@ -195,8 +192,6 @@ const EditProduct = (props) => {
         setSubCategory(item.SubCategory);
       }
     });
-
-    setDuplicateVarient(varients);
     setDuplicateCategory(categories);
     setDuplicateSubCategory(subCategories);
 
@@ -204,7 +199,7 @@ const EditProduct = (props) => {
     varients.forEach((i, key) => {
       keys.push(varients[key].varientName || null);
     });
-    setFatr([...keys, "quantity", "price"]);
+    setFatr([...keys, "quantity", "discount", "price"]);
   }, []);
 
   useEffect(() => {
@@ -260,15 +255,23 @@ const EditProduct = (props) => {
   }
 
   const handleChangePrice = (event) => {
-    const { name, value } = event.target;
+    const { name } = event.target;
     const newInputValues = [...res];
-    newInputValues[name].price = event.target.value;
+    newInputValues[name].price = Number(event.target.value);
+    setRes(newInputValues);
+  };
+
+  const handleChangeDiscount = (event) => {
+    const { name } = event.target;
+    console.log(name);
+    const newInputValues = [...res];
+    newInputValues[name].discount = Number(event.target.value);
     setRes(newInputValues);
   };
 
   const handleChangeQuantity = (index, event) => {
     const newInputValues = [...res];
-    newInputValues[index].quantity = event.target.value;
+    newInputValues[index].quantity = Number(event.target.value);
     setRes(newInputValues);
   };
 
@@ -276,6 +279,7 @@ const EditProduct = (props) => {
     //const name = e.target.name
     //const value = e.target.value
     const { name, value } = e.target;
+    console.log(typeof value);
     if (
       name === "is_featured" ||
       name === "is_best_seller" ||
@@ -311,19 +315,20 @@ const EditProduct = (props) => {
     let body = {
       name: values.name,
       description: values.description,
-      gst_price: values.gst_price,
-      sale_price: values.sale_price,
+      gst_percent: Number(values.gst_percent),
       brand_name: values.brand_name,
       is_featured: values.is_featured,
       is_new_arrival: values.is_new_arrival,
       is_best_seller: values.is_best_seller,
-      slug: values.slug,
       meta_tittle: values.meta_tittle,
       meta_keyword: values.meta_keyword,
       meta_description: values.meta_description,
       MainCategory,
       SubCategory,
-      varients: res,
+      varients: {
+        attributes: atr,
+        variations: res,
+      },
       images: imagePreview,
     };
     dispatch(
@@ -437,33 +442,16 @@ const EditProduct = (props) => {
                     htmlFor=""
                     className="mb-1 ml-4 mr-3 text-lg text-gray-400  lg:flex lg:h-[50px] lg:items-center "
                   >
-                    Gst Price
+                    Gst
                   </label>
                   <input
                     type="number"
-                    value={values.gst_price}
+                    value={values.gst_percent}
                     onChange={handleInputChange}
-                    label="Gst_price"
-                    name="gst_price"
+                    label="Gst_percent"
+                    name="gst_percent"
                     className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                    placeholder="Title"
-                  />
-                </div>
-                <div className="flex flex-col lg:flex-row w-[30%]  mt-5 ">
-                  <label
-                    htmlFor=""
-                    className="mb-1 ml-4 mr-3 text-lg text-gray-400 lg:flex lg:h-[50px] lg:items-center"
-                  >
-                    Sale Price
-                  </label>
-                  <input
-                    type="number"
-                    value={values.sale_price}
-                    onChange={handleInputChange}
-                    label="Sale_price"
-                    name="sale_price"
-                    className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                    placeholder="Title"
+                    placeholder="Gst in %"
                   />
                 </div>
               </div>
@@ -528,20 +516,6 @@ const EditProduct = (props) => {
               </div>
               <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
                 <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-                  Slug
-                </label>
-                <input
-                  type="text"
-                  value={values.slug}
-                  onChange={handleInputChange}
-                  label="Slug"
-                  name="slug"
-                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                  placeholder="Slug"
-                />
-              </div>
-              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
                   Brand Name
                 </label>
                 <input
@@ -551,7 +525,7 @@ const EditProduct = (props) => {
                   label="Brand_name"
                   name="brand_name"
                   className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                  placeholder="Slug"
+                  placeholder="Brand-name"
                 />
               </div>
               <div className="flex flex-col lg:flex-row lg:items-center w-[95%] mx-auto">
@@ -614,16 +588,18 @@ const EditProduct = (props) => {
                 </label>
                 <div className=" min-h-[100px] mt-2 mb-10  ">
                   <div className="w-full h-[50px] bg-slate-700 text-white opacity-75 flex text-lg  sm:text-xl  items-center  font-semibold  justify-between  ">
-                    <h1 className="ml-5 w-[50%] flex-grow  ">Attributes</h1>
-                    <div className="flex gap-1  sm:gap-x-5 w-[50%] justify-end  ">
+                    <h1 className="ml-5 w-[30%] flex-grow  ">Attributes</h1>
+                    <div className="flex gap-1  sm:gap-x-5 w-[70%] justify-end  ">
+                      <div className="sm:mr-5 mr-2 ">Quantity</div>
+                      <div className="sm:mr-5 mr-2 ">Discount</div>
                       <div className="sm:mr-5 mr-2  sm:w-[80px] w-[70px]  flex  ">
                         Price
                       </div>
-                      <div className="sm:mr-5 mr-2 ">Quantity</div>
                     </div>
                   </div>
-                  {values.varients.length > 0 ? (
-                    values.varients.map((item, key) => {
+                  {values.varients.variations !== undefined &&
+                  values.varients.variations.length > 0 ? (
+                    values.varients.variations.map((item, key) => {
                       return (
                         <div className="w-full min-h-[50px] bg-gray-100 opacity-75 flex  text-xl  items-center  font-semibold  justify-between  ">
                           <section className="flex flex-wrap ml-5 text-xl my-2 w-[50%]  min-h-[30px]  ">
@@ -649,17 +625,25 @@ const EditProduct = (props) => {
                           <div className="flex  gap-1  sm:gap-x-5 w-[50%] justify-end  ">
                             <input
                               type="number"
+                              key={key}
+                              readOnly
+                              value={item.quantity}
+                              className="sm:mr-5 border-2 text-center w-[70px] mr-2 sm:w-[80px] border-black   "
+                            />
+
+                            <input
+                              type="number"
                               name={key}
-                              value={item.price}
+                              value={item.discount}
                               readOnly
                               className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
                             />
                             <input
                               type="number"
-                              key={key}
+                              name={key}
+                              value={item.price}
                               readOnly
-                              value={item.quantity}
-                              className="sm:mr-5 border-2 text-center w-[70px] mr-2 sm:w-[80px] border-black   "
+                              className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
                             />
                           </div>
                         </div>
@@ -728,12 +712,13 @@ const EditProduct = (props) => {
                 </div>
                 <div className=" min-h-[100px] ">
                   <div className="w-full h-[50px] bg-blue-200 opacity-75 flex text-lg  sm:text-xl  items-center  font-semibold  justify-between  ">
-                    <h1 className="ml-5 w-[50%] flex-grow  ">Attributes</h1>
-                    <div className="flex gap-1  sm:gap-x-5 w-[50%] justify-end  ">
+                    <h1 className="ml-5 w-[30%] flex-grow  ">Attributes</h1>
+                    <div className="flex gap-1  sm:gap-x-5 w-[70%] justify-end  ">
+                      <div className="sm:mr-5 mr-2 ">Quantity</div>
+                      <div className="sm:mr-5 mr-2 ">Discount</div>
                       <div className="sm:mr-5 mr-2  sm:w-[80px] w-[70px]  flex  ">
                         Price
                       </div>
-                      <div className="sm:mr-5 mr-2 ">Quantity</div>
                     </div>
                   </div>
                   {res.length > 0 ? (
@@ -763,19 +748,24 @@ const EditProduct = (props) => {
                           <div className="flex  gap-1  sm:gap-x-5 w-[50%] justify-end  ">
                             <input
                               type="number"
-                              name={key}
-                              value={item.price}
-                              onChange={(event) => handleChangePrice(event)}
-                              className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
-                            />
-                            <input
-                              type="number"
                               key={key}
-                              value={item.quantity}
                               onChange={(event) =>
                                 handleChangeQuantity(key, event)
                               }
                               className="sm:mr-5 border-2 text-center w-[70px] mr-2 sm:w-[80px] border-black   "
+                            />
+                            <input
+                              type="number"
+                              name={key}
+                              onChange={(event) => handleChangeDiscount(event)}
+                              className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
+                            />
+                            <input
+                              type="number"
+                              name={key}
+                              placeholder=""
+                              onChange={(event) => handleChangePrice(event)}
+                              className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
                             />
                           </div>
                         </div>

@@ -3,19 +3,13 @@ import Navbar from "../Home/Navbar";
 import Sidebar from "../Home/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineDelete } from "react-icons/ai";
-import {
-  addCategory,
-  addCategoryImage,
-  clearState,
-} from "../../Redux/slices/CategorySlice";
+import { addCategory, clearState } from "../../Redux/slices/CategorySlice";
 import { toast } from "react-toastify";
 const MAX_SIZE = 400 * 1024;
 const CategoryForm = () => {
-  const { message, type, _id } = useSelector((state) => state.categories);
+  const { message, type } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
-  const [images, setImages] = useState({});
   const [Title, setTitle] = useState("");
-  const [Slug, setSlug] = useState("");
   const [Meta_Title, setMeta_Title] = useState("");
   const [Meta_Description, setMeta_Description] = useState("");
   const [base64Image, setBase64Image] = useState("");
@@ -63,7 +57,6 @@ const CategoryForm = () => {
 
     if (
       Title.trim() !== "" &&
-      Slug.trim() !== "" &&
       Meta_Description.trim() !== "" &&
       Meta_Title.trim() !== ""
     ) {
@@ -72,14 +65,12 @@ const CategoryForm = () => {
         addCategory({
           cookie: accessToken,
           Title,
-          Slug,
           Meta_Title,
           Meta_Description,
           Image: base64Image,
         })
       );
       setTitle("");
-      setSlug("");
       setMeta_Title("");
       setMeta_Description("");
       setBase64Image("");
@@ -126,18 +117,6 @@ const CategoryForm = () => {
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Title"
                   className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                />
-              </div>
-              <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-                <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-                  Slug
-                </label>
-                <input
-                  type="text"
-                  value={Slug}
-                  onChange={(e) => setSlug(e.target.value)}
-                  className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-                  placeholder="Slug"
                 />
               </div>
               <div className="flex flex-col w-[95%]  mx-auto mt-5 ">

@@ -153,7 +153,7 @@ const Banner = () => {
       rows.push({
         id: item._id,
         type: item.type,
-        isPublished: item.Slug === true ? "YES" : "NO",
+        isPublished: item.isPublished === true ? "YES" : "NO",
         image: item.image,
       });
     });
