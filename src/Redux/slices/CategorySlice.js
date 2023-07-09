@@ -6,7 +6,7 @@ export const addCategory = createAsyncThunk(
   "addCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `http://localhost:4500/api/v1/admin/addCategory`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/addCategory`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -35,7 +35,7 @@ export const addCategoryImage = createAsyncThunk(
   async (datas, { rejectWithValue }) => {
     console.log(datas);
     try {
-      const url = `/api/v1/admin/addCategoryImage?_id=${datas._id}`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/addCategoryImage?_id=${datas._id}`;
       const headers = {
         // You may need to include other headers based on the API requirements
         "Content-Type": "application/json",
@@ -64,10 +64,13 @@ export const loadAllCategories = createAsyncThunk(
   "loadAllCategories",
   async ({ rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/v1/user/categories`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `https://api.sanskrutinx.in/api/v1/user/categories`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = response.data;
@@ -86,7 +89,7 @@ export const deleteCategory = createAsyncThunk(
   "deleteCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/deleteCategory?id=${datas.id}`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/deleteCategory?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -113,7 +116,7 @@ export const updateCategory = createAsyncThunk(
   "updateCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/updateCategory?id=${datas.id}`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/updateCategory?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -139,7 +142,7 @@ export const searchCategory = createAsyncThunk(
   "searchCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/user/categories?keyword=${datas.value}`;
+      const url = `https://api.sanskrutinx.in/api/v1/user/categories?keyword=${datas.value}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };

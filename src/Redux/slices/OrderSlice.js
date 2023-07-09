@@ -2,41 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "axios";
 
-export const addBanner = createAsyncThunk(
-  "addBanner",
+export const loadAllOrders = createAsyncThunk(
+  "loadAllOrders",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/addBanner`;
-
-      const headers = {
-        "Content-Type": "application/json", // You may need to include other headers based on the API requirements
-      };
-      const response = await axios.post(url, datas.body, {
-        headers,
-        withCredentials: true,
-      });
-
-      if (response.status === 409 || response.status === 404) {
-        const payload = response.data;
-        return rejectWithValue(payload);
-      }
-
-      const data = response.data;
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const loadAllBanners = createAsyncThunk(
-  "loadAllBanners",
-  async (datas, { rejectWithValue }) => {
-    try {
+      console.log(datas);
       const response = await axios.get(
-        `https://api.sanskrutinx.in/api/v1/user/getAllBanners?keyword=${
-          datas.keyword === undefined ? "" : datas.keyword
-        }`,
+        `https://api.sanskrutinx.in/api/v1/admin/allOrders`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -56,14 +28,39 @@ export const loadAllBanners = createAsyncThunk(
   }
 );
 
-export const updateBanner = createAsyncThunk(
-  "updateBanner",
+export const orderDetails = createAsyncThunk(
+  "orderDetails",
   async (datas, { rejectWithValue }) => {
-    console.log(datas);
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/updateBanner?id=${datas.id}`;
+      console.log(datas);
+      const response = await axios.get(
+        `https://api.sanskrutinx.in/api/v1/admin/getOrderDetails?id=${datas.id}`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = response.data;
+        return rejectWithValue(payload);
+      }
+
+      const data = response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateOrder = createAsyncThunk(
+  "updateOrder",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `https://api.sanskrutinx.in/api/v1/admin/updateOrderStatus?id=${datas.id}`;
       const headers = {
-        "Content-Type": "application/json; charset=utf-8",
+        "Content-Type": "application/json",
       };
       const response = await axios.put(url, datas.body, {
         headers,
@@ -83,11 +80,11 @@ export const updateBanner = createAsyncThunk(
   }
 );
 
-export const deleteBanner = createAsyncThunk(
-  "deleteBanner",
+export const deleteProduct = createAsyncThunk(
+  "deleteProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/deleteBanner?id=${datas.id}`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/delete?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -109,15 +106,16 @@ export const deleteBanner = createAsyncThunk(
   }
 );
 
-const bannerSlice = createSlice({
-  name: "banner",
+const orderSlice = createSlice({
+  name: "order",
   initialState: {
-    banners: [],
-    banner: {},
-    bannerCount: 0,
+    orders: [],
+    order: {},
+    orderCount: 0,
     loading: false,
     error: null,
     message: "",
+    _id: null,
     type: "",
   },
   reducers: {
@@ -126,64 +124,64 @@ const bannerSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // addBanner
-    builder.addCase(addBanner.pending, (state, action) => {
+    // loadAllOrders
+    builder.addCase(loadAllOrders.pending, (state, action) => {
       state.loading = true;
-      state.message = "";
     });
-    builder.addCase(addBanner.fulfilled, (state, action) => {
+    builder.addCase(loadAllOrders.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
+      state.orders = action.payload.orders;
+      state.orderCount = action.payload.orderCount;
     });
-    builder.addCase(addBanner.rejected, (state, action) => {
+    builder.addCase(loadAllOrders.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
-    // deleteBanner
-    builder.addCase(deleteBanner.pending, (state, action) => {
+    // orderDetails
+    builder.addCase(orderDetails.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(deleteBanner.fulfilled, (state, action) => {
+    builder.addCase(orderDetails.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
+      state.order = action.payload.order;
     });
-    builder.addCase(deleteBanner.rejected, (state, action) => {
+    builder.addCase(orderDetails.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
-    // updateBanner
-    builder.addCase(updateBanner.pending, (state, action) => {
+    // updateProduct
+    builder.addCase(updateOrder.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(updateBanner.fulfilled, (state, action) => {
+    builder.addCase(updateOrder.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
-    builder.addCase(updateBanner.rejected, (state, action) => {
+    builder.addCase(updateOrder.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
-    // loadAllBanners
-    builder.addCase(loadAllBanners.pending, (state, action) => {
+    // deleteProduct
+    builder.addCase(deleteProduct.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(loadAllBanners.fulfilled, (state, action) => {
+    builder.addCase(deleteProduct.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
-      state.banners = action.payload.banners;
-      state.bannerCount = action.payload.bannerCount;
     });
-    builder.addCase(loadAllBanners.rejected, (state, action) => {
+    builder.addCase(deleteProduct.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
@@ -191,5 +189,5 @@ const bannerSlice = createSlice({
   },
 });
 
-export const { addItem, clearState } = bannerSlice.actions;
-export default bannerSlice.reducer;
+export const { addItem, clearState } = orderSlice.actions;
+export default orderSlice.reducer;

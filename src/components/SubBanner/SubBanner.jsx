@@ -7,22 +7,24 @@ import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  loadAllBanners,
-  deleteBanner,
+  loadAllSubBanners,
   clearState,
-} from "../../Redux/slices/BannerSlice";
+  deleteSubBanner,
+} from "../../Redux/slices/SubBannerSlice";
 import EditIcon from "@material-ui/icons/Edit";
 import { toast } from "react-toastify";
 
-const Banner = () => {
-  const { banners, message, type } = useSelector((state) => state.banners);
+const SubBanner = () => {
+  const { subBanners, message, type, loading } = useSelector(
+    (state) => state.subbanners
+  );
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState("");
 
   const deleteBannerHandler = (id) => {
     const accessToken = getCookie();
     dispatch(
-      deleteBanner({
+      deleteSubBanner({
         id,
         cookie: accessToken,
       })
@@ -32,7 +34,7 @@ const Banner = () => {
     const cookie = getCookie();
     console.log(keyword);
     dispatch(
-      loadAllBanners({
+      loadAllSubBanners({
         keyword,
         cookie,
       })
@@ -65,7 +67,7 @@ const Banner = () => {
     }
     const cookie = getCookie();
     dispatch(
-      loadAllBanners({
+      loadAllSubBanners({
         cookie,
       })
     );
@@ -74,7 +76,7 @@ const Banner = () => {
   useEffect(() => {
     const cookie = getCookie();
     dispatch(
-      loadAllBanners({
+      loadAllSubBanners({
         cookie,
       })
     );
@@ -109,7 +111,7 @@ const Banner = () => {
       renderCell: (params) => {
         return (
           <Fragment>
-            <Link to={`/editbanner/${params.id}`}>
+            <Link to={`/subeditbanner/${params.id}`}>
               <EditIcon />
             </Link>
             <Button onClick={() => deleteBannerHandler(params.id)}>
@@ -141,8 +143,8 @@ const Banner = () => {
   }
   // Adjust the row gap value as desired
 
-  banners &&
-    banners.forEach((item) => {
+  subBanners &&
+    subBanners.forEach((item) => {
       rows.push({
         id: item._id,
         isPublished: item.isPublished === true ? "YES" : "NO",
@@ -174,7 +176,7 @@ const Banner = () => {
                 </div>
               </div>
               <button className=" lg:mx-[5%] mx-[10%] mt-4 lg:mt-6 px-2 h-[45px] w-[80px] lg:w-[100px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
-                <Link to="/bannerform">Add</Link>
+                <Link to="/subbannerform">Add</Link>
               </button>
             </div>
             <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
@@ -199,4 +201,4 @@ const Banner = () => {
   );
 };
 
-export default Banner;
+export default SubBanner;

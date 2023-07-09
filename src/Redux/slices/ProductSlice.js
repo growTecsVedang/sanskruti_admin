@@ -6,10 +6,13 @@ export const loadAllProducts = createAsyncThunk(
   "loadAllProducts",
   async ({ rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/v1/user/getallProducts`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `https://api.sanskrutinx.in/api/v1/user/getallProducts`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = response.data;
@@ -29,7 +32,7 @@ export const addProduct = createAsyncThunk(
   async (datas, { rejectWithValue }) => {
     console.log(datas);
     try {
-      const url = `http://localhost:4500/api/v1/admin/newProduct`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/newProduct`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -55,7 +58,7 @@ export const updateProduct = createAsyncThunk(
   "updateProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/updateProduct?id=${datas.id}`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/updateProduct?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -81,7 +84,7 @@ export const deleteProduct = createAsyncThunk(
   "deleteProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/delete?id=${datas.id}`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/delete?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };

@@ -4,17 +4,14 @@ import Sidebar from "../Home/Sidebar";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearState,
-  addBanner,
-  updateBanner,
-} from "../../Redux/slices/BannerSlice";
+import { clearState, updateBanner } from "../../Redux/slices/BannerSlice";
 const MAX_SIZE = 400 * 1024;
 const EditBannerForm = (props) => {
-  const ref = useRef("");
+  const fileInputRef = useRef("");
   const dispatch = useDispatch();
   const { message, type, banners } = useSelector((state) => state.banners);
-  const [base64Image, setBase64Image] = useState("");
+  const [mobileImage, setMobileImage] = useState("");
+  const [desktopImage, setDesktopImage] = useState("");
   const [Type, setType] = useState("");
   const [checked, setChecked] = useState(false);
   const [id, setId] = useState(null);
@@ -25,7 +22,8 @@ const EditBannerForm = (props) => {
         setId(item._id);
         setType(item.type);
         setChecked(item.isPublished);
-        setBase64Image(item.image);
+        setMobileImage(item.mobileImage);
+        setDesktopImage(item.desktopImage);
       }
     });
   }, []);
@@ -71,38 +69,51 @@ const EditBannerForm = (props) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file.size > MAX_SIZE) {
-      console.log(file.size);
+    if (file?.size !== undefined && file.size > MAX_SIZE) {
       alert("file size exceeded");
       return;
       // NOTE: state set ker joh prevent karega user ko upload karne se
     }
     const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const base64String = reader.result;
-      setBase64Image(base64String);
-    };
-
     if (file) {
       reader.readAsDataURL(file);
     }
+
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      console.log(Type);
+      if (Type === "Desktop") {
+        setDesktopImage(base64String);
+      }
+      if (Type === "Mobile") {
+        setMobileImage(base64String);
+      }
+    };
+    console.log(fileInputRef.current.value);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+    console.log(fileInputRef.current.value);
   };
 
-  const deleteFile = () => {
-    setBase64Image("");
+  const deleteDesktopFile = () => {
+    setDesktopImage("");
+  };
+
+  const deleteMobileFile = () => {
+    setMobileImage("");
   };
 
   const createBannerSubmitHandler = (e) => {
     e.preventDefault();
-    if (Type !== "" && base64Image !== "") {
+    if (desktopImage !== "" && mobileImage !== "") {
       dispatch(
         updateBanner({
           id,
           body: {
-            type: Type,
             isPublished: checked,
-            image: base64Image,
+            mobileImage,
+            desktopImage,
           },
         })
       );
@@ -117,7 +128,7 @@ const EditBannerForm = (props) => {
         <div className=" flex flex-col overflow-y-scroll overflow-x-hidden no-scroll  h-[100vh] w-[100%] lg:w-[80%]">
           <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
             <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
-              Update Banner
+              Add Banner
             </h1>
           </div>
           <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
@@ -125,18 +136,42 @@ const EditBannerForm = (props) => {
               <div class="  mt-5 flex items-center justify-center   w-[95%]   lg:w-[95%] mx-auto cursor-pointer ">
                 <div className="w-[95%] mx-auto flex   flex-col  lg:flex-row    ">
                   <div className="lg:w-[60%]">
-                    <h2 className="text-lg font-bold mt-5  mx-4 ">Image</h2>
+                    <h2 className="text-lg font-bold mt-5  mx-4 ">
+                      Desktop Banner
+                    </h2>
                     <div className=" mt-5 mx-4  flex w- gap-x-6 lg:h-[430px] h-[280px] ">
                       <div className="w-full">
                         <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
                           <img
-                            src={base64Image}
+                            src={desktopImage}
                             className="w-[100%] h-[200px]  lg:h-[350px]"
                             alt="upload_image"
                           />
                         </div>
                         <div
-                          onClick={deleteFile}
+                          onClick={deleteDesktopFile}
+                          className=" cursor-pointer hover:bg-slate-300 lg:w-[60px] w-[full]  h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 "
+                        >
+                          <span className="text-[red]">
+                            {<AiOutlineDelete size={30} />}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <h2 className="text-lg font-bold mt-5  mx-4 ">
+                      Mobile Banner
+                    </h2>
+                    <div className=" mt-5 mx-4  flex w- gap-x-6 lg:h-[430px] h-[280px] ">
+                      <div className="w-full">
+                        <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
+                          <img
+                            src={mobileImage}
+                            className="w-[100%] h-[200px]  lg:h-[350px]"
+                            alt="upload_image"
+                          />
+                        </div>
+                        <div
+                          onClick={deleteMobileFile}
                           className=" cursor-pointer hover:bg-slate-300 lg:w-[60px] w-[full]  h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 "
                         >
                           <span className="text-[red]">
@@ -178,7 +213,7 @@ const EditBannerForm = (props) => {
                         </div>
                         <input
                           id="dropzone-file"
-                          ref={ref}
+                          ref={fileInputRef}
                           type="file"
                           class="hidden"
                           onChange={handleFileChange}
@@ -200,8 +235,7 @@ const EditBannerForm = (props) => {
                   >
                     <option value="">Screen</option>
                     <option value="Mobile">Mobile</option>
-                    <option value="Tablet">Tablet</option>
-                    <option value="Laptop">Laptop</option>
+                    <option value="Desktop">Desktop</option>
                   </select>
                 </div>
                 <div className=" w-[95%] mx-auto  flex h-[50px] items-center mt-[60px]  ">
@@ -229,7 +263,7 @@ const EditBannerForm = (props) => {
                   onClick={(e) => createBannerSubmitHandler(e)}
                   className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
                 >
-                  Update
+                  Save
                 </div>
               </div>
             </form>

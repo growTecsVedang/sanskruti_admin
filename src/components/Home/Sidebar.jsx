@@ -89,6 +89,14 @@ const Sidebar = () => {
           <div className="mx-5">Banner</div>
         </div>
       </Link>
+
+      <hr className="text-black h-2" />
+      <Link to="/subbanner">
+        <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+          <ImImages size={30} />
+          <div className="mx-5">Sub Banner</div>
+        </div>
+      </Link>
       <hr className="text-black h-2" />
       <Link to="/orders">
         <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">

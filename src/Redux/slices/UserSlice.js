@@ -5,7 +5,7 @@ export const deleteUser = createAsyncThunk(
   "deleteUser",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/admin/deleteuser?id=${datas.id}`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/deleteuser?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -32,7 +32,7 @@ export const updateUser = createAsyncThunk(
   "updateUser",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `/api/v1/superadmin/banAndEditUser?id=${datas.id}`;
+      const url = `https://api.sanskrutinx.in/api/v1/superadmin/banAndEditUser?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -59,12 +59,16 @@ export const logInUserWithEmailOrNumber = createAsyncThunk(
   "logInUserWithEmailOrNumber",
   async (datas, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`/api/v1/user/login`, datas, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response.status);
+      const response = await axios.post(
+        `https://api.sanskrutinx.in/api/v1/user/login`,
+        datas,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            withCredentials: true,
+          },
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = response.data;
@@ -85,7 +89,7 @@ export const logOutUser = createAsyncThunk(
   "logOutUserWithNumber",
   async ({ rejectWithValue }) => {
     try {
-      const url = `/api/v1/user/logout`;
+      const url = `https://api.sanskrutinx.in/api/v1/user/logout`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -112,10 +116,13 @@ export const loadAllUsers = createAsyncThunk(
   "loadAllUsers",
   async ({ rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/v1/admin/getAllUsers`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `https://api.sanskrutinx.in/api/v1/admin/getAllUsers`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = response.data;
@@ -135,7 +142,7 @@ export const getUserDetails = createAsyncThunk(
   async (datas, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `/api/v1/admin/getUserDetails?id=${datas.id}`,
+        `https://api.sanskrutinx.in/api/v1/admin/getUserDetails?id=${datas.id}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -159,10 +166,13 @@ export const userProfile = createAsyncThunk(
   "userProfile",
   async ({ rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/v1/user`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `https://api.sanskrutinx.in/api/v1/user`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = response.data;

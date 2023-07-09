@@ -30,6 +30,10 @@ import { loadUser } from "./Redux/slices/LoadUserSlice";
 import getRole from "./helper/getRole";
 import ProtectedRoute from "./components/ProtectedRoute";
 import EditBannerForm from "./components/Banner/EditBannerForm";
+import SubEditBannerForm from "./components/SubBanner/SubEditBannerForm";
+import SubBanner from "./components/SubBanner/SubBanner";
+import SubBannerForm from "./components/SubBanner/SubBannerForm";
+import EditOrders from "./components/Orders/EditOrders";
 
 function App() {
   const dispatch = useDispatch();
@@ -94,6 +98,13 @@ function App() {
         />
         <ProtectedRoute exact path="/banner" component={Banner} />
         <ProtectedRoute exact path="/bannerform" component={BannerForm} />
+        <ProtectedRoute
+          exact
+          path="/subeditbanner/:id"
+          component={SubEditBannerForm}
+        />
+        <ProtectedRoute exact path="/subbanner" component={SubBanner} />
+        <ProtectedRoute exact path="/subbannerform" component={SubBannerForm} />
         <ProtectedRoute exact path="/users" component={Users} />
         <ProtectedRoute exact path="/permissions" component={Permission} />
         <ProtectedRoute
@@ -103,6 +114,7 @@ function App() {
         />
         <ProtectedRoute exact path="/viewuser/:id" component={ViewUser} />
         <ProtectedRoute exact path="/orders" component={Orders} />
+        <ProtectedRoute exact path="/vieworder/:id" component={EditOrders} />
       </Switch>
     </div>
   );

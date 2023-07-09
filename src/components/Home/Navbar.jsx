@@ -59,7 +59,7 @@ const Navbar = () => {
               </span>
             </div>
           </div>
-          <div className="lg:hidden">
+          <div className="lg:hidden cursor-pointer">
             {open ? (
               <div onClick={() => setOpen(!open)}>
                 {<AiOutlineClose size={30} />}
@@ -126,6 +126,13 @@ const Navbar = () => {
           <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
             <ImImages size={30} />
             <div className="mx-5">Banner</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/subbanner">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <ImImages size={30} />
+            <div className="mx-5">Sub Banner</div>
           </div>
         </Link>
         <hr className="text-black h-2" />

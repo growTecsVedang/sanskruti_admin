@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "axios";
 
-export const addBanner = createAsyncThunk(
-  "addBanner",
+export const addSubBanner = createAsyncThunk(
+  "addSubBanner",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/addBanner`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/addSubBanner`;
 
       const headers = {
         "Content-Type": "application/json", // You may need to include other headers based on the API requirements
@@ -29,12 +29,12 @@ export const addBanner = createAsyncThunk(
   }
 );
 
-export const loadAllBanners = createAsyncThunk(
-  "loadAllBanners",
+export const loadAllSubBanners = createAsyncThunk(
+  "loadAllSubBanners",
   async (datas, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://api.sanskrutinx.in/api/v1/user/getAllBanners?keyword=${
+        `https://api.sanskrutinx.in/api/v1/user/getAllSubBanners?keyword=${
           datas.keyword === undefined ? "" : datas.keyword
         }`,
         {
@@ -56,12 +56,12 @@ export const loadAllBanners = createAsyncThunk(
   }
 );
 
-export const updateBanner = createAsyncThunk(
-  "updateBanner",
+export const updateSubBanner = createAsyncThunk(
+  "updateSubBanner",
   async (datas, { rejectWithValue }) => {
     console.log(datas);
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/updateBanner?id=${datas.id}`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/updateSubBanner?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -83,11 +83,11 @@ export const updateBanner = createAsyncThunk(
   }
 );
 
-export const deleteBanner = createAsyncThunk(
-  "deleteBanner",
+export const deleteSubBanner = createAsyncThunk(
+  "deleteSubBanner",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/deleteBanner?id=${datas.id}`;
+      const url = `https://api.sanskrutinx.in/api/v1/admin/deleteSubBanner?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -109,12 +109,12 @@ export const deleteBanner = createAsyncThunk(
   }
 );
 
-const bannerSlice = createSlice({
-  name: "banner",
+const subbannerSlice = createSlice({
+  name: "subbanner",
   initialState: {
-    banners: [],
+    subBanners: [],
     banner: {},
-    bannerCount: 0,
+    subBannerCount: 0,
     loading: false,
     error: null,
     message: "",
@@ -127,63 +127,63 @@ const bannerSlice = createSlice({
   },
   extraReducers: (builder) => {
     // addBanner
-    builder.addCase(addBanner.pending, (state, action) => {
+    builder.addCase(addSubBanner.pending, (state, action) => {
       state.loading = true;
       state.message = "";
     });
-    builder.addCase(addBanner.fulfilled, (state, action) => {
+    builder.addCase(addSubBanner.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
-    builder.addCase(addBanner.rejected, (state, action) => {
+    builder.addCase(addSubBanner.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
     // deleteBanner
-    builder.addCase(deleteBanner.pending, (state, action) => {
+    builder.addCase(deleteSubBanner.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(deleteBanner.fulfilled, (state, action) => {
+    builder.addCase(deleteSubBanner.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
-    builder.addCase(deleteBanner.rejected, (state, action) => {
+    builder.addCase(deleteSubBanner.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
     // updateBanner
-    builder.addCase(updateBanner.pending, (state, action) => {
+    builder.addCase(updateSubBanner.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(updateBanner.fulfilled, (state, action) => {
+    builder.addCase(updateSubBanner.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
-    builder.addCase(updateBanner.rejected, (state, action) => {
+    builder.addCase(updateSubBanner.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
     // loadAllBanners
-    builder.addCase(loadAllBanners.pending, (state, action) => {
+    builder.addCase(loadAllSubBanners.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(loadAllBanners.fulfilled, (state, action) => {
+    builder.addCase(loadAllSubBanners.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
-      state.banners = action.payload.banners;
-      state.bannerCount = action.payload.bannerCount;
+      state.subBanners = action.payload.subBanners;
+      state.subBannerCount = action.payload.subBannerCount;
     });
-    builder.addCase(loadAllBanners.rejected, (state, action) => {
+    builder.addCase(loadAllSubBanners.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
@@ -191,5 +191,5 @@ const bannerSlice = createSlice({
   },
 });
 
-export const { addItem, clearState } = bannerSlice.actions;
-export default bannerSlice.reducer;
+export const { addItem, clearState } = subbannerSlice.actions;
+export default subbannerSlice.reducer;

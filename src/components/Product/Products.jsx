@@ -17,7 +17,9 @@ import { loadAllVarients } from "../../Redux/slices/VarientSlice";
 import { loadAllCategories } from "../../Redux/slices/CategorySlice";
 import { loadAllSubCategories } from "../../Redux/slices/SubCategorySlice";
 const Products = () => {
-  const { products, message, type } = useSelector((state) => state.products);
+  const { products, message, type, loading } = useSelector(
+    (state) => state.products
+  );
   const dispatch = useDispatch();
 
   function getCookie() {

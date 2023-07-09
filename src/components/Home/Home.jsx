@@ -9,6 +9,7 @@ import { clearState, loadAllUsers } from "../../Redux/slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { loadAllProducts } from "../../Redux/slices/ProductSlice";
 import { useState } from "react";
+import { loadAllOrders } from "../../Redux/slices/OrderSlice";
 
 const Home = () => {
   const [allusers, setAllUsers] = useState(0);
@@ -19,6 +20,7 @@ const Home = () => {
     (state) => state.user
   );
   const { productCount } = useSelector((state) => state.products);
+  const { orders } = useSelector((state) => state.orders);
 
   function getCookie() {
     var name = "connect.sid".concat("=");
@@ -43,6 +45,11 @@ const Home = () => {
     );
     dispatch(
       loadAllProducts({
+        cookie,
+      })
+    );
+    dispatch(
+      loadAllOrders({
         cookie,
       })
     );
@@ -74,7 +81,7 @@ const Home = () => {
             </div>
             <div className="h-[100px] lg:ml-2 bg-[#74c69d] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
               <h1 className="text-lg ml-5 ">Total orders</h1>
-              <p className="font-bold text-xl ml-5">20</p>
+              <p className="font-bold text-xl ml-5">{orders.length}</p>
             </div>
             <div className="h-[100px] lg:ml-2 bg-[#61a5c2] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
               <h1 className="text-lg ml-5 ">Total sells</h1>
