@@ -6,10 +6,13 @@ export const loadUser = createAsyncThunk(
   "loadUser",
   async ({ rejectWithValue }) => {
     try {
-      const response = await axios.get(`${process.env.ENDPOINT}/api/v1/user`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/user`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = response.data;
