@@ -6,7 +6,7 @@ export const addVarient = createAsyncThunk(
   "addVarient",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/addVarient`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/addVarient`;
 
       const headers = {
         "Content-Type": "application/json", // You may need to include other headers based on the API requirements
@@ -34,7 +34,7 @@ export const loadAllVarients = createAsyncThunk(
   async (datas, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://api.sanskrutinx.in/api/v1/user/getVarients?keyword=${
+        `${process.env.ENDPOINT}/api/v1/user/getVarients?keyword=${
           datas.keyword === undefined ? "" : datas.keyword
         }`,
         {
@@ -60,7 +60,7 @@ export const updateVarient = createAsyncThunk(
   "updateVarient",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/updateVarient?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/updateVarient?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -86,7 +86,7 @@ export const deleteVarient = createAsyncThunk(
   "deleteVarient",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/deleteVarient?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/deleteVarient?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };

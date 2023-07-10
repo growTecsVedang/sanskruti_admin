@@ -6,7 +6,7 @@ export const addSubCategory = createAsyncThunk(
   "addSubCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/addSubCategory`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/addSubCategory`;
       const headers = {
         "Content-Type": "application/json", // You may need to include other headers based on the API requirements
       };
@@ -32,7 +32,7 @@ export const updateSubCategory = createAsyncThunk(
   "updateSubCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/updateSubCategory?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/updateSubCategory?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -58,7 +58,7 @@ export const deleteSubCategory = createAsyncThunk(
   "deleteSubCategory",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/deleteSubCategory?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/deleteSubCategory?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -85,7 +85,7 @@ export const loadAllSubCategories = createAsyncThunk(
   async (datas, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://api.sanskrutinx.in/api/v1/user/subcategories?keyword=${
+        `${process.env.ENDPOINT}/api/v1/user/subcategories?keyword=${
           datas.keyword === undefined ? "" : datas.keyword
         }`,
         {

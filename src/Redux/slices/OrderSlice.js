@@ -8,7 +8,7 @@ export const loadAllOrders = createAsyncThunk(
     try {
       console.log(datas);
       const response = await axios.get(
-        `https://api.sanskrutinx.in/api/v1/admin/allOrders`,
+        `${process.env.ENDPOINT}/api/v1/admin/allOrders`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -34,7 +34,7 @@ export const orderDetails = createAsyncThunk(
     try {
       console.log(datas);
       const response = await axios.get(
-        `https://api.sanskrutinx.in/api/v1/admin/getOrderDetails?id=${datas.id}`,
+        `${process.env.ENDPOINT}/api/v1/admin/getOrderDetails?id=${datas.id}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -58,7 +58,7 @@ export const updateOrder = createAsyncThunk(
   "updateOrder",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/updateOrderStatus?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/updateOrderStatus?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -84,7 +84,7 @@ export const deleteProduct = createAsyncThunk(
   "deleteProduct",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/delete?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/delete?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };

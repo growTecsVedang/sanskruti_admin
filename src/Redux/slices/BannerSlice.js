@@ -6,7 +6,7 @@ export const addBanner = createAsyncThunk(
   "addBanner",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/addBanner`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/addBanner`;
 
       const headers = {
         "Content-Type": "application/json", // You may need to include other headers based on the API requirements
@@ -34,7 +34,7 @@ export const loadAllBanners = createAsyncThunk(
   async (datas, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://api.sanskrutinx.in/api/v1/user/getAllBanners?keyword=${
+        `${process.env.ENDPOINT}/api/v1/user/getAllBanners?keyword=${
           datas.keyword === undefined ? "" : datas.keyword
         }`,
         {
@@ -61,7 +61,7 @@ export const updateBanner = createAsyncThunk(
   async (datas, { rejectWithValue }) => {
     console.log(datas);
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/updateBanner?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/updateBanner?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };
@@ -87,7 +87,7 @@ export const deleteBanner = createAsyncThunk(
   "deleteBanner",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `https://api.sanskrutinx.in/api/v1/admin/deleteBanner?id=${datas.id}`;
+      const url = `${process.env.ENDPOINT}/api/v1/admin/deleteBanner?id=${datas.id}`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",
       };

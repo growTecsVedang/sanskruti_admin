@@ -72,10 +72,12 @@ const EditOrders = (props) => {
     }
   }
   useEffect(() => {
-    setDelivery_status(order.order.deliveryInfo.status);
-    setReturn_status(order.order.returnInfo.status);
-    setCancelChecked(order.order.cancellationInfo.Amount_refunded);
-    setReturnChecked(order.order.returnInfo.Amount_refunded);
+    if (order && order.order && order.payment) {
+      setDelivery_status(order.order.deliveryInfo.status);
+      setReturn_status(order.order.returnInfo.status);
+      setCancelChecked(order.order.cancellationInfo.Amount_refunded);
+      setReturnChecked(order.order.returnInfo.Amount_refunded);
+    }
   }, [order]);
 
   console.log(delivery_status, Return_status, returnChecked, cancelChecked);
@@ -106,7 +108,7 @@ const EditOrders = (props) => {
       <Navbar />
       <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
         <Sidebar />
-        {Object.keys(order).length !== 0 ? (
+        {order && order.order && order.payment ? (
           <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  min-h-[100vh] w-[100%] lg:w-[80%] no-scroll  ">
             <div className="w-[97%] mx-auto mt-3 mb-[1px] py-3 min-h-full  bg-white  rounded-md flex flex-col shadow-md  ">
               <div className=" mx-4 flex flex-col lg:justify-between  lg:flex-row gap-y-4 ">
@@ -320,7 +322,9 @@ const EditOrders = (props) => {
                         value={Return_status}
                         className="cursor-pointer h-[40px] min-w-[150px] pl-3  bg-gray-50 rounded-md text-lg border-2 border-gray-300 "
                       >
-                        <option value={"Null"}>Return Status</option>
+                        <option value={""} hidden>
+                          Return Status
+                        </option>
                         <option value={"Pending"}>Pending</option>
                         <option value={"Confirmed"}>Confirmed</option>
                         <option value={"Out for pickup"}>Out For Pickup</option>
