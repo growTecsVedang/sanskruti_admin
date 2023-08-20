@@ -81,7 +81,7 @@ const Navbar = () => {
       <div
         className={
           open
-            ? "  h-[100vh] w-[220px] absolute  ease-in-out duration-500  bg-[#fbfbfb] z-20 left-[0px] "
+            ? "  h-[90vh] w-[220px] absolute overflow-y-scroll  ease-in-out duration-500  bg-[#fbfbfb] z-20 left-[0px] "
             : "fixed left-[-100%]"
         }
       >
