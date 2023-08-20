@@ -34,6 +34,11 @@ import SubEditBannerForm from "./components/SubBanner/SubEditBannerForm";
 import SubBanner from "./components/SubBanner/SubBanner";
 import SubBannerForm from "./components/SubBanner/SubBannerForm";
 import EditOrders from "./components/Orders/EditOrders";
+import Coupons from "./components/Coupons/Coupons";
+import ReturnComponent from "./components/Settings/ReturnComponent";
+import PolicyComponent from "./components/Settings/PolicyComponent";
+import TermsAndCondition from "./components/Settings/TermsAndCondition";
+import AnalyticsComponent from "./components/Settings/AnalyticsComponent";
 
 function App() {
   const dispatch = useDispatch();
@@ -115,6 +120,16 @@ function App() {
         <ProtectedRoute exact path="/viewuser/:id" component={ViewUser} />
         <ProtectedRoute exact path="/orders" component={Orders} />
         <ProtectedRoute exact path="/vieworder/:id" component={EditOrders} />
+        <ProtectedRoute exact path="/coupons" component={Coupons} />
+        {/* setting */}
+        <ProtectedRoute exact path="/return" component={ReturnComponent} />
+        <ProtectedRoute exact path="/t&c" component={TermsAndCondition} />
+        <ProtectedRoute exact path="/policy" component={PolicyComponent} />
+        <ProtectedRoute
+          exact
+          path="/analytics"
+          component={AnalyticsComponent}
+        />
       </Switch>
     </div>
   );

@@ -83,6 +83,33 @@ export const updateBanner = createAsyncThunk(
   }
 );
 
+export const deleteBannerImage = createAsyncThunk(
+  "deleteBannerImage",
+  async (datas, { rejectWithValue }) => {
+    console.log(datas);
+    try {
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/deleteBannerImage?_id=${datas._id}&name=${datas.name}&type=${datas.type}`;
+      const headers = {
+        "Content-Type": "application/json; charset=utf-8",
+      };
+      const response = await axios.delete(url, {
+        headers,
+        withCredentials: true,
+      });
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = response.data;
+        return rejectWithValue(payload);
+      }
+
+      const data = response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const deleteBanner = createAsyncThunk(
   "deleteBanner",
   async (datas, { rejectWithValue }) => {
@@ -137,6 +164,21 @@ const bannerSlice = createSlice({
       state.type = action.payload.type;
     });
     builder.addCase(addBanner.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+
+    // deleteBannerImage
+    builder.addCase(deleteBannerImage.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteBannerImage.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(deleteBannerImage.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;

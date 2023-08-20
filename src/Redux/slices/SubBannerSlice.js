@@ -85,6 +85,33 @@ export const updateSubBanner = createAsyncThunk(
   }
 );
 
+export const deleteSubBannerImage = createAsyncThunk(
+  "deleteSubBannerImage",
+  async (datas, { rejectWithValue }) => {
+    console.log(datas);
+    try {
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/deleteSubBannerImage?_id=${datas._id}&name=${datas.name}&type=${datas.type}`;
+      const headers = {
+        "Content-Type": "application/json; charset=utf-8",
+      };
+      const response = await axios.delete(url, {
+        headers,
+        withCredentials: true,
+      });
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = response.data;
+        return rejectWithValue(payload);
+      }
+
+      const data = response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const deleteSubBanner = createAsyncThunk(
   "deleteSubBanner",
   async (datas, { rejectWithValue }) => {
@@ -139,6 +166,21 @@ const subbannerSlice = createSlice({
       state.type = action.payload.type;
     });
     builder.addCase(addSubBanner.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+
+    // deleteSubBannerImage
+    builder.addCase(deleteSubBannerImage.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteSubBannerImage.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(deleteSubBannerImage.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;

@@ -80,6 +80,33 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
+export const deleteProductImage = createAsyncThunk(
+  "deleteProductImage",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/deleteProductImage?_id=${datas.id}&name=${datas.name}`;
+      console.log(datas);
+      const headers = {
+        "Content-Type": "application/json; charset=utf-8",
+      };
+      const response = await axios.delete(url, {
+        headers,
+        withCredentials: true,
+      });
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = response.data;
+        return rejectWithValue(payload);
+      }
+
+      const data = response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const deleteProduct = createAsyncThunk(
   "deleteProduct",
   async (datas, { rejectWithValue }) => {

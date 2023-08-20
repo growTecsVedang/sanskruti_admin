@@ -4,7 +4,12 @@ import Sidebar from "../Home/Sidebar";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { clearState, updateSubBanner } from "../../Redux/slices/SubBannerSlice";
+import {
+  clearState,
+  updateSubBanner,
+  deleteSubBannerImage,
+} from "../../Redux/slices/SubBannerSlice";
+
 const MAX_SIZE = 400 * 1024;
 const SubEditBannerForm = (props) => {
   const fileInputRef = useRef("");
@@ -14,6 +19,10 @@ const SubEditBannerForm = (props) => {
   );
   const [mobileImage, setMobileImage] = useState("");
   const [desktopImage, setDesktopImage] = useState("");
+  const [mobileImageBase64, setMobileImageBase64] = useState("");
+  const [desktopImageBase64, setDesktopImageBase64] = useState("");
+  const [mobileImageName, setMobileImageName] = useState("");
+  const [desktopImageName, setDesktopImageName] = useState("");
   const [Type, setType] = useState("");
   const [checked, setChecked] = useState(false);
   const [id, setId] = useState(null);
@@ -85,37 +94,80 @@ const SubEditBannerForm = (props) => {
       const base64String = reader.result;
       console.log(Type);
       if (Type === "Desktop") {
-        setDesktopImage(base64String);
+        setDesktopImageBase64(base64String);
+        const name = file.name.split(".")[0];
+        const extension = file.name.split(".")[1];
+        const date = Date.now().toString();
+        const imageName = name.concat(date).concat(".").concat(extension);
+        setDesktopImageName(imageName);
       }
       if (Type === "Mobile") {
-        setMobileImage(base64String);
+        setMobileImageBase64(base64String);
+        const name = file.name.split(".")[0];
+        const extension = file.name.split(".")[1];
+        const date = Date.now().toString();
+        const imageName = name.concat(date).concat(".").concat(extension);
+        setMobileImageName(imageName);
       }
     };
-    console.log(fileInputRef.current.value);
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
     }
-    console.log(fileInputRef.current.value);
   };
 
   const deleteDesktopFile = () => {
-    setDesktopImage("");
+    if (desktopImage !== "") {
+      const name = desktopImage.split(
+        `${process.env.REACT_APP_ENDPOINT_CDN}/`
+      )[1];
+      dispatch(
+        deleteSubBannerImage({
+          _id: id,
+          type: "desktop",
+          name,
+        })
+      );
+      setDesktopImage("");
+    } else {
+      setDesktopImageBase64("");
+    }
   };
 
   const deleteMobileFile = () => {
-    setMobileImage("");
+    if (mobileImage !== "") {
+      const name = mobileImage.split(
+        `${process.env.REACT_APP_ENDPOINT_CDN}/`
+      )[1];
+      dispatch(
+        deleteSubBannerImage({
+          _id: id,
+          type: "mobile",
+          name,
+        })
+      );
+      setMobileImage("");
+    } else {
+      setMobileImageBase64("");
+    }
   };
 
   const createBannerSubmitHandler = (e) => {
     e.preventDefault();
-    if (desktopImage !== "" && mobileImage !== "") {
+    if (
+      desktopImage !== "" ||
+      mobileImage !== "" ||
+      desktopImageBase64 !== "" ||
+      mobileImageBase64 !== ""
+    ) {
       dispatch(
         updateSubBanner({
           id,
           body: {
             isPublished: checked,
-            mobileImage,
-            desktopImage,
+            mobileImage: mobileImage || mobileImageBase64,
+            desktopImage: desktopImage || desktopImageBase64,
+            mobileImageName,
+            desktopImageName,
           },
         })
       );
@@ -127,7 +179,7 @@ const SubEditBannerForm = (props) => {
       <Navbar />
       <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
         <Sidebar />
-        <div className=" flex flex-col overflow-y-scroll overflow-x-hidden no-scroll  h-[100vh] w-[100%] lg:w-[80%]">
+        <div className=" flex flex-col overflow-y-scroll  h-[90vh] w-[100%] lg:w-[80%]">
           <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
             <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
               Add Banner
@@ -143,13 +195,23 @@ const SubEditBannerForm = (props) => {
                     </h2>
                     <div className=" mt-5 mx-4  flex w- gap-x-6 lg:h-[430px] h-[280px] ">
                       <div className="w-full">
-                        <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
-                          <img
-                            src={desktopImage}
-                            className="w-[100%] h-[200px]  lg:h-[350px]"
-                            alt="upload_image"
-                          />
-                        </div>
+                        {desktopImage === "" ? (
+                          <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
+                            <img
+                              src={desktopImageBase64}
+                              className="w-[100%] h-[200px]  lg:h-[350px]"
+                              alt="upload_image"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
+                            <img
+                              src={desktopImage}
+                              className="w-[100%] h-[200px]  lg:h-[350px]"
+                              alt="upload_image"
+                            />
+                          </div>
+                        )}
                         <div
                           onClick={deleteDesktopFile}
                           className=" cursor-pointer hover:bg-slate-300 lg:w-[60px] w-[full]  h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 "
@@ -165,13 +227,23 @@ const SubEditBannerForm = (props) => {
                     </h2>
                     <div className=" mt-5 mx-4  flex w- gap-x-6 lg:h-[430px] h-[280px] ">
                       <div className="w-full">
-                        <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
-                          <img
-                            src={mobileImage}
-                            className="w-[100%] h-[200px]  lg:h-[350px]"
-                            alt="upload_image"
-                          />
-                        </div>
+                        {mobileImage === "" ? (
+                          <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
+                            <img
+                              src={mobileImageBase64}
+                              className="w-[100%] h-[200px]  lg:h-[350px]"
+                              alt="upload_image"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
+                            <img
+                              src={mobileImage}
+                              className="w-[100%] h-[200px]  lg:h-[350px]"
+                              alt="upload_image"
+                            />
+                          </div>
+                        )}
                         <div
                           onClick={deleteMobileFile}
                           className=" cursor-pointer hover:bg-slate-300 lg:w-[60px] w-[full]  h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 "
@@ -235,7 +307,9 @@ const SubEditBannerForm = (props) => {
                     value={Type}
                     className="cursor-pointer h-[45px] min-w-[140px] pl-3  bg-gray-50 rounded-md text-lg border-2 border-gray-300 "
                   >
-                    <option value="">Screen</option>
+                    <option value="" hidden>
+                      Screen
+                    </option>
                     <option value="Mobile">Mobile</option>
                     <option value="Desktop">Desktop</option>
                   </select>

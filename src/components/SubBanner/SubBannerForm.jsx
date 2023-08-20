@@ -12,6 +12,8 @@ const SubBannerForm = () => {
   const { message, type, loading } = useSelector((state) => state.subbanners);
   const [mobileImage, setMobileImage] = useState("");
   const [desktopImage, setDesktopImage] = useState("");
+  const [mobileImageName, setMobileImageName] = useState("");
+  const [desktopImageName, setDesktopImageName] = useState("");
   const [Type, setType] = useState("");
   const [checked, setChecked] = useState(false);
   useEffect(() => {
@@ -69,25 +71,35 @@ const SubBannerForm = () => {
       const base64String = reader.result;
       console.log(Type);
       if (Type === "Desktop") {
+        const name = file.name.split(".")[0];
+        const extension = file.name.split(".")[1];
+        const date = Date.now().toString();
+        const imageName = name.concat(date).concat(".").concat(extension);
+        setDesktopImageName(imageName);
         setDesktopImage(base64String);
       }
       if (Type === "Mobile") {
+        const name = file.name.split(".")[0];
+        const extension = file.name.split(".")[1];
+        const date = Date.now().toString();
+        const imageName = name.concat(date).concat(".").concat(extension);
+        setMobileImageName(imageName);
         setMobileImage(base64String);
       }
     };
-    console.log(fileInputRef.current.value);
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
     }
-    console.log(fileInputRef.current.value);
   };
 
   const deleteDesktopFile = () => {
     setDesktopImage("");
+    setDesktopImageName("");
   };
 
   const deleteMobileFile = () => {
     setMobileImage("");
+    setMobileImageName("");
   };
 
   const createBannerSubmitHandler = (e) => {
@@ -98,19 +110,28 @@ const SubBannerForm = () => {
           body: {
             isPublished: checked,
             mobileImage,
+            mobileImageName,
             desktopImage,
+            desktopImageName,
           },
         })
       );
+      setDesktopImage("");
+      setMobileImage("");
+      setDesktopImageName("");
+      setMobileImageName("");
+      setType("");
+      setChecked(false);
     }
   };
+  console.log(desktopImageName, mobileImageName);
 
   return (
     <div className="">
       <Navbar />
       <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
         <Sidebar />
-        <div className=" flex flex-col overflow-y-scroll overflow-x-hidden no-scroll  h-[100vh] w-[100%] lg:w-[80%]">
+        <div className=" flex flex-col overflow-y-scroll overflow-x-hidden no-scroll  h-[90vh] w-[100%] lg:w-[80%]">
           <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
             <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
               Add Sub-Banner
@@ -218,7 +239,9 @@ const SubBannerForm = () => {
                     value={Type}
                     className="cursor-pointer h-[45px] min-w-[140px] pl-3  bg-gray-50 rounded-md text-lg border-2 border-gray-300 "
                   >
-                    <option value="">Screen</option>
+                    <option value="" hidden>
+                      Screen
+                    </option>
                     <option value="Mobile">Mobile</option>
                     <option value="Desktop">Desktop</option>
                   </select>

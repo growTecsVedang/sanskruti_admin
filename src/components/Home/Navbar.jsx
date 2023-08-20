@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { BiUserCircle, BiCalendarStar } from "react-icons/bi";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { AiOutlineClose, AiOutlineInbox } from "react-icons/ai";
+import {
+  AiOutlineClose,
+  AiOutlineInbox,
+  AiOutlineSetting,
+} from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { MdOutlineDashboard } from "react-icons/md";
 import { FiUsers, FiLogOut } from "react-icons/fi";
-import { RiArrowDropDownLine } from "react-icons/ri";
+import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import { BsShieldLockFill } from "react-icons/bs";
 import { ImImages, ImProfile } from "react-icons/im";
 import { logOutUser } from "../../Redux/slices/UserSlice";
@@ -27,6 +31,7 @@ const Navbar = () => {
   }
   const [open, setOpen] = useState(false);
   const [prod, setProd] = useState(false);
+  const [settings, setSettings] = useState(false);
 
   return (
     <div className="">
@@ -93,7 +98,11 @@ const Navbar = () => {
         >
           <AiOutlineInbox size={30} />
           <div className="mx-5">Product</div>
-          <RiArrowDropDownLine size={30} />
+          {prod ? (
+            <RiArrowDropUpLine size={30} />
+          ) : (
+            <RiArrowDropDownLine size={30} />
+          )}
         </div>
         {prod ? (
           <div className="bg-[#ebf7f7]">
@@ -143,6 +152,13 @@ const Navbar = () => {
           </div>
         </Link>
         <hr className="text-black h-2" />
+        <Link to="/coupons">
+          <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+            <MdOutlineDashboard size={30} />
+            <div className="mx-5">Coupons</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
         <Link to="/users">
           <div className="h-[40px] flex my-3  w-[200px] pl-5 text-xl">
             <FiUsers size={30} />
@@ -164,6 +180,45 @@ const Navbar = () => {
             <div className="mx-5">Profile</div>
           </div>
         </Link>
+        <hr className="text-black h-2" />
+        <div
+          onClick={() => setSettings(!settings)}
+          className=" cursor-pointer h-[40px] flex mt-3  w-[100%] pl-5 text-xl"
+        >
+          <AiOutlineSetting size={30} />
+          <div className="mx-5">Settings</div>
+          {settings ? (
+            <RiArrowDropUpLine size={30} />
+          ) : (
+            <RiArrowDropDownLine size={30} />
+          )}
+        </div>
+        {settings ? (
+          <div className="bg-[#ebf7f7]">
+            <Link to="/return">
+              <div className="h-[40px] flex mt-3 items-center  w-[100%] pl-5 text-xl">
+                <div className="mx-5">Return</div>
+              </div>
+            </Link>
+            <Link to="/t&c">
+              <div className="h-[40px] flex mt-3 items-center w-[100%] pl-5 text-xl">
+                <div className="mx-5">T&C</div>
+              </div>
+            </Link>
+            <Link to="/policy">
+              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+                <div className="mx-5">Privacy Policy</div>
+              </div>
+            </Link>
+            <Link to="/analytics">
+              <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+                <div className="mx-5">Analytics</div>
+              </div>
+            </Link>
+          </div>
+        ) : (
+          ""
+        )}
         <hr className="text-black h-2" />
       </div>
       {/* laptop */}

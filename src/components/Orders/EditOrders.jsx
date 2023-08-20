@@ -109,7 +109,7 @@ const EditOrders = (props) => {
       <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
         <Sidebar />
         {order && order.order && order.payment ? (
-          <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  min-h-[100vh] w-[100%] lg:w-[80%] no-scroll  ">
+          <div className=" flex  flex-col   h-[90vh] w-[100%] lg:w-[80%]   ">
             <div className="w-[97%] mx-auto mt-3 mb-[1px] py-3 min-h-full  bg-white  rounded-md flex flex-col shadow-md  ">
               <div className=" mx-4 flex flex-col lg:justify-between  lg:flex-row gap-y-4 ">
                 <div className="flex flex-col">

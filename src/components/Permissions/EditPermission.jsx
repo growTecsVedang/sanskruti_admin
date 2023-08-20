@@ -93,7 +93,7 @@ const EditPermission = (props) => {
       <Navbar />
       <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
         <Sidebar />
-        <div className=" flex flex-col overflow-y-scroll no-scroll  h-[100vh] w-[100%] lg:w-[80%]">
+        <div className=" flex flex-col overflow-y-scroll no-scroll  h-[90vh] w-[100%] lg:w-[80%]">
           <div className="flex flex-col gap-x-3  lg:flex-row ">
             <div className=" w-[97%]   lg:min-w-[45%] mx-auto mt-5  min-h-[50px] bg-white  rounded-md flex flex-col     shadow-md ">
               <h1 className="text-xl h-[50px] flex  items-center pl-3 font-semibold ">
@@ -102,7 +102,7 @@ const EditPermission = (props) => {
               <div className="flex  min-h-[200px]  ">
                 <div className=" w-[120px]  sm:w-[200px]  h-full p-2 border-r-2   ">
                   <img
-                    className="border-2"
+                    className="border-2 mx-auto "
                     src="https://res.cloudinary.com/dqyvomyqy/image/upload/v1683034362/user_2_mkh7hm.png"
                     alt="userIcon"
                   />

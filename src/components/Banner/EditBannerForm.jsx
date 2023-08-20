@@ -4,14 +4,24 @@ import Sidebar from "../Home/Sidebar";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { clearState, updateBanner } from "../../Redux/slices/BannerSlice";
+import {
+  clearState,
+  updateBanner,
+  deleteBannerImage,
+} from "../../Redux/slices/BannerSlice";
 const MAX_SIZE = 400 * 1024;
 const EditBannerForm = (props) => {
   const fileInputRef = useRef("");
   const dispatch = useDispatch();
-  const { message, type, banners } = useSelector((state) => state.banners);
+  const { message, type, banners, loading } = useSelector(
+    (state) => state.banners
+  );
   const [mobileImage, setMobileImage] = useState("");
   const [desktopImage, setDesktopImage] = useState("");
+  const [mobileImageBase64, setMobileImageBase64] = useState("");
+  const [desktopImageBase64, setDesktopImageBase64] = useState("");
+  const [mobileImageName, setMobileImageName] = useState("");
+  const [desktopImageName, setDesktopImageName] = useState("");
   const [Type, setType] = useState("");
   const [checked, setChecked] = useState(false);
   const [id, setId] = useState(null);
@@ -83,37 +93,81 @@ const EditBannerForm = (props) => {
       const base64String = reader.result;
       console.log(Type);
       if (Type === "Desktop") {
-        setDesktopImage(base64String);
+        setDesktopImageBase64(base64String);
+        const name = file.name.split(".")[0];
+        const extension = file.name.split(".")[1];
+        const date = Date.now().toString();
+        const imageName = name.concat(date).concat(".").concat(extension);
+        setDesktopImageName(imageName);
       }
       if (Type === "Mobile") {
-        setMobileImage(base64String);
+        setMobileImageBase64(base64String);
+        const name = file.name.split(".")[0];
+        const extension = file.name.split(".")[1];
+        const date = Date.now().toString();
+        const imageName = name.concat(date).concat(".").concat(extension);
+        setMobileImageName(imageName);
       }
     };
-    console.log(fileInputRef.current.value);
+
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
     }
-    console.log(fileInputRef.current.value);
   };
 
   const deleteDesktopFile = () => {
-    setDesktopImage("");
+    if (desktopImage !== "") {
+      const name = desktopImage.split(
+        `${process.env.REACT_APP_ENDPOINT_CDN}/`
+      )[1];
+      dispatch(
+        deleteBannerImage({
+          _id: id,
+          type: "desktop",
+          name,
+        })
+      );
+      setDesktopImage("");
+    } else {
+      setDesktopImageBase64("");
+    }
   };
 
   const deleteMobileFile = () => {
-    setMobileImage("");
+    if (mobileImage !== "") {
+      const name = mobileImage.split(
+        `${process.env.REACT_APP_ENDPOINT_CDN}/`
+      )[1];
+      dispatch(
+        deleteBannerImage({
+          _id: id,
+          type: "mobile",
+          name,
+        })
+      );
+      setMobileImage("");
+    } else {
+      setMobileImageBase64("");
+    }
   };
 
   const createBannerSubmitHandler = (e) => {
     e.preventDefault();
-    if (desktopImage !== "" && mobileImage !== "") {
+    if (
+      desktopImage !== "" ||
+      mobileImage !== "" ||
+      desktopImageBase64 !== "" ||
+      mobileImageBase64 !== ""
+    ) {
       dispatch(
         updateBanner({
           id,
           body: {
             isPublished: checked,
-            mobileImage,
-            desktopImage,
+            mobileImage: mobileImage || mobileImageBase64,
+            desktopImage: desktopImage || desktopImageBase64,
+            mobileImageName,
+            desktopImageName,
           },
         })
       );
@@ -141,13 +195,23 @@ const EditBannerForm = (props) => {
                     </h2>
                     <div className=" mt-5 mx-4  flex w- gap-x-6 lg:h-[430px] h-[280px] ">
                       <div className="w-full">
-                        <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
-                          <img
-                            src={desktopImage}
-                            className="w-[100%] h-[200px]  lg:h-[350px]"
-                            alt="upload_image"
-                          />
-                        </div>
+                        {desktopImage === "" ? (
+                          <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
+                            <img
+                              src={desktopImageBase64}
+                              className="w-[100%] h-[200px]  lg:h-[350px]"
+                              alt="upload_image"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
+                            <img
+                              src={desktopImage}
+                              className="w-[100%] h-[200px]  lg:h-[350px]"
+                              alt="upload_image"
+                            />
+                          </div>
+                        )}
                         <div
                           onClick={deleteDesktopFile}
                           className=" cursor-pointer hover:bg-slate-300 lg:w-[60px] w-[full]  h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 "
@@ -163,13 +227,23 @@ const EditBannerForm = (props) => {
                     </h2>
                     <div className=" mt-5 mx-4  flex w- gap-x-6 lg:h-[430px] h-[280px] ">
                       <div className="w-full">
-                        <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
-                          <img
-                            src={mobileImage}
-                            className="w-[100%] h-[200px]  lg:h-[350px]"
-                            alt="upload_image"
-                          />
-                        </div>
+                        {mobileImage === "" ? (
+                          <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
+                            <img
+                              src={mobileImageBase64}
+                              className="w-[100%] h-[200px]  lg:h-[350px]"
+                              alt="upload_image"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-[100%] h-[200px]  lg:h-[350px] border-2 border-gray-200 ">
+                            <img
+                              src={mobileImage}
+                              className="w-[100%] h-[200px]  lg:h-[350px]"
+                              alt="upload_image"
+                            />
+                          </div>
+                        )}
                         <div
                           onClick={deleteMobileFile}
                           className=" cursor-pointer hover:bg-slate-300 lg:w-[60px] w-[full]  h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 "
@@ -233,7 +307,9 @@ const EditBannerForm = (props) => {
                     value={Type}
                     className="cursor-pointer h-[45px] min-w-[140px] pl-3  bg-gray-50 rounded-md text-lg border-2 border-gray-300 "
                   >
-                    <option value="">Screen</option>
+                    <option value="" hidden>
+                      Screen
+                    </option>
                     <option value="Mobile">Mobile</option>
                     <option value="Desktop">Desktop</option>
                   </select>
@@ -259,12 +335,39 @@ const EditBannerForm = (props) => {
               </div>
 
               <div className="w-full pr-4 mt-3 h-[60px] flex items-center justify-end  ">
-                <div
-                  onClick={(e) => createBannerSubmitHandler(e)}
-                  className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
-                >
-                  Save
-                </div>
+                {!loading ? (
+                  <button
+                    onClick={(e) => createBannerSubmitHandler(e)}
+                    className="text-white w-[140px] bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm  py-2.5 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex justify-center items-center"
+                  >
+                    Save & edit
+                  </button>
+                ) : (
+                  <button
+                    disabled
+                    type="button"
+                    class="text-white bg-blue-700 w-[140px] hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      role="status"
+                      class="inline w-4 h-4 mr-3 text-white animate-spin"
+                      viewBox="0 0 100 101"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="#E5E7EB"
+                      />
+                      <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    Updating...
+                  </button>
+                )}
               </div>
             </form>
           </div>

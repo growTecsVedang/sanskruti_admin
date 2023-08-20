@@ -4,7 +4,10 @@ import Sidebar from "../Home/Sidebar";
 import { toast } from "react-toastify";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { clearState } from "../../Redux/slices/ProductSlice";
+import {
+  clearState,
+  deleteProductImage,
+} from "../../Redux/slices/ProductSlice";
 import { updateProduct } from "../../Redux/slices/ProductSlice";
 import {
   generateCombinations,
@@ -70,8 +73,8 @@ const EditProduct = (props) => {
   );
   const [quantity, setQuantity] = useState(0);
   const [price, setprice] = useState(0);
-  const [images, setImages] = useState([]);
-  const [imagePreview, setImagePreview] = useState([]);
+  const [images, setImages] = useState([{}]);
+  const [imagePreview, setImagePreview] = useState([{}]);
 
   const handleAttributeNameChange = (e) => {
     const { name, value } = e.target;
@@ -110,8 +113,6 @@ const EditProduct = (props) => {
     setImagePreview([...imagePreview, ...images]);
   }, [images]);
 
-  console.log(res);
-
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const imagePromises = files.map((file) => {
@@ -119,7 +120,14 @@ const EditProduct = (props) => {
         const reader = new FileReader();
         reader.onloadend = () => {
           const base64String = reader.result;
-          resolve(base64String);
+          const name = file.name.split(".")[0];
+          const extension = file.name.split(".")[1];
+          const date = Date.now().toString();
+          const imageName = name.concat(date).concat(".").concat(extension);
+          resolve({
+            image: base64String,
+            imageName: imageName,
+          });
         };
         if (file.size > MAX_SIZE) {
           alert("file size exceeded");
@@ -136,6 +144,14 @@ const EditProduct = (props) => {
   };
 
   const deleteFile = (k) => {
+    if (imagePreview[k].image.length < 100) {
+      dispatch(
+        deleteProductImage({
+          id: values.id,
+          name: imagePreview[k].image,
+        })
+      );
+    }
     const newBase64ImageArray = imagePreview.filter((item, key) => {
       return k !== key;
     });
@@ -189,7 +205,14 @@ const EditProduct = (props) => {
           meta_description: item.meta_description,
           meta_keyword: item.meta_keyword,
         });
-        setImagePreview(item.images);
+        const array = item.images.map((i) => {
+          const obj = {
+            image: i,
+            imageName: "",
+          };
+          return obj;
+        });
+        setImagePreview(array);
         setMainCategory(item.MainCategory);
         setSubCategory(item.SubCategory);
       }
@@ -793,7 +816,7 @@ const EditProduct = (props) => {
                             <div className="w-[280px] h-[350px] border-2 border-gray-200 ">
                               <img
                                 className="w-[280px] h-[350px]"
-                                src={i}
+                                src={i.image}
                                 alt="product_image"
                               />
                             </div>

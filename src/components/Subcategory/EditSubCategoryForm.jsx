@@ -100,7 +100,7 @@ const EditSubCategoryForm = (props) => {
       <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
         <Sidebar />
 
-        <div className=" flex flex-col overflow-y-scroll   h-[100vh] w-[100%] lg:w-[80%] no-scroll ">
+        <div className=" flex flex-col overflow-y-scroll   h-[90vh] w-[100%] lg:w-[80%] no-scroll ">
           <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
             <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
               Edit Sub Category

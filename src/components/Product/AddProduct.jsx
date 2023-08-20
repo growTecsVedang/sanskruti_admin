@@ -113,7 +113,15 @@ const AddProduct = () => {
         const reader = new FileReader();
         reader.onloadend = () => {
           const base64String = reader.result;
-          resolve(base64String);
+          console.log(base64String);
+          const name = file.name.split(".")[0];
+          const extension = file.name.split(".")[1];
+          const date = Date.now().toString();
+          const imageName = name.concat(date).concat(".").concat(extension);
+          resolve({
+            image: base64String,
+            imageName: imageName,
+          });
         };
         if (file.size > MAX_SIZE) {
           alert("file size exceeded");
@@ -170,7 +178,7 @@ const AddProduct = () => {
       <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
         <Sidebar />
 
-        <div className=" flex flex-col overflow-y-scroll overflow-x-hidden   h-[100vh] w-[100%] lg:w-[80%] no-scroll ">
+        <div className=" flex flex-col overflow-y-scroll overflow-x-hidden   h-[90vh] w-[100%] lg:w-[80%] no-scroll ">
           <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
             <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
               Product Details
@@ -217,7 +225,9 @@ const AddProduct = () => {
                     value={MainCategory}
                     className="cursor-pointer h-[45px] min-w-[140px] pl-3  bg-gray-50 rounded-md text-lg border-2 border-gray-300 "
                   >
-                    <option value="">categories</option>
+                    <option value="" hidden>
+                      Categories
+                    </option>
                     {duplicateCategory &&
                       duplicateCategory.map((item, key) => {
                         return <option value={item.Title}>{item.Title}</option>;
@@ -233,7 +243,10 @@ const AddProduct = () => {
                     onChange={handleSubCategoryChange}
                     className="cursor-pointer h-[45px] min-w-[140px] pl-3  bg-gray-50 rounded-md text-lg border-2 border-gray-300 "
                   >
-                    <option value="">SubCategories</option>;
+                    <option value="" hidden>
+                      SubCategories
+                    </option>
+                    ;
                     {MainCategory !== "" && duplicateSubCategory ? (
                       duplicateSubCategory
                         .filter((item, key) => item.Category === MainCategory)
@@ -397,11 +410,11 @@ const AddProduct = () => {
                     {base64Image.length !== 0 ? (
                       base64Image.map((i, key) => {
                         return (
-                          <div key={key} className="mb-4">
+                          <div key={i.name} className="mb-4">
                             <div className="w-[280px] h-[350px] border-2 border-gray-200 ">
                               <img
                                 className="w-[280px] h-[350px]"
-                                src={i}
+                                src={i.image}
                                 alt="product_image"
                               />
                             </div>

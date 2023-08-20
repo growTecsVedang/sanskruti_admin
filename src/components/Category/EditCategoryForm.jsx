@@ -3,7 +3,11 @@ import Navbar from "../Home/Navbar";
 import Sidebar from "../Home/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineDelete } from "react-icons/ai";
-import { updateCategory, clearState } from "../../Redux/slices/CategorySlice";
+import {
+  updateCategory,
+  deleteCategoryImage,
+  clearState,
+} from "../../Redux/slices/CategorySlice";
 import { toast } from "react-toastify";
 const MAX_SIZE = 400 * 1024;
 const EditCategoryForm = (props) => {
@@ -17,6 +21,8 @@ const EditCategoryForm = (props) => {
   const [Meta_Title, setMeta_Title] = useState("");
   const [Meta_Description, setMeta_Description] = useState("");
   const [base64Image, setBase64Image] = useState("");
+  const [image, setImage] = useState("");
+  const [imageName, setImageName] = useState("");
 
   useEffect(() => {
     categories.forEach((item) => {
@@ -26,13 +32,50 @@ const EditCategoryForm = (props) => {
         setPath(item.Image);
         setMeta_Title(item.Meta_Title);
         setMeta_Description(item.Meta_Description);
-        setBase64Image(item.Image);
+        setImage(item.Image);
       }
     });
   }, [categories, props]);
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    const name = file.name.split(".")[0];
+    const extension = file.name.split(".")[1];
+    const date = Date.now().toString();
+    const imageName = name.concat(date).concat(".").concat(extension);
+    setImageName(imageName);
+    if (file.size > MAX_SIZE) {
+      console.log(file.size);
+      alert("file size exceeded");
+      return;
+      // NOTE: state set ker joh prevent karega user ko upload karne se
+    }
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      setBase64Image(base64String);
+    };
+    console.log(base64Image);
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
   const deleteFile = () => {
-    setBase64Image("");
+    if (image !== "") {
+      const name = image.split(`${process.env.REACT_APP_ENDPOINT_CDN}/`)[1];
+      dispatch(
+        deleteCategoryImage({
+          id,
+          name,
+        })
+      );
+      setImage("");
+    } else {
+      setBase64Image("");
+    }
   };
 
   const createCategorySubmitHandler = (e) => {
@@ -50,30 +93,11 @@ const EditCategoryForm = (props) => {
             Title,
             Meta_Title,
             Meta_Description,
-            Image: base64Image,
+            Image: image || base64Image,
+            imageName,
           },
         })
       );
-    }
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file.size > MAX_SIZE) {
-      console.log(file.size);
-      alert("file size exceeded");
-      return;
-      // NOTE: state set ker joh prevent karega user ko upload karne se
-    }
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const base64String = reader.result;
-      setBase64Image(base64String);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
     }
   };
 
@@ -148,15 +172,30 @@ const EditCategoryForm = (props) => {
               <div className="w-[95%] mx-auto flex   flex-col  lg:flex-row    ">
                 <div className="lg:w-[40%]">
                   <h2 className="text-lg font-bold mt-5  mx-4 ">Image</h2>
-                  <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[430px] overflow-y-hidden  ">
+                  <div className="w-[95%] mx-auto h-[40px] sm:h-[40px] lg:h-[40px] px-5 mt-6  flex items-center bg-[#bde0fe]  ">
+                    first <strong className="px-2  text-[red]"> Delete </strong>
+                    the Image and then
+                    <strong className="px-2 text-[green] "> Upload </strong> .
+                  </div>
+                  <div className=" mt-5 mx-3  flex overflow-x-scroll w-full gap-x-6 h-[430px] overflow-y-hidden  ">
                     <div className="">
-                      <div className="w-[300px] h-[350px] border-2 border-gray-200 ">
-                        <img
-                          src={base64Image}
-                          className="w-[300px] h-[350px]"
-                          alt="upload_image"
-                        />
-                      </div>
+                      {image === "" ? (
+                        <div className="w-[300px] h-[350px] border-2 border-gray-200 ">
+                          <img
+                            src={base64Image}
+                            className="w-[300px] h-[350px]"
+                            alt="upload_image"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-[300px] h-[350px] border-2 border-gray-200 ">
+                          <img
+                            src={image}
+                            className="w-[300px] h-[350px]"
+                            alt="upload_image"
+                          />
+                        </div>
+                      )}
                       <div
                         onClick={deleteFile}
                         className=" cursor-pointer hover:bg-slate-300 w-[300px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 "

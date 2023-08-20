@@ -157,7 +157,7 @@ const Products = () => {
       <Navbar />
       <div className=" flex w-[full] ">
         <Sidebar />
-        <div className=" flex flex-col overflow-y-scroll h-[100vh] w-[100%]  lg:w-[80%] no-scroll ">
+        <div className=" flex flex-col overflow-y-scroll h-[90vh] w-[100%]  lg:w-[80%] no-scroll ">
           <div className="flex flex-col ml-5 ">
             <div className="  lg:flex lg:h-[80px] lg:items-center  ">
               <div className=" mx-auto lg:mx-0 w-[80%] h-[45px] flex mt-5  overflow-hidden ">
@@ -186,7 +186,7 @@ const Products = () => {
             rowHeight={60}
             initialState={{
               pagination: {
-                paginationModel: { pageSize: 5, page: 0 },
+                paginationModel: { pageSize: 8 },
               },
             }}
           />

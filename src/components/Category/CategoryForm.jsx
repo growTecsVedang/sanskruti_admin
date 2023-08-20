@@ -13,6 +13,7 @@ const CategoryForm = () => {
   const [Meta_Title, setMeta_Title] = useState("");
   const [Meta_Description, setMeta_Description] = useState("");
   const [base64Image, setBase64Image] = useState("");
+  const [imageName, setImageName] = useState("");
 
   function getCookie() {
     var name = "accessToken".concat("=");
@@ -30,6 +31,11 @@ const CategoryForm = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    const name = file.name.split(".")[0];
+    const extension = file.name.split(".")[1];
+    const date = Date.now().toString();
+    const imageName = name.concat(date).concat(".").concat(extension);
+    setImageName(imageName);
     if (file.size > MAX_SIZE) {
       console.log(file.size);
       alert("file size exceeded");
@@ -40,6 +46,7 @@ const CategoryForm = () => {
 
     reader.onloadend = () => {
       const base64String = reader.result;
+      console.log(base64Image.length);
       setBase64Image(base64String);
     };
 
@@ -49,6 +56,7 @@ const CategoryForm = () => {
   };
 
   const deleteFile = () => {
+    setImageName("");
     setBase64Image("");
   };
 
@@ -58,7 +66,9 @@ const CategoryForm = () => {
     if (
       Title.trim() !== "" &&
       Meta_Description.trim() !== "" &&
-      Meta_Title.trim() !== ""
+      Meta_Title.trim() !== "" &&
+      imageName.trim() !== "" &&
+      Image !== ""
     ) {
       const accessToken = getCookie();
       dispatch(
@@ -68,6 +78,7 @@ const CategoryForm = () => {
           Meta_Title,
           Meta_Description,
           Image: base64Image,
+          imageName,
         })
       );
       setTitle("");

@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineDashboard } from "react-icons/md";
 import { FiUsers, FiLogOut } from "react-icons/fi";
-import { RiArrowDropDownLine } from "react-icons/ri";
+import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import { BsShieldLockFill } from "react-icons/bs";
 import { ImImages, ImProfile } from "react-icons/im";
 import { BiCalendarStar } from "react-icons/bi";
-import { AiOutlineInbox } from "react-icons/ai";
+import { AiOutlineInbox, AiOutlineSetting } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../Redux/slices/UserSlice";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
   const [prod, setProd] = useState(false);
+  const [settings, setSettings] = useState(false);
   function getCookie() {
     var name = "accessToken".concat("=");
     var decodedCookie = document.cookie;
@@ -38,7 +39,7 @@ const Sidebar = () => {
   return (
     <div
       className={
-        "hidden lg:block  h-[100vh] w-[20%]   ease-in-out duration-500 overflow-y-scroll   bg-[#fbfbfb] z-20 left-[0px]  "
+        "hidden lg:block  h-[90vh] w-[20%]   ease-in-out duration-500 overflow-y-scroll   bg-[#fbfbfb] z-20 left-[0px]  "
       }
     >
       <Link to="/home">
@@ -54,7 +55,11 @@ const Sidebar = () => {
       >
         <AiOutlineInbox size={30} />
         <div className="mx-5">Product</div>
-        <RiArrowDropDownLine size={30} />
+        {prod ? (
+          <RiArrowDropUpLine size={30} />
+        ) : (
+          <RiArrowDropDownLine size={30} />
+        )}
       </div>
       {prod ? (
         <div className="bg-[#ebf7f7]">
@@ -105,6 +110,13 @@ const Sidebar = () => {
         </div>
       </Link>
       <hr className="text-black h-2" />
+      <Link to="/coupons">
+        <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
+          <MdOutlineDashboard size={30} />
+          <div className="mx-5">Coupons</div>
+        </div>
+      </Link>
+      <hr className="text-black h-2" />
       <Link to="/users">
         <div className="h-[40px] flex my-3  w-[200px] pl-5 text-xl">
           <FiUsers size={30} />
@@ -126,6 +138,45 @@ const Sidebar = () => {
           <div className="mx-5">Profile</div>
         </div>
       </Link>
+      <hr className="text-black h-2" />
+      <div
+        onClick={() => setSettings(!settings)}
+        className=" cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-xl"
+      >
+        <AiOutlineSetting size={30} />
+        <div className="mx-5">Settings</div>
+        {settings ? (
+          <RiArrowDropUpLine size={30} />
+        ) : (
+          <RiArrowDropDownLine size={30} />
+        )}
+      </div>
+      {settings ? (
+        <div className="bg-[#ebf7f7]">
+          <Link to="/return">
+            <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+              <div className="mx-5">Return</div>
+            </div>
+          </Link>
+          <Link to="/t&c">
+            <div className="h-[40px] flex mt-3 items-center w-[200px] pl-5 text-xl">
+              <div className="mx-5">T&C</div>
+            </div>
+          </Link>
+          <Link to="/policy">
+            <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+              <div className="mx-5">Privacy Policy</div>
+            </div>
+          </Link>
+          <Link to="/analytics">
+            <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-xl">
+              <div className="mx-5">Analytics</div>
+            </div>
+          </Link>
+        </div>
+      ) : (
+        ""
+      )}
       <hr className="text-black h-2" />
     </div>
   );
