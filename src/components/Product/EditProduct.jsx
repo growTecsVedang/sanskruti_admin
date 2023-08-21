@@ -350,10 +350,13 @@ const EditProduct = (props) => {
       meta_description: values.meta_description,
       MainCategory,
       SubCategory,
-      varients: {
-        attributes: atr,
-        variations: res,
-      },
+      varients:
+        res.length > 0
+          ? {
+              attributes: atr,
+              variations: res,
+            }
+          : values.varients,
       images: imagePreview,
     };
     dispatch(
@@ -376,6 +379,9 @@ const EditProduct = (props) => {
       }
     }
   }, [dispatch, type, message]);
+
+  console.log(values.varients);
+  console.log(res);
   return (
     <div className="">
       <Navbar />
