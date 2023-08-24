@@ -153,45 +153,39 @@ const Products = () => {
     });
 
   return (
-    <div>
-      <Navbar />
-      <div className=" flex w-[full] ">
-        <Sidebar />
-        <div className=" flex flex-col overflow-y-scroll h-[90vh] w-[100%]  lg:w-[80%] no-scroll ">
-          <div className="flex flex-col ml-5 ">
-            <div className="  lg:flex lg:h-[80px] lg:items-center  ">
-              <div className=" mx-auto lg:mx-0 w-[80%] h-[45px] flex mt-5  overflow-hidden ">
-                <input
-                  type="text"
-                  placeholder="Search Products"
-                  className="w-[200px] flex-grow rounded-l-3xl border-[1px] border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none  disabled:cursor-not-allowed disabled:opacity-50 "
-                />
-                <div className="cursor-pointer w-[100px] flex justify-center items-center rounded-r-3xl border-[1px] border-gray-300  bg-[#4361ee] text-white">
-                  Search
-                </div>
-              </div>
-              <Link to="/addproduct">
-                <button className=" lg:mx-[5%] mx-[10%] mt-4 lg:mt-6  h-[45px] w-[120px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
-                  Add Product
-                </button>
-              </Link>
+    <div className=" flex flex-col overflow-y-scroll h-[90vh] w-[100%]  lg:w-[80%] no-scroll ">
+      <div className="flex flex-col ml-5 ">
+        <div className="  lg:flex lg:h-[80px] lg:items-center  ">
+          <div className=" mx-auto lg:mx-0 w-[80%] h-[45px] flex mt-5  overflow-hidden ">
+            <input
+              type="text"
+              placeholder="Search Products"
+              className="w-[200px] flex-grow rounded-l-3xl border-[1px] border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none  disabled:cursor-not-allowed disabled:opacity-50 "
+            />
+            <div className="cursor-pointer w-[100px] flex justify-center items-center rounded-r-3xl border-[1px] border-gray-300  bg-[#4361ee] text-white">
+              Search
             </div>
-            <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
           </div>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            disableSelectionOnClick
-            className="productListTable"
-            rowHeight={60}
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 8 },
-              },
-            }}
-          />
+          <Link to="/addproduct">
+            <button className=" lg:mx-[5%] mx-[10%] mt-4 lg:mt-6  h-[45px] w-[120px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
+              Add Product
+            </button>
+          </Link>
         </div>
+        <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
       </div>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        disableSelectionOnClick
+        className="productListTable"
+        rowHeight={60}
+        initialState={{
+          pagination: {
+            paginationModel: { pageSize: 8 },
+          },
+        }}
+      />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { FiUsers, FiLogOut } from "react-icons/fi";
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import { BsShieldLockFill } from "react-icons/bs";
 import { ImImages, ImProfile } from "react-icons/im";
-import { BiCalendarStar } from "react-icons/bi";
+import { CiDiscount1 } from "react-icons/ci";
 import { AiOutlineInbox, AiOutlineSetting } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../Redux/slices/UserSlice";
@@ -112,7 +112,7 @@ const Sidebar = () => {
       <hr className="text-black h-2" />
       <Link to="/coupons">
         <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-xl">
-          <MdOutlineDashboard size={30} />
+          <CiDiscount1 size={30} />
           <div className="mx-5">Coupons</div>
         </div>
       </Link>

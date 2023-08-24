@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadAllProducts } from "../../Redux/slices/ProductSlice";
 import { useState } from "react";
 import { loadAllOrders } from "../../Redux/slices/OrderSlice";
+import PieChartComponent from "../Charts/PieChart";
 
 const Home = () => {
   const [allusers, setAllUsers] = useState(0);
@@ -67,33 +68,34 @@ const Home = () => {
     setAllOrders(orderCount);
   }, [dispatch, type, message, history, userCount, productCount, orderCount]);
   return (
-    <div className="">
-      <Navbar />
-      <div className=" flex w-[full] bg-[#edf2f4] opacity-80 ">
-        <Sidebar />
-        <div className=" flex flex-col overflow-y-scroll no-scroll  h-[90vh] w-[100%] lg:w-[80%]">
-          <div className="flex flex-col lg:flex-row mx-3 mt-3 ">
-            <div className="h-[100px] lg:ml-2 bg-[#f5dd90] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
-              <h1 className="text-lg ml-5 ">Total products</h1>
-              <p className="font-bold text-xl ml-5">{allproducts}</p>
-            </div>
-            <div className="h-[100px] lg:ml-2 bg-[#aaa1c8] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
-              <h1 className="text-lg ml-5 ">Total users</h1>
-              <p className="font-bold text-xl ml-5">{allusers}</p>
-            </div>
-            <div className="h-[100px] lg:ml-2 bg-[#74c69d] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
-              <h1 className="text-lg ml-5 ">Total orders</h1>
-              <p className="font-bold text-xl ml-5">{allOrders}</p>
-            </div>
-            <div className="h-[100px] lg:ml-2 bg-[#61a5c2] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
-              <h1 className="text-lg ml-5 ">Total sells</h1>
-              <p className="font-bold text-xl ml-5">15000&#8377; </p>
-            </div>
-          </div>
-          <BarChart />
-          <OrderStat />
+    <div className=" flex flex-col overflow-y-scroll no-scroll  h-[90vh] w-[100%] lg:w-[80%]">
+      <div className="flex flex-col lg:flex-row mx-3 mt-3 ">
+        <div className="h-[100px] lg:ml-2 bg-[#f5dd90] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
+          <h1 className="text-lg ml-5 ">Total products</h1>
+          <p className="font-bold text-xl ml-5">{allproducts}</p>
+        </div>
+        <div className="h-[100px] lg:ml-2 bg-[#aaa1c8] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
+          <h1 className="text-lg ml-5 ">Total users</h1>
+          <p className="font-bold text-xl ml-5">{allusers}</p>
+        </div>
+        <div className="h-[100px] lg:ml-2 bg-[#74c69d] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
+          <h1 className="text-lg ml-5 ">Total orders</h1>
+          <p className="font-bold text-xl ml-5">{allOrders}</p>
+        </div>
+        <div className="h-[100px] lg:ml-2 bg-[#61a5c2] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
+          <h1 className="text-lg ml-5 ">Total sells</h1>
+          <p className="font-bold text-xl ml-5">15000&#8377; </p>
         </div>
       </div>
+      <div className="flex flex-col lg:flex-row w-full ">
+        <div className="lg:w-[60%] lg:ml-4 ">
+          <BarChart />
+        </div>
+        <div className="lg:w-[40%]">
+          <PieChartComponent />
+        </div>
+      </div>
+      <OrderStat />
     </div>
   );
 };

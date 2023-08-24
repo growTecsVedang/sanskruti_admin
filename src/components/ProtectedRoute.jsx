@@ -4,6 +4,8 @@ import { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../Redux/slices/LoadUserSlice";
 import SignInOne from "./SignInOne";
+import Navbar from "./Home/Navbar";
+import Sidebar from "./Home/Sidebar";
 
 const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
   const dispatch = useDispatch();
@@ -33,22 +35,26 @@ const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
   }, []);
   return (
     <Fragment>
-      {loading === false && isAuthenticate === true ? (
-        <Route
-          {...rest}
-          render={(props) => {
-            if (!isAuthenticate) {
-              return <Redirect to="/" />;
-            } else if (isAdmin === true && loaduser.role === "USER") {
-              return <Redirect to="/" />;
-            } else {
-              return <Component {...props} />;
-            }
-          }}
-        ></Route>
-      ) : (
-        <Route exact path="/" component={SignInOne} />
-      )}
+      <Navbar />
+      <div className=" flex w-[full] bg-[#edf2f4] opacity-80  ">
+        <Sidebar />
+        {loading === false && isAuthenticate === true ? (
+          <Route
+            {...rest}
+            render={(props) => {
+              if (!isAuthenticate) {
+                return <Redirect to="/" />;
+              } else if (isAdmin === true && loaduser.role === "USER") {
+                return <Redirect to="/" />;
+              } else {
+                return <Component {...props} />;
+              }
+            }}
+          ></Route>
+        ) : (
+          <Route exact path="/" component={SignInOne} />
+        )}
+      </div>
     </Fragment>
   );
 };

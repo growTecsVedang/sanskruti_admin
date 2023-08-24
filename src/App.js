@@ -39,6 +39,9 @@ import ReturnComponent from "./components/Settings/ReturnComponent";
 import PolicyComponent from "./components/Settings/PolicyComponent";
 import TermsAndCondition from "./components/Settings/TermsAndCondition";
 import AnalyticsComponent from "./components/Settings/AnalyticsComponent";
+import CouponForm from "./components/Coupons/CouponForm";
+import Navbar from "./components/Home/Navbar";
+import Sidebar from "./components/Home/Sidebar";
 
 function App() {
   const dispatch = useDispatch();
@@ -129,6 +132,12 @@ function App() {
           exact
           path="/analytics"
           component={AnalyticsComponent}
+        />
+        <ProtectedRoute exact path="/couponform" component={CouponForm} />
+        <ProtectedRoute
+          exact
+          path="/editcoupon/:id"
+          component={EditPermission}
         />
       </Switch>
     </div>

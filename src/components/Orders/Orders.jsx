@@ -115,31 +115,23 @@ const Orders = () => {
     });
 
   return (
-    <div>
-      <Navbar />
-      <div className=" flex w-[full] ">
-        <Sidebar />
-        <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[90vh] w-[100%] lg:w-[80%] no-scroll  ">
-          <div className="flex flex-col ml-5 ">
-            <p className="mx-[10%] lg:mx-[1%] my-3">
-              Showing Results {orderCount}
-            </p>
-          </div>
-
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            disableSelectionOnClick
-            className="productListTable"
-            rowHeight={60}
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 5, page: 0 },
-              },
-            }}
-          />
-        </div>
+    <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[90vh] w-[100%] lg:w-[80%] no-scroll  ">
+      <div className="flex flex-col ml-5 ">
+        <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results {orderCount}</p>
       </div>
+
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        disableSelectionOnClick
+        className="productListTable"
+        rowHeight={60}
+        initialState={{
+          pagination: {
+            paginationModel: { pageSize: 5, page: 0 },
+          },
+        }}
+      />
     </div>
   );
 };
