@@ -12,6 +12,7 @@ const CouponForm = () => {
   const [varientName, setVarientName] = useState("");
   const [disType, setDisType] = useState("");
   const [arr, setArr] = useState([]);
+  const [date, setDate] = useState("");
   const dispatch = useDispatch();
   useEffect(() => {}, [arr]);
 
@@ -68,6 +69,7 @@ const CouponForm = () => {
       }
     }
   }
+  console.log(date);
   return (
     <div className="w-full ">
       <div className="w-[97%] mx-auto mt-5  min-h-[50px] bg-white  rounded-md flex flex-col     shadow-md ">
@@ -179,6 +181,8 @@ const CouponForm = () => {
                 </label>
                 <input
                   type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
                   className=" cursor-pointer border border-black h-[30px] rounded-md "
                 />
               </div>

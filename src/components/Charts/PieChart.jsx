@@ -90,7 +90,7 @@ const PieChartComponent = () => {
 
   return (
     <div className=" w-[95%] lg:w-[98%] mx-auto ">
-      <div className="min-h-[90px] w-[100%]   bg-[#2b2d42]  rounded-md flex flex-col justify-center  mb-3   shadow-md   ">
+      <div className="min-h-[90px] w-[100%]   bg-[white]  rounded-md flex flex-col justify-center  mb-3   shadow-md   ">
         <div className="  h-[333px] lg:min-h-[450px]  rounded-md ">
           <h1 className="ml-4  text-2xl font-bold   my-2 ">Users Statistics</h1>
           <ResponsiveContainer width="100%" height="100%">
