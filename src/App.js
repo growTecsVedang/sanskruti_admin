@@ -42,6 +42,7 @@ import AnalyticsComponent from "./components/Settings/AnalyticsComponent";
 import CouponForm from "./components/Coupons/CouponForm";
 import Navbar from "./components/Home/Navbar";
 import Sidebar from "./components/Home/Sidebar";
+import EditCouponForm from "./components/Coupons/EditCouponForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -137,7 +138,7 @@ function App() {
         <ProtectedRoute
           exact
           path="/editcoupon/:id"
-          component={EditPermission}
+          component={EditCouponForm}
         />
       </Switch>
     </div>

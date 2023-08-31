@@ -8,7 +8,7 @@ export const loadAllOrders = createAsyncThunk(
     try {
       console.log(datas);
       const response = await axios.get(
-        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/allOrders`,
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/allOrders?date=&status=`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,

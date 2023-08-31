@@ -390,7 +390,7 @@ const AddProduct = () => {
               onChange={handleInputChange}
               label="Meta_description"
               name="meta_description"
-              className=" min-h-[250px] px-3 py-2 rounded-md border text-black border-gray-300 bg-transparent  text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
+              className=" min-h-[250px] px-3 py-2 rounded-md border text-black border-gray-100 bg-transparent  text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-100  "
               placeholder="Meta Description"
             />
           </div>
