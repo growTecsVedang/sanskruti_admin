@@ -65,7 +65,7 @@ const ReturnComponent = () => {
     }
     dispatch(
       markdownDetails({
-        feild: "returnPolicy",
+        field: "returnPolicy",
       })
     );
   }, [dispatch, type, message]);
