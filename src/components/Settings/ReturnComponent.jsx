@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import RichTextEditor from "react-rte";
+import {
+  clearState,
+  markdownDetails,
+  updatemd,
+} from "../../Redux/slices/MarkDownSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import markdownToTxt from "markdown-to-txt";
 
 const ReturnComponent = () => {
+  const dispatch = useDispatch();
   const [val, setVal] = useState("");
-  const [btnid, setBtnid] = useState("");
+  const { message, type, loading, md } = useSelector((state) => state.markdown);
   const [editorValue, setEditorValue] = useState(
     RichTextEditor.createEmptyValue()
   );
@@ -12,21 +21,54 @@ const ReturnComponent = () => {
   const onChange = (newEditorValue) => {
     setEditorValue(newEditorValue);
   };
-  const getValue = (v) => {
-    setBtnid(v.target.id);
-  };
-  const sendText = () => {
+
+  const sendText = (e) => {
+    e.preventDefault();
     console.log(val);
+    if (val !== "") {
+      dispatch(
+        updatemd({
+          body: {
+            status: "present",
+            returnPolicy: val,
+          },
+        })
+      );
+    }
   };
 
   useEffect(() => {
-    if (btnid === "HTML") {
-      setVal(editorValue.toString("html"));
+    // const text = markdownToTxt(md);
+    // console.log(text);
+    // setEditorValue(text);
+    setVal(editorValue.toString("markdown"));
+  }, [editorValue]);
+
+  useEffect(() => {
+    console.log(md);
+    setEditorValue(
+      RichTextEditor.createValueFromString(md.toString() || " ", "markdown")
+    );
+    setVal(md);
+  }, [md]);
+
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+      } else {
+        notify(message);
+        dispatch(clearState());
+      }
     }
-    if (btnid === "Markdown") {
-      setVal(editorValue.toString("markdown"));
-    }
-  }, [editorValue, btnid]);
+    dispatch(
+      markdownDetails({
+        feild: "returnPolicy",
+      })
+    );
+  }, [dispatch, type, message]);
 
   return (
     <div className="w-full bg-gray-50 ">
@@ -35,28 +77,7 @@ const ReturnComponent = () => {
           &#x25cf; Return Policy
         </h1>
         <RichTextEditor value={editorValue} onChange={onChange} />
-        <div className="flex gap-x-5   ">
-          <section>
-            <input
-              type="radio"
-              id="HTML"
-              name="Grp1"
-              onClick={(e) => getValue(e)}
-            />
-            <label className="ml-2">HTML</label>
-          </section>
-
-          <section>
-            <input
-              type="radio"
-              id="Markdown"
-              name="Grp1"
-              onClick={(e) => getValue(e)}
-            />
-            <label className="ml-2">Markdown</label>
-          </section>
-        </div>
-        <div className=" bg-white ">
+        <div className=" bg-white mt-3">
           <textarea
             readOnly
             value={val}
@@ -65,7 +86,7 @@ const ReturnComponent = () => {
         </div>
         <div className="w-full h-[60px] flex items-center justify-end  ">
           <button
-            onClick={() => sendText()}
+            onClick={(e) => sendText(e)}
             className="w-[150px] h-[45px] bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
           >
             Save & edit
