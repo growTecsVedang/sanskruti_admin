@@ -7,7 +7,7 @@ export const markdownDetails = createAsyncThunk(
     try {
       console.log(datas);
       const response = await axios.get(
-        `${process.env.REACT_APP_ENDPOINT}/api/v1/user/getMarkdown?feild=${datas.feild}`,
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/user/getMarkdown?field=${datas.field}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
