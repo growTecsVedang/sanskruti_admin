@@ -7,17 +7,14 @@ import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import {
-  deleteVarient,
-  loadAllVarients,
-  clearState,
-} from "../../Redux/slices/VarientSlice";
+import { loadAllCoupons, clearState } from "../../Redux/slices/CouponSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { RiH1 } from "react-icons/ri";
 
 const Coupons = () => {
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState("");
-  const { varients, message, type } = useSelector((state) => state.varients);
+  const { coupons, message, type } = useSelector((state) => state.coupons);
 
   function getCookie() {
     var name = "connect.sid".concat("=");
@@ -33,17 +30,17 @@ const Coupons = () => {
     return null; // Cookie not found
   }
   const deleteVarientHandler = (id) => {
-    dispatch(
-      deleteVarient({
-        id,
-      })
-    );
+    // dispatch(
+    //   deleteVarient({
+    //     id,
+    //   })
+    // );
   };
   const handleSearch = () => {
     const cookie = getCookie();
     console.log(keyword);
     dispatch(
-      loadAllVarients({
+      loadAllCoupons({
         keyword,
         cookie,
       })
@@ -63,7 +60,7 @@ const Coupons = () => {
     }
     const cookie = getCookie();
     dispatch(
-      loadAllVarients({
+      loadAllCoupons({
         cookie,
       })
     );
@@ -74,20 +71,44 @@ const Coupons = () => {
 
     {
       field: "name",
-      headerName: "Varient Name",
+      headerName: "Coupon Name",
       minWidth: 180,
       flex: 0.3,
     },
     {
-      field: "value",
-      headerName: "Attributes Count",
+      field: "code",
+      headerName: "Code",
+      minWidth: 180,
+      flex: 0.3,
+    },
+    {
+      field: "expired",
+      headerName: "Expired",
+      minWidth: 180,
+      flex: 0.3,
+    },
+    {
+      field: "type",
+      headerName: "Type",
+      minWidth: 180,
+      flex: 0.3,
+    },
+    {
+      field: "dis_type",
+      headerName: "Discount Type",
+      minWidth: 180,
+      flex: 0.3,
+    },
+    {
+      field: "discount",
+      headerName: "Discount",
       minWidth: 180,
       flex: 0.3,
     },
 
     {
-      field: "Created_At",
-      headerName: "Created At",
+      field: "exp_date",
+      headerName: "Expiration Date",
       minWidth: 180,
       flex: 0.5,
     },
@@ -114,13 +135,19 @@ const Coupons = () => {
     },
   ];
   const rows = [];
-  varients &&
-    varients.forEach((item, key) => {
+  coupons &&
+    coupons.forEach((item, key) => {
+      const newDate = new Date();
+      const valid = newDate.toISOString() > item.expirationDate;
       rows.push({
         id: item._id,
-        name: item.varientName,
-        value: item.value.length,
-        Created_At: item.created_at,
+        name: item.name,
+        code: item.code,
+        expired: valid ? "Expired" : "Valid",
+        type: item.type,
+        dis_type: item.discountType,
+        discount: item.value,
+        exp_date: item.expirationDate,
       });
     });
   return (
@@ -147,7 +174,7 @@ const Coupons = () => {
           </button>
         </div>
         <p className="mx-[10%] lg:mx-[1%] my-3">
-          Showing Results {varients.length}
+          Showing Results {coupons.length}
         </p>
       </div>
       <DataGrid

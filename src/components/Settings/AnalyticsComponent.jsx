@@ -1,7 +1,7 @@
 import React from "react";
 
 const AnalyticsComponent = () => {
-  return <div>Analytics</div>;
+  return <div>Under Development</div>;
 };
 
 export default AnalyticsComponent;

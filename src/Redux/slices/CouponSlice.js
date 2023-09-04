@@ -1,19 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
 import axios from "axios";
 
-export const loadAllOrders = createAsyncThunk(
-  "loadAllOrders",
+export const addCoupon = createAsyncThunk(
+  "addCoupon",
   async (datas, { rejectWithValue }) => {
     try {
-      console.log(datas);
-      const response = await axios.get(
-        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/allOrders?date=&status=`,
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/coupons`;
+
+      const headers = {
+        "Content-Type": "application/json", // You may need to include other headers based on the API requirements
+      };
+      const response = await axios.post(url, datas.body, {
+        headers,
+        withCredentials: true,
+      });
 
       if (response.status === 409 || response.status === 404) {
         const payload = response.data;
@@ -28,37 +28,11 @@ export const loadAllOrders = createAsyncThunk(
   }
 );
 
-export const orderDetails = createAsyncThunk(
-  "orderDetails",
+export const updateCoupon = createAsyncThunk(
+  "updateCoupon",
   async (datas, { rejectWithValue }) => {
     try {
-      console.log(datas);
-      const response = await axios.get(
-        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/getOrderDetails?id=${datas.id}`,
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-
-      if (response.status === 409 || response.status === 404) {
-        const payload = response.data;
-        return rejectWithValue(payload);
-      }
-
-      const data = response.data;
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const updateOrder = createAsyncThunk(
-  "updateOrder",
-  async (datas, { rejectWithValue }) => {
-    try {
-      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/updateOrderStatus?id=${datas.id}`;
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/coupons`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -80,18 +54,18 @@ export const updateOrder = createAsyncThunk(
   }
 );
 
-export const deleteProduct = createAsyncThunk(
-  "deleteProduct",
+export const couponDetails = createAsyncThunk(
+  "couponDetails",
   async (datas, { rejectWithValue }) => {
     try {
-      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/delete?id=${datas.id}`;
-      const headers = {
-        "Content-Type": "application/json; charset=utf-8",
-      };
-      const response = await axios.delete(url, {
-        headers,
-        withCredentials: true,
-      });
+      console.log(datas);
+      const response = await axios.get(
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/couponDetail?id=${datas.id}`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
       if (response.status === 409 || response.status === 404) {
         const payload = response.data;
@@ -106,16 +80,41 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-const orderSlice = createSlice({
-  name: "order",
+export const loadAllCoupons = createAsyncThunk(
+  "loadAllCoupons",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/allCoupons?keyword=${
+          datas.keyword === undefined ? "" : datas.keyword
+        }`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = response.data;
+        return rejectWithValue(payload);
+      }
+
+      const data = response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const couponSlice = createSlice({
+  name: "coupon",
   initialState: {
-    orders: [],
-    order: {},
-    orderCount: 0,
+    coupons: [],
+    coupon: {},
     loading: false,
     error: null,
     message: "",
-    _id: null,
     type: "",
   },
   reducers: {
@@ -124,64 +123,63 @@ const orderSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // loadAllOrders
-    builder.addCase(loadAllOrders.pending, (state, action) => {
+    // addCoupon
+    builder.addCase(addCoupon.pending, (state, action) => {
       state.loading = true;
+      state.message = "";
     });
-    builder.addCase(loadAllOrders.fulfilled, (state, action) => {
+    builder.addCase(addCoupon.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
-      state.orders = action.payload.orders;
-      state.orderCount = action.payload.orderCount;
     });
-    builder.addCase(loadAllOrders.rejected, (state, action) => {
+    builder.addCase(addCoupon.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
-    // orderDetails
-    builder.addCase(orderDetails.pending, (state, action) => {
+    // loadAllVarients
+    builder.addCase(loadAllCoupons.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(orderDetails.fulfilled, (state, action) => {
+    builder.addCase(loadAllCoupons.fulfilled, (state, action) => {
+      state.loading = false;
+      state.type = action.payload.type;
+      state.message = action.payload.message;
+      state.coupons = action.payload.coupons;
+    });
+    builder.addCase(loadAllCoupons.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
-      state.order = action.payload.order;
     });
-    builder.addCase(orderDetails.rejected, (state, action) => {
+    // couponDetails
+    builder.addCase(couponDetails.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(couponDetails.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+      state.coupon = action.payload.coupon;
+    });
+    builder.addCase(couponDetails.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
 
-    // updateProduct
-    builder.addCase(updateOrder.pending, (state, action) => {
+    // updateCoupon
+    builder.addCase(updateCoupon.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(updateOrder.fulfilled, (state, action) => {
+    builder.addCase(updateCoupon.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
     });
-    builder.addCase(updateOrder.rejected, (state, action) => {
-      state.loading = false;
-      state.message = action.payload.message;
-      state.type = action.payload.type;
-    });
-
-    // deleteProduct
-    builder.addCase(deleteProduct.pending, (state, action) => {
-      state.loading = true;
-    });
-    builder.addCase(deleteProduct.fulfilled, (state, action) => {
-      state.loading = false;
-      state.message = action.payload.message;
-      state.type = action.payload.type;
-    });
-    builder.addCase(deleteProduct.rejected, (state, action) => {
+    builder.addCase(updateCoupon.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;
@@ -189,5 +187,5 @@ const orderSlice = createSlice({
   },
 });
 
-export const { addItem, clearState } = orderSlice.actions;
-export default orderSlice.reducer;
+export const { addItem, clearState } = couponSlice.actions;
+export default couponSlice.reducer;

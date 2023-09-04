@@ -116,6 +116,27 @@ const Orders = () => {
 
   return (
     <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[90vh] w-[100%] lg:w-[80%] no-scroll  ">
+      <div className=" ml-2 lg:ml-0 flex flex-col sm:flex-row lg:justify-end mt-3 lg:items-center gap-x-8  mr-2 min-h-[60px] ">
+        <div className="mb-2 lg:mb-0 ">
+          <label htmlFor="" className="font-semibold mr-14 lg:m-3 ">
+            Date :-
+          </label>
+          <input type="date" className="h-[40px] border-2" />
+        </div>
+        <div>
+          <label htmlFor="" className="font-semibold lg:m-3 ">
+            Order Status :-
+          </label>
+          <select name="" id="" className="h-[40px] w-[180px] border-2">
+            <option>All</option>
+            <option>Pending</option>
+            <option>Confirmed</option>
+            <option>Out for pickup</option>
+            <option>Refund initiated</option>
+            <option>Refund credited</option>
+          </select>
+        </div>
+      </div>
       <div className="flex flex-col ml-5 ">
         <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results {orderCount}</p>
       </div>
@@ -128,7 +149,7 @@ const Orders = () => {
         rowHeight={60}
         initialState={{
           pagination: {
-            paginationModel: { pageSize: 5, page: 0 },
+            paginationModel: { pageSize: 8, page: 0 },
           },
         }}
       />
