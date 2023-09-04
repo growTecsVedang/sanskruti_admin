@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import { loadAllCoupons, clearState } from "../../Redux/slices/CouponSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RiH1 } from "react-icons/ri";
-import Dummy from "../Dummy";
 
 const Coupons = () => {
   const dispatch = useDispatch();
