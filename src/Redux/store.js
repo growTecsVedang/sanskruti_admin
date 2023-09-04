@@ -8,6 +8,7 @@ import loaduserReducer from "./slices/LoadUserSlice";
 import bannerReducer from "./slices/BannerSlice";
 import subbannerReducer from "./slices/SubBannerSlice";
 import orderReducer from "./slices/OrderSlice";
+import couponReducer from "./slices/CouponSlice";
 const store = configureStore({
   reducer: {
     products: productReducer,
@@ -19,6 +20,7 @@ const store = configureStore({
     banners: bannerReducer,
     subbanners: subbannerReducer,
     orders: orderReducer,
+    coupons: couponReducer,
   },
 });
 
