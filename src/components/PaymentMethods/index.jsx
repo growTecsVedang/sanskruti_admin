@@ -110,15 +110,9 @@ const PaymentMethodsIndex = () => {
       .post(
         `${process.env.REACT_APP_ENDPOINT}/api/v1/superadmin/config/payZapp`,
         {
-          merchant_id: tempmerchant_id.endsWith("••••••••••")
-            ? undefined
-            : tempmerchant_id,
-          working_key: tempworking_key.endsWith("••••••••••")
-            ? undefined
-            : tempworking_key,
-          access_code: tempaccess_code.endsWith("••••••••••")
-            ? undefined
-            : tempaccess_code,
+          merchant_id: tempmerchant_id ? undefined : tempmerchant_id,
+          working_key: tempworking_key ? undefined : tempworking_key,
+          access_code: tempaccess_code ? undefined : tempaccess_code,
         },
         {
           headers: {
