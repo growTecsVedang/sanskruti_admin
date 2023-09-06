@@ -43,6 +43,7 @@ import CouponForm from "./components/Coupons/CouponForm";
 import Navbar from "./components/Home/Navbar";
 import Sidebar from "./components/Home/Sidebar";
 import EditCouponForm from "./components/Coupons/EditCouponForm";
+import PaymentMethodsIndex from "./components/PaymentMethods";
 
 function App() {
   const dispatch = useDispatch();
@@ -125,6 +126,22 @@ function App() {
         <ProtectedRoute exact path="/orders" component={Orders} />
         <ProtectedRoute exact path="/vieworder/:id" component={EditOrders} />
         <ProtectedRoute exact path="/coupons" component={Coupons} />
+
+        <ProtectedRoute
+          exact
+          path="/paymentMethods"
+          component={PaymentMethodsIndex}
+        />
+        <ProtectedRoute
+          exact
+          path="/paymentMethods/payZapp"
+          component={PaymentMethodsIndex}
+        />
+        <ProtectedRoute
+          exact
+          path="/paymentMethods/cod"
+          component={PaymentMethodsIndex}
+        />
         {/* setting */}
         <ProtectedRoute exact path="/return" component={ReturnComponent} />
         <ProtectedRoute exact path="/t&c" component={TermsAndCondition} />
