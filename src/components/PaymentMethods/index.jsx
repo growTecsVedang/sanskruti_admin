@@ -110,15 +110,9 @@ const PaymentMethodsIndex = () => {
       .post(
         `${process.env.REACT_APP_ENDPOINT}/api/v1/superadmin/config/payZapp`,
         {
-          merchant_id: tempmerchant_id.endsWith("••••••••••")
-            ? undefined
-            : tempmerchant_id,
-          working_key: tempworking_key.endsWith("••••••••••")
-            ? undefined
-            : tempworking_key,
-          access_code: tempaccess_code.endsWith("••••••••••")
-            ? undefined
-            : tempaccess_code,
+          merchant_id: !tempmerchant_id ? undefined : tempmerchant_id,
+          working_key: !tempworking_key ? undefined : tempworking_key,
+          access_code: !tempaccess_code ? undefined : tempaccess_code,
         },
         {
           headers: {
@@ -138,6 +132,11 @@ const PaymentMethodsIndex = () => {
   };
 
   const clearCredentials = () => {
+    const doesUserWantToClearCredentials = window.confirm(
+      "Are you sure you want to clear your credentials. This action will deactivate payZapp and clear all credentials"
+    );
+    if (!doesUserWantToClearCredentials) return;
+
     axios
       .delete(
         `${process.env.REACT_APP_ENDPOINT}/api/v1/superadmin/config/payZapp`,
@@ -155,6 +154,10 @@ const PaymentMethodsIndex = () => {
         setMerchant_id(res.data.merchant_id);
         setWorking_key(res.data.working_key);
         setAccess_code(res.data.access_code);
+        setpaymentStatus({
+          cashondelivery: res.data.cashondelivery,
+          payZapp: res.data.payZapp,
+        });
       });
   };
 
@@ -169,7 +172,8 @@ const PaymentMethodsIndex = () => {
               id="cod"
               checked={paymentStatus?.cashondelivery}
               className="hidden"
-              onClick={toggleCashonDelivery}
+              onChange={toggleCashonDelivery}
+              readOnly
             />
             <label
               className={`border-[1px] ${
@@ -193,6 +197,7 @@ const PaymentMethodsIndex = () => {
               checked={paymentStatus?.payZapp}
               className="hidden"
               onChange={togglePayZapp}
+              readOnly
             />
             <label
               className={`border-[1px] ${

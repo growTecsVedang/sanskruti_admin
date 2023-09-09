@@ -7,7 +7,7 @@ import { BsShieldLockFill } from "react-icons/bs";
 import { ImImages, ImProfile } from "react-icons/im";
 import { CiDiscount1 } from "react-icons/ci";
 import { AiOutlineInbox, AiOutlineSetting } from "react-icons/ai";
-import { HiCurrencyRupee } from "react-icons/hi";
+import { HiCurrencyRupee, HiOutlineClipboardList } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../Redux/slices/UserSlice";
 
@@ -144,8 +144,8 @@ const Sidebar = () => {
         onClick={() => setSettings(!settings)}
         className=" cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-[16px]"
       >
-        <AiOutlineSetting size={30} />
-        <div className="mx-5">Settings</div>
+        <HiOutlineClipboardList size={30} />
+        <div className="mx-5">Policies</div>
         {settings ? (
           <RiArrowDropUpLine size={30} />
         ) : (
