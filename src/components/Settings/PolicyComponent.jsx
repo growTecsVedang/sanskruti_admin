@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import RichTextEditor from "react-rte";
+import {
+  clearState,
+  markdownDetails,
+  updatemd,
+} from "../../Redux/slices/MarkDownSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const PolicyComponent = () => {
+  const dispatch = useDispatch();
   const [val, setVal] = useState("");
-  const [btnid, setBtnid] = useState("");
+  const { message, type, loading, md } = useSelector((state) => state.markdown);
   const [editorValue, setEditorValue] = useState(
     RichTextEditor.createEmptyValue()
   );
@@ -12,51 +20,60 @@ const PolicyComponent = () => {
   const onChange = (newEditorValue) => {
     setEditorValue(newEditorValue);
   };
-  const getValue = (v) => {
-    setBtnid(v.target.id);
-  };
-  const sendText = () => {
+
+  const sendText = (e) => {
+    e.preventDefault();
     console.log(val);
+    if (val !== "") {
+      dispatch(
+        updatemd({
+          body: {
+            status: "present",
+            privacyPolicy: val,
+          },
+        })
+      );
+    }
   };
 
   useEffect(() => {
-    if (btnid === "HTML") {
-      setVal(editorValue.toString("html"));
+    setVal(editorValue.toString("markdown"));
+  }, [editorValue]);
+
+  useEffect(() => {
+    console.log(md);
+    setEditorValue(
+      RichTextEditor.createValueFromString(md.toString() || " ", "markdown")
+    );
+    setVal(md);
+  }, [md]);
+
+  useEffect(() => {
+    const notify = (arg) => toast(`${arg}`);
+    if (message && type) {
+      if (type === "success") {
+        notify(message);
+        dispatch(clearState());
+      } else {
+        notify(message);
+        dispatch(clearState());
+      }
     }
-    if (btnid === "Markdown") {
-      setVal(editorValue.toString("markdown"));
-    }
-  }, [editorValue, btnid]);
+    dispatch(
+      markdownDetails({
+        field: "privacyPolicy",
+      })
+    );
+  }, [dispatch, type, message]);
 
   return (
-    <div className="w-full bg-gray-50 ">
-      <div className=" w-[97%] lg:max-w-[1200px] mx-auto ">
+    <main className="w-full p-5">
+      <div className="bg-white rounded-md w-full flex flex-col p-5">
         <h1 className=" text-2xl  lg:text-3xl font-semibold my-4 ">
-          &#x25cf; Privacy Policy
+          Privacy Policy
         </h1>
         <RichTextEditor value={editorValue} onChange={onChange} />
-        <div className="flex gap-x-5   ">
-          <section>
-            <input
-              type="radio"
-              id="HTML"
-              name="Grp1"
-              onClick={(e) => getValue(e)}
-            />
-            <label className="ml-2">HTML</label>
-          </section>
-
-          <section>
-            <input
-              type="radio"
-              id="Markdown"
-              name="Grp1"
-              onClick={(e) => getValue(e)}
-            />
-            <label className="ml-2">Markdown</label>
-          </section>
-        </div>
-        <div className=" bg-white ">
+        <div className=" bg-white mt-3">
           <textarea
             readOnly
             value={val}
@@ -65,14 +82,14 @@ const PolicyComponent = () => {
         </div>
         <div className="w-full h-[60px] flex items-center justify-end  ">
           <button
-            onClick={() => sendText()}
+            onClick={(e) => sendText(e)}
             className="w-[150px] h-[45px] bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
           >
             Save & edit
           </button>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

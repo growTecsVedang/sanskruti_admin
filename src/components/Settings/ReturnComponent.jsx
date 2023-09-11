@@ -8,7 +8,6 @@ import {
 } from "../../Redux/slices/MarkDownSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import markdownToTxt from "markdown-to-txt";
 
 const ReturnComponent = () => {
   const dispatch = useDispatch();
@@ -38,9 +37,6 @@ const ReturnComponent = () => {
   };
 
   useEffect(() => {
-    // const text = markdownToTxt(md);
-    // console.log(text);
-    // setEditorValue(text);
     setVal(editorValue.toString("markdown"));
   }, [editorValue]);
 
@@ -74,7 +70,7 @@ const ReturnComponent = () => {
     <div className="w-full overflow-y-scroll h-[89vh] bg-gray-50 ">
       <div className=" w-[97%]  mx-auto ">
         <h1 className=" text-2xl  lg:text-3xl font-semibold my-4 ">
-          &#x25cf; Return Policy
+          Return Policy
         </h1>
         <RichTextEditor value={editorValue} onChange={onChange} />
         <div className=" bg-white mt-3">

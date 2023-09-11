@@ -69,7 +69,7 @@ function App() {
   }
 
   return (
-    <div className="">
+    <React.Fragment>
       <ToastContainer autoClose={2000} />
       <Switch>
         <Route exact path="/" component={SignInOne} />
@@ -162,7 +162,7 @@ function App() {
           component={EditCouponForm}
         />
       </Switch>
-    </div>
+    </React.Fragment>
   );
 }
 

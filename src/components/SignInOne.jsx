@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { MdOutlineEmail } from "react-icons/md";
-import { AiOutlinePhone } from "react-icons/ai";
+import { useHistory, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   clearState,
   logInUserWithEmailOrNumber,
 } from "../Redux/slices/UserSlice";
-import { ArrowRight } from "lucide-react";
-import { loadUser } from "../Redux/slices/LoadUserSlice";
+import { Input } from "./common/Input";
 
 const SignInOne = () => {
   const [password, setPassword] = useState("");
@@ -77,83 +74,43 @@ const SignInOne = () => {
     }
   }, [dispatch, type, message, history, isAuthenticate]);
   return (
-    <section>
-      <div className="flex items-center justify-center w-full h-[100vh]  ">
-        <div className="w-[400px] border-[1px] p-2 ">
-          <div className="mb-2 flex gap-x-2 justify-center">
-            <img
-              src="https://res.cloudinary.com/dqyvomyqy/image/upload/v1686160747/authorization_tkpfnm.png"
-              className="w-[60px] h-[50px] "
-              alt="imgicon"
-            />
-            <p className="flex items-center  text-4xl font-bold ">
-              Admin Panel
-            </p>
-          </div>
-          <h2 className="text-center text-2xl font-bold leading-tight text-black">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600 ">
-            Don&apos;t have an account?
-            <p className=" cursor-pointer font-semibold text-black transition-all duration-200 hover:underline">
-              Create a free account
-            </p>
-          </p>
-          <form action="#" method="POST" className="mt-8">
-            <div className="space-y-5">
-              <div>
-                <label
-                  htmlFor=""
-                  className="text-base font-medium text-gray-900"
-                >
-                  Email / Phone
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                    type="email"
-                    placeholder="Email or Phone"
-                  ></input>
-                </div>
-              </div>
-              <div>
-                <div className="flex items-center justify-between">
-                  <label
-                    htmlFor=""
-                    className="text-base font-medium text-gray-900"
-                  >
-                    Password
-                  </label>
-                  <p className=" cursor-pointer text-sm font-semibold text-black hover:underline">
-                    Forgot password?
-                  </p>
-                </div>
-                <div className="mt-2">
-                  <input
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                    type="password"
-                    placeholder="Password"
-                  ></input>
-                </div>
-              </div>
-              <div>
-                <button
-                  type="button"
-                  onClick={(e) => handleSubmit(e)}
-                  className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
-                >
-                  Sign In <ArrowRight className="ml-2" size={16} />
-                </button>
-              </div>
-            </div>
-          </form>
+    <main className="flex relative items-center justify-center isolate w-full h-screen">
+      <div className="w-[50vw] -z-10 h-[50vh] absolute bottom-0 right-0 bg-gradient-to-br from-white from-50% via-orange-50 to-orange-200"></div>
+      <div className="w-[50vw] -z-10 h-[50vh] absolute top-0 left-0 bg-gradient-to-tl from-white from-50% via-orange-50 to-orange-200"></div>
+      <div className="max-w-[400px] w-full flex flex-col gap-3 md:rounded-xl md:shadow-xl px-4 py-8">
+        <div className="mb-2 flex gap-x-2 justify-center">
+          <img
+            src="/sanskruti-logo.svg"
+            className="w-full h-[80px]"
+            alt="Sanskruti Log"
+          />
         </div>
+        <form action="#" method="POST" className="mt-10 flex flex-col gap-3">
+          <Input
+            input_type="text"
+            placeholder="Email / Phone"
+            value={email}
+            setValue={setEmail}
+          />
+
+          <Input
+            input_type="password"
+            placeholder="Password"
+            value={password}
+            setValue={setPassword}
+          />
+          <div>
+            <button
+              type="button"
+              onClick={(e) => handleSubmit(e)}
+              className="flex items-center justify-center rounded-md border-[1px] w-full py-2 hover:outline hover:outline-4 mt-5 h-10 border-gray-700 bg-gray-50 font-bold text-gray-700 hover:border-sky-700 hover:bg-sky-50 hover:text-sky-700 hover:outline-sky-100"
+            >
+              Sign In
+            </button>
+          </div>
+        </form>
       </div>
-    </section>
+    </main>
   );
 };
 
