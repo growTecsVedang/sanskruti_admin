@@ -37,16 +37,21 @@ const Navbar = () => {
   const [settings, setSettings] = useState(false);
 
   return (
-    <React.Fragment>
-      <nav className="relative px-8 h-[10vh] flex justify-between items-center border-y border-gray-400 ">
-        <img src="/sanskruti-logo.svg" className="h-[3rem]" />
+    <div className="">
+      <nav className="relative px-8 py-4 flex justify-between items-center border-y border-gray-400 ">
+        <p className="text-3xl font-bold leading-none flex items-center space-x-4">
+          <img src="/sanskruti-logo.svg" className="w-[7rem]" />
+        </p>
         <div className="flex gap-5">
-          <Link
-            href="/profile"
-            className="flex items-center gap-1 p-2 hover:bg-sky-100 rounded-full bg-gray-50"
-          >
-            <BiUserCircle size={30} />
-          </Link>
+          <div className="">
+            <div className="flex items-center space-x-2">
+              <span className="flex flex-col">
+                <Link href="/profile" className="cursor-pointer">
+                  <BiUserCircle size={30} />
+                </Link>
+              </span>
+            </div>
+          </div>
           <div className="lg:hidden cursor-pointer">
             {open ? (
               <div onClick={() => setOpen(!open)}>
@@ -64,7 +69,7 @@ const Navbar = () => {
       <div
         className={
           open
-            ? " lg:hidden h-[89vh] w-[220px] absolute overflow-y-scroll  ease-in-out duration-500  bg-[#fbfbfb] z-20 left-[0px] "
+            ? " lg:hidden h-[90vh] w-[220px] absolute overflow-y-scroll  ease-in-out duration-500  bg-[#fbfbfb] z-20 left-[0px] "
             : " lg:hidden fixed left-[-100%]"
         }
       >
@@ -298,7 +303,7 @@ const Navbar = () => {
         <hr className="text-black h-2" />
       </div>
       {/* laptop */}
-    </React.Fragment>
+    </div>
   );
 };
 
