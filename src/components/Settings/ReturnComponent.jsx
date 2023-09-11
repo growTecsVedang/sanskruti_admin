@@ -71,8 +71,8 @@ const ReturnComponent = () => {
   }, [dispatch, type, message]);
 
   return (
-    <div className="w-full bg-gray-50 ">
-      <div className=" w-[97%] lg:max-w-[1200px] mx-auto ">
+    <div className="w-full overflow-y-scroll h-[89vh] bg-gray-50 ">
+      <div className=" w-[97%]  mx-auto ">
         <h1 className=" text-2xl  lg:text-3xl font-semibold my-4 ">
           &#x25cf; Return Policy
         </h1>

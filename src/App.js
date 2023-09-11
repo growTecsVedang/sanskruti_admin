@@ -44,6 +44,8 @@ import Navbar from "./components/Home/Navbar";
 import Sidebar from "./components/Home/Sidebar";
 import EditCouponForm from "./components/Coupons/EditCouponForm";
 import PaymentMethodsIndex from "./components/PaymentMethods";
+import Socials from "./components/config/Socials";
+import SocialForm from "./components/config/SocialForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -78,6 +80,8 @@ function App() {
         <ProtectedRoute exact path="/categories" component={Categories} />
         <ProtectedRoute exact path="/attributes" component={Attributes} />
         <ProtectedRoute exact path="/attributeform" component={AttributeForm} />
+        <ProtectedRoute exact path="/socials" component={Socials} />
+        <ProtectedRoute exact path="/socialform" component={SocialForm} />
         <ProtectedRoute
           exact
           path="/editattribute/:id"

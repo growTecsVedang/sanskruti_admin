@@ -10,6 +10,7 @@ import subbannerReducer from "./slices/SubBannerSlice";
 import orderReducer from "./slices/OrderSlice";
 import couponReducer from "./slices/CouponSlice";
 import markdownReducer from "./slices/MarkDownSlice";
+import configReducer from "./slices/Config";
 const store = configureStore({
   reducer: {
     products: productReducer,
@@ -23,6 +24,7 @@ const store = configureStore({
     orders: orderReducer,
     coupons: couponReducer,
     markdown: markdownReducer,
+    config: configReducer,
   },
 });
 

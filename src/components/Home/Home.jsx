@@ -68,7 +68,7 @@ const Home = () => {
     setAllOrders(orderCount);
   }, [dispatch, type, message, history, userCount, productCount, orderCount]);
   return (
-    <div className=" flex flex-col overflow-y-scroll no-scroll  h-[90vh] w-[100%] lg:w-[80%]">
+    <div className=" flex flex-col overflow-y-scroll no-scroll  h-[89vh] w-[100%] lg:w-[80%]">
       <div className="flex flex-col lg:flex-row mx-3 mt-3 ">
         <div className="h-[100px] lg:ml-2 bg-[#f5dd90] w-full rounded-md flex flex-col justify-center  lg:w-[25%] mb-3  ">
           <h1 className="text-lg ml-5 ">Total products</h1>

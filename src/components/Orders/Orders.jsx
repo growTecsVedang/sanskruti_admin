@@ -1,19 +1,19 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Link } from "react-router-dom";
-import Sidebar from "../Home/Sidebar";
-import Navbar from "../Home/Navbar";
 import { toast } from "react-toastify";
 import { loadAllOrders, clearState } from "../../Redux/slices/OrderSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Orders = () => {
-  const { orders, message, type, orderCount } = useSelector(
+  const { orders, message, type, orderCount, loading } = useSelector(
     (state) => state.orders
   );
   const dispatch = useDispatch();
+  const [date, setDate] = useState("");
+  const [pay_status, setPay_Status] = useState("");
 
   function getCookie() {
     var name = "accessToken".concat("=");
@@ -41,15 +41,21 @@ const Orders = () => {
       }
     }
     const cookie = getCookie();
-    dispatch(
-      loadAllOrders({
-        cookie,
-      })
-    );
-  }, [dispatch, type, message]);
+    async function request() {
+      await dispatch(
+        loadAllOrders({
+          cookie,
+          date,
+          pay_status,
+        })
+      );
+    }
+    request();
+  }, [dispatch, type, message, pay_status, date]);
 
   const columns = [
     { field: "id", headerName: "id", minWidth: 200, flex: 0.5 },
+    { field: "order_id", headerName: "order id", minWidth: 350, flex: 1.5 },
     {
       field: "product",
       headerName: "Product",
@@ -105,30 +111,43 @@ const Orders = () => {
   orders &&
     orders.forEach((item) => {
       rows.push({
-        id: item.order._id,
-        product: item.order.product.name,
-        status: item.order.deliveryInfo.status,
-        pay_method: item.payment.paymentMethod,
-        created_at: item.payment.orderInfo.Date,
-        quantity: item.order.product.quantity,
+        id: item.order.order._id,
+        order_id: item.order.order.orderId,
+        product: item.order.order.product.name,
+        status: item.order.order.deliveryInfo.status,
+        pay_method: item.order.payment.paymentMethod,
+        created_at: item.order.payment.orderInfo.Date,
+        quantity: item.order.order.product.quantity,
       });
     });
+  console.log(orders);
 
   return (
-    <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[90vh] w-[100%] lg:w-[80%] no-scroll  ">
+    <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[89vh] w-[100%] lg:w-[80%] no-scroll  ">
       <div className=" ml-2 lg:ml-0 flex flex-col sm:flex-row lg:justify-end mt-3 lg:items-center gap-x-8  mr-2 min-h-[60px] ">
         <div className="mb-2 lg:mb-0 ">
           <label htmlFor="" className="font-semibold mr-14 lg:m-3 ">
             Date :-
           </label>
-          <input type="date" className="h-[40px] border-2" />
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="h-[40px] border-2"
+          />
         </div>
         <div>
           <label htmlFor="" className="font-semibold lg:m-3 ">
             Order Status :-
           </label>
-          <select name="" id="" className="h-[40px] w-[180px] border-2">
-            <option>All</option>
+          <select
+            name=""
+            value={pay_status}
+            onChange={(e) => setPay_Status(e.target.value)}
+            id=""
+            className="h-[40px] w-[180px] border-2"
+          >
+            <option value="">All</option>
             <option>Pending</option>
             <option>Confirmed</option>
             <option>Out for pickup</option>
@@ -147,6 +166,7 @@ const Orders = () => {
         disableSelectionOnClick
         className="productListTable"
         rowHeight={60}
+        loading={loading}
         initialState={{
           pagination: {
             paginationModel: { pageSize: 8, page: 0 },

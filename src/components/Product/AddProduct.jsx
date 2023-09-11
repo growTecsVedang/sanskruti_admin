@@ -7,6 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadAllCategories } from "../../Redux/slices/CategorySlice";
 import { loadAllSubCategories } from "../../Redux/slices/SubCategorySlice";
 import { addProduct, clearState } from "../../Redux/slices/ProductSlice";
+import {
+  generateCombinations,
+  generateResponse,
+  takeObj,
+} from "../../helper/combinations";
 const MAX_SIZE = 400 * 1024;
 const AddProduct = () => {
   const dispatch = useDispatch();
@@ -22,15 +27,42 @@ const AddProduct = () => {
     meta_description: "",
     meta_keyword: "",
   };
+  const attributes = [
+    {
+      name: "",
+      state: false,
+      childern: [
+        {
+          state: false,
+          value: "",
+        },
+      ],
+    },
+  ];
+  const finalAttributes = [];
+  const result = [finalAttributes];
+  const arrayOfArray = [
+    {
+      Title: "",
+      values: [],
+    },
+  ];
+  const [combinations, setCombinations] = useState([]);
+  const [dynamicArray, setDynamicArray] = useState([]);
+  const [count, setCount] = useState(0);
   const [values, setValues] = useState(initialValues);
+  const [res, setRes] = useState(result);
   const [MainCategory, setMainCategory] = useState("");
   const [SubCategory, setSubCategory] = useState("");
   const [duplicateCategory, setDuplicateCategory] = useState([]);
   const [duplicateSubCategory, setDuplicateSubCategory] = useState([]);
-
+  const [atr, setAtr] = useState(attributes);
+  const [fatr, setFatr] = useState(finalAttributes);
+  const [aoa, setAoa] = useState(arrayOfArray);
   const { subCategories } = useSelector((state) => state.subcategories);
   const { categories } = useSelector((state) => state.categories);
   const { message, type, loading } = useSelector((state) => state.products);
+  const { varients } = useSelector((state) => state.varients);
   const [base64Image, setBase64Image] = useState([]);
   function getCookie() {
     var name = "connect.sid".concat("=");
@@ -97,13 +129,95 @@ const AddProduct = () => {
       MainCategory,
       SubCategory,
       images: base64Image,
-      varients: {},
+      varients:
+        res.length > 0
+          ? {
+              attributes: atr,
+              variations: res,
+            }
+          : values.varients,
     };
-    dispatch(
-      addProduct({
-        body,
-      })
-    );
+    if (
+      body.name !== "" &&
+      body.description !== "" &&
+      body.gst_percent !== "" &&
+      body.brand_name !== "" &&
+      body.meta_tittle !== "" &&
+      body.meta_description !== "" &&
+      body.meta_keyword !== "" &&
+      body.MainCategory !== "" &&
+      body.SubCategory !== "" &&
+      res.length > 0
+    ) {
+      dispatch(
+        addProduct({
+          body,
+        })
+      );
+    }
+  };
+
+  const handleAttributeNameChange = (e) => {
+    const { name, value } = e.target;
+    const updatedArray = atr.map((item) => {
+      if (item.name === name) {
+        if (value === "false") {
+          return {
+            ...item,
+            state: true,
+            childern: item.childern.map((item) => {
+              return {
+                ...item,
+                state: true,
+              };
+            }),
+          };
+        } else {
+          return {
+            ...item,
+            state: false,
+            childern: item.childern.map((item) => {
+              return {
+                ...item,
+                state: false,
+              };
+            }),
+          };
+        }
+      }
+      return item;
+    });
+    setAtr(updatedArray);
+  };
+
+  const handleAttributeChildrenNameChange = (e, parent) => {
+    const { name, value } = e.target;
+    const updatedArray = atr.map((item) => {
+      if (parent === item.name) {
+        return {
+          ...item,
+          state: false,
+          childern: item.childern.map((i) => {
+            if (i.value === name) {
+              if (value === "false") {
+                return {
+                  ...i,
+                  state: true,
+                };
+              } else {
+                return {
+                  ...i,
+                  state: false,
+                };
+              }
+            }
+            return i;
+          }),
+        };
+      }
+      return item;
+    });
+    setAtr(updatedArray);
   };
 
   const handleFileChange = (e) => {
@@ -158,7 +272,71 @@ const AddProduct = () => {
     );
     setDuplicateCategory(categories);
     setDuplicateSubCategory(subCategories);
+    const keys = [];
+    varients.forEach((i, key) => {
+      keys.push(varients[key].varientName || null);
+    });
+    setFatr([...keys, "quantity", "discount", "price"]);
   }, []);
+
+  useEffect(() => {
+    if (varients && count < varients.length) {
+      setAoa([
+        ...aoa,
+        {
+          Title: varients[count].varientName,
+          value: [],
+        },
+      ]);
+      setAtr([
+        ...atr,
+        {
+          name: varients[count].varientName,
+          state: false,
+          childern: varients[count].value.map((i, key) => {
+            return {
+              state: false,
+              value: i,
+            };
+          }),
+        },
+      ]);
+      setCount(count + 1);
+    }
+  }, [count]);
+
+  useEffect(() => {
+    setRes(generateResponse(combinations, fatr));
+  }, [combinations, fatr]);
+
+  useEffect(() => {
+    setDynamicArray(takeObj({ ...atr }));
+  }, [atr]);
+
+  useEffect(() => {
+    setCombinations(generateCombinations(...dynamicArray));
+  }, [dynamicArray]);
+
+  const handleChangePrice = (event) => {
+    const { name } = event.target;
+    const newInputValues = [...res];
+    newInputValues[name].price = Number(event.target.value);
+    setRes(newInputValues);
+  };
+
+  const handleChangeDiscount = (event) => {
+    const { name } = event.target;
+    console.log(name);
+    const newInputValues = [...res];
+    newInputValues[name].discount = Number(event.target.value);
+    setRes(newInputValues);
+  };
+
+  const handleChangeQuantity = (index, event) => {
+    const newInputValues = [...res];
+    newInputValues[index].quantity = Number(event.target.value);
+    setRes(newInputValues);
+  };
 
   useEffect(() => {
     const notify = (arg) => toast(`${arg}`);
@@ -166,6 +344,7 @@ const AddProduct = () => {
       if (type === "success") {
         notify(message);
         dispatch(clearState());
+        window.location.replace("/products");
       } else {
         notify(message);
         dispatch(clearState());
@@ -173,7 +352,7 @@ const AddProduct = () => {
     }
   }, [dispatch, type, message]);
   return (
-    <div className=" flex flex-col overflow-y-scroll overflow-x-hidden   h-[90vh] w-[100%] lg:w-[80%] no-scroll ">
+    <div className=" flex flex-col overflow-y-scroll overflow-x-hidden   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">
       <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
         <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
           Product Details
@@ -393,6 +572,123 @@ const AddProduct = () => {
               className=" min-h-[250px] px-3 py-2 rounded-md border text-black border-gray-100 bg-transparent  text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-100  "
               placeholder="Meta Description"
             />
+          </div>
+          <h1 className="text-black lg:text-xl text-xl font-semibold  pl-3">
+            Product Inventory
+          </h1>
+          <hr className="w-full  h-[2px] " />
+          <div className="w-full min-h-[150px] my-3 ">
+            {atr &&
+              atr
+                .filter((item, key) => key !== 0)
+                .map((item, key) => {
+                  return (
+                    <div className="flex bg-gray-100 text-lg ">
+                      <div className="min-w-[140px] min-h-[50px]  flex items-center  ">
+                        <div className="ml-1">
+                          <input
+                            type="checkbox"
+                            onChange={handleAttributeNameChange}
+                            checked={item.state}
+                            value={item.state}
+                            name={item.name}
+                            className="w-[18px] h-[18px] "
+                          ></input>
+                          <span className="ml-2 font-semibold text-xl ">
+                            {item.name}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex-grow  gap-x-3 gap-1  flex-wrap  w-full overflow-x-hidden  min-h-[50px]  flex items-center ">
+                        {item.childern &&
+                          item.childern.map((i, key) => {
+                            return (
+                              <div className=" h-[40px] flex items-center ">
+                                <input
+                                  type="checkbox"
+                                  name={i.value}
+                                  value={i.state}
+                                  checked={i.state}
+                                  onChange={(e) =>
+                                    handleAttributeChildrenNameChange(
+                                      e,
+                                      item.name
+                                    )
+                                  }
+                                  className="w-[18px] h-[18px] "
+                                ></input>
+                                <span className="ml-2">{i.value}</span>
+                              </div>
+                            );
+                          })}
+                        <hr className="w-full text-black   h-[3px] " />
+                      </div>
+                    </div>
+                  );
+                })}
+          </div>
+          <div className=" min-h-[100px] ">
+            <div className="w-full h-[50px] bg-blue-200 opacity-75 flex text-lg  sm:text-xl  items-center  font-semibold  justify-between  ">
+              <h1 className="ml-5 w-[30%] flex-grow  ">Attributes</h1>
+              <div className="flex gap-1  sm:gap-x-5 w-[70%] justify-end  ">
+                <div className="sm:mr-5 mr-2 ">Quantity</div>
+                <div className="sm:mr-5 mr-2 ">Discount</div>
+                <div className="sm:mr-5 mr-2  sm:w-[80px] w-[70px]  flex  ">
+                  Price
+                </div>
+              </div>
+            </div>
+            {res.length > 0 ? (
+              res.map((item, key) => {
+                return (
+                  <div className="w-full min-h-[50px] bg-gray-100 opacity-75 flex  text-xl  items-center  font-semibold  justify-between  ">
+                    <section className="flex flex-wrap ml-5 text-xl my-2 w-[50%]  min-h-[30px]  ">
+                      {item.combinationString &&
+                        item.combinationString.map((i, key) => {
+                          var a = item.combinationString.length;
+                          return (
+                            <div className="mx-1">
+                              {i}
+                              <span
+                                className={
+                                  a - key === 1 ? "hidden" : "visible mx-1"
+                                }
+                              >
+                                +
+                              </span>
+                            </div>
+                          );
+                        })}
+                    </section>
+                    <div className="flex  gap-1  sm:gap-x-5 w-[50%] justify-end  ">
+                      <input
+                        type="number"
+                        key={key}
+                        onChange={(event) => handleChangeQuantity(key, event)}
+                        className="sm:mr-5 border-2 text-center w-[70px] mr-2 sm:w-[80px] border-black   "
+                      />
+                      <input
+                        type="number"
+                        name={key}
+                        onChange={(event) => handleChangeDiscount(event)}
+                        className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
+                      />
+                      <input
+                        type="number"
+                        name={key}
+                        placeholder=""
+                        onChange={(event) => handleChangePrice(event)}
+                        className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
+                      />
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <h1 className="text-center h-[40px] flex justify-center items-center font-medium ">
+                No rows
+              </h1>
+            )}
           </div>
           <div class="  mt-5 flex items-center flex-col   justify-center   w-[95%]   lg:w-[95%] mx-auto cursor-pointer ">
             <div className="w-[100%] mb-8 ">

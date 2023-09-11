@@ -89,7 +89,7 @@ const EditPermission = (props) => {
   }, [dispatch, type, message]);
 
   return (
-    <div className=" flex flex-col overflow-y-scroll no-scroll  h-[90vh] w-[100%] lg:w-[80%]">
+    <div className=" flex flex-col overflow-y-scroll no-scroll  h-[89vh] w-[100%] lg:w-[80%]">
       <div className="flex flex-col gap-x-3  lg:flex-row ">
         <div className=" w-[97%]   lg:min-w-[45%] mx-auto mt-5  min-h-[50px] bg-white  rounded-md flex flex-col     shadow-md ">
           <h1 className="text-xl h-[50px] flex  items-center pl-3 font-semibold ">

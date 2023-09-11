@@ -8,7 +8,7 @@ export const loadAllOrders = createAsyncThunk(
     try {
       console.log(datas);
       const response = await axios.get(
-        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/allOrders?date=&status=`,
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/allOrders?date=${datas.date}&status=${datas.pay_status}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -21,6 +21,7 @@ export const loadAllOrders = createAsyncThunk(
       }
 
       const data = response.data;
+      console.log(data.orders);
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data);

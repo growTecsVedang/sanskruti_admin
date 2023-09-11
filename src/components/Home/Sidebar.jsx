@@ -14,6 +14,7 @@ import { logOutUser } from "../../Redux/slices/UserSlice";
 const Sidebar = () => {
   const dispatch = useDispatch();
   const [prod, setProd] = useState(false);
+  const [prod1, setProd1] = useState(false);
   const [settings, setSettings] = useState(false);
   function getCookie() {
     var name = "accessToken".concat("=");
@@ -40,7 +41,7 @@ const Sidebar = () => {
   return (
     <div
       className={
-        "hidden lg:block  h-[90vh] w-[20%]   ease-in-out duration-500 overflow-y-scroll   bg-[#fbfbfb] z-20 left-[0px]  "
+        "hidden lg:block   h-[89vh] w-[20%]   ease-in-out duration-500 overflow-y-scroll   bg-[#fbfbfb] z-20 left-[0px]  "
       }
     >
       <Link to="/home">
@@ -139,6 +140,40 @@ const Sidebar = () => {
           <div className="ml-5">Payment Method</div>
         </div>
       </Link>
+      <hr className="text-black h-2" />
+      <div
+        onClick={() => setProd1(!prod1)}
+        className=" cursor-pointer h-[40px] flex mt-3  w-[200px] pl-5 text-[16px]"
+      >
+        <AiOutlineInbox size={30} />
+        <div className="mx-5">Config</div>
+        {prod ? (
+          <RiArrowDropUpLine size={30} />
+        ) : (
+          <RiArrowDropDownLine size={30} />
+        )}
+      </div>
+      {prod1 ? (
+        <div className="bg-[#ebf7f7]">
+          <Link to="/socials">
+            <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-[16px]">
+              <div className="mx-5">Social Media</div>
+            </div>
+          </Link>
+          <Link to="/subcategories">
+            <div className="h-[40px] flex mt-3 items-center w-[200px] pl-5 text-[16px]">
+              <div className="mx-5">Google Analytics</div>
+            </div>
+          </Link>
+          <Link to="/subcategories">
+            <div className="h-[40px] flex mt-3 items-center w-[200px] pl-5 text-[16px]">
+              <div className="mx-5">Auth Keys</div>
+            </div>
+          </Link>
+        </div>
+      ) : (
+        ""
+      )}
       <hr className="text-black h-2" />
       <div
         onClick={() => setSettings(!settings)}

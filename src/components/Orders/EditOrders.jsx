@@ -106,7 +106,7 @@ const EditOrders = (props) => {
   return (
     <>
       {order && order.order && order.payment ? (
-        <div className=" flex  flex-col  overflow-y-scroll  overflow-x-hidden  h-[90vh] w-[100%] lg:w-[80%]   ">
+        <div className=" flex  flex-col  overflow-y-scroll  overflow-x-hidden  h-[89vh] w-[100%] lg:w-[80%]   ">
           <div className="w-[97%] mx-auto mt-3 mb-[1px] py-3 min-h-full  bg-white  rounded-md flex flex-col shadow-md  ">
             <div className=" mx-4 flex flex-col lg:justify-between  lg:flex-row gap-y-4 ">
               <div className="flex flex-col">

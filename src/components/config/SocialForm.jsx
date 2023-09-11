@@ -1,41 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../Home/Navbar";
-import Sidebar from "../Home/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineDelete } from "react-icons/ai";
-import {
-  updateCategory,
-  deleteCategoryImage,
-  clearState,
-} from "../../Redux/slices/CategorySlice";
+import { addSocials, clearState } from "../../Redux/slices/Config";
 import { toast } from "react-toastify";
 const MAX_SIZE = 400 * 1024;
-const EditCategoryForm = (props) => {
-  const { categories, message, type } = useSelector(
-    (state) => state.categories
-  );
+const SocialForm = () => {
+  const { message, type } = useSelector((state) => state.config);
   const dispatch = useDispatch();
-  const [id, setId] = useState("");
-  const [path, setPath] = useState("");
   const [Title, setTitle] = useState("");
-  const [Meta_Title, setMeta_Title] = useState("");
-  const [Meta_Description, setMeta_Description] = useState("");
   const [base64Image, setBase64Image] = useState("");
-  const [image, setImage] = useState("");
   const [imageName, setImageName] = useState("");
-
-  useEffect(() => {
-    categories.forEach((item) => {
-      if (item._id === props.match.params.id) {
-        setId(item._id);
-        setTitle(item.Title);
-        setPath(item.Image);
-        setMeta_Title(item.Meta_Title);
-        setMeta_Description(item.Meta_Description);
-        setImage(item.Image);
-      }
-    });
-  }, [categories, props]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -54,9 +28,9 @@ const EditCategoryForm = (props) => {
 
     reader.onloadend = () => {
       const base64String = reader.result;
+      console.log(base64Image.length);
       setBase64Image(base64String);
     };
-    console.log(base64Image);
 
     if (file) {
       reader.readAsDataURL(file);
@@ -64,40 +38,23 @@ const EditCategoryForm = (props) => {
   };
 
   const deleteFile = () => {
-    if (image !== "") {
-      const name = image.split(`${process.env.REACT_APP_ENDPOINT_CDN}/`)[1];
-      dispatch(
-        deleteCategoryImage({
-          id,
-          name,
-        })
-      );
-      setImage("");
-    } else {
-      setBase64Image("");
-    }
+    setImageName("");
+    setBase64Image("");
   };
 
   const createCategorySubmitHandler = (e) => {
     e.preventDefault();
 
-    if (
-      Title.trim() !== "" &&
-      Meta_Description.trim() !== "" &&
-      Meta_Title.trim() !== ""
-    ) {
+    if (Title.trim() !== "" && imageName.trim() !== "" && Image !== "") {
       dispatch(
-        updateCategory({
-          id,
-          body: {
-            Title,
-            Meta_Title,
-            Meta_Description,
-            Image: image || base64Image,
-            imageName,
-          },
+        addSocials({
+          media: Title,
+          Image: base64Image,
+          imageName,
         })
       );
+      setTitle("");
+      setBase64Image("");
     }
   };
 
@@ -118,7 +75,7 @@ const EditCategoryForm = (props) => {
     <div className=" flex flex-col overflow-y-scroll   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">
       <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
         <h1 className="text-black lg:text-3xl text-2xl   pl-4 ">
-          Edit Category
+          Social Media
         </h1>
       </div>
       <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
@@ -128,67 +85,28 @@ const EditCategoryForm = (props) => {
         >
           <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
             <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-              Title
+              Media
             </label>
             <input
               type="text"
               value={Title}
-              onChange={(e) => setTitle(e.target.value.trim().toLowerCase())}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="Title"
               className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-            />
-          </div>
-          <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-            <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-              Meta Title
-            </label>
-            <input
-              type="text"
-              value={Meta_Title}
-              onChange={(e) => setMeta_Title(e.target.value)}
-              className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-              placeholder="Meta Title"
-            />
-          </div>
-          <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-            <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-              Meta Description
-            </label>
-            <textarea
-              type="text"
-              value={Meta_Description}
-              onChange={(e) => setMeta_Description(e.target.value)}
-              className=" min-h-[250px] px-3 py-2 rounded-md border text-black border-gray-300 bg-transparent  text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-              placeholder="Meta Description"
             />
           </div>
           <div className="w-[95%] mx-auto flex   flex-col  lg:flex-row    ">
             <div className="lg:w-[40%]">
               <h2 className="text-lg font-bold mt-5  mx-4 ">Image</h2>
-              <div className="w-[95%] mx-auto h-[40px] sm:h-[40px] lg:h-[40px] px-5 mt-6  flex items-center bg-[#bde0fe]  ">
-                first <strong className="px-2  text-[red]"> Delete </strong>
-                the Image and then
-                <strong className="px-2 text-[green] "> Upload </strong> .
-              </div>
-              <div className=" mt-5 mx-3  flex overflow-x-scroll w-full gap-x-6 h-[430px] overflow-y-hidden  ">
+              <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[430px] overflow-y-hidden  ">
                 <div className="">
-                  {image === "" ? (
-                    <div className="w-[300px] h-[350px] border-2 border-gray-200 ">
-                      <img
-                        src={base64Image}
-                        className="w-[300px] h-[350px]"
-                        alt="upload_image"
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-[300px] h-[350px] border-2 border-gray-200 ">
-                      <img
-                        src={image}
-                        className="w-[300px] h-[350px]"
-                        alt="upload_image"
-                      />
-                    </div>
-                  )}
+                  <div className="w-[300px] h-[350px] border-2 border-gray-200 ">
+                    <img
+                      src={base64Image}
+                      className="w-[300px] h-[350px]"
+                      alt="upload_image"
+                    />
+                  </div>
                   <div
                     onClick={deleteFile}
                     className=" cursor-pointer hover:bg-slate-300 w-[300px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 "
@@ -225,7 +143,7 @@ const EditCategoryForm = (props) => {
                       and drop
                     </p>
                     <p class="text-xs text-gray-500 dark:text-gray-400">
-                      SVG, PNG, JPG or GIF (MAX. 800x400px)
+                      SVG (MAX. 96x96 px)
                     </p>
                   </div>
                   <input
@@ -243,7 +161,7 @@ const EditCategoryForm = (props) => {
               type="submit"
               className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
             >
-              Save & edit
+              Add
             </button>
           </div>
         </form>
@@ -252,4 +170,4 @@ const EditCategoryForm = (props) => {
   );
 };
 
-export default EditCategoryForm;
+export default SocialForm;
