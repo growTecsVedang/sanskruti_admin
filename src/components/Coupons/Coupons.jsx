@@ -14,7 +14,9 @@ import { RiH1 } from "react-icons/ri";
 const Coupons = () => {
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState("");
-  const { coupons, message, type } = useSelector((state) => state.coupons);
+  const { coupons, message, type, loading } = useSelector(
+    (state) => state.coupons
+  );
 
   function getCookie() {
     var name = "connect.sid".concat("=");
@@ -151,7 +153,7 @@ const Coupons = () => {
       });
     });
   return (
-    <div className=" flex flex-col overflow-y-scroll h-[89vh] w-[100%] lg:w-[80%] no-scroll  ">
+    <div className=" flex flex-col overflow-y-scroll h-[90vh] w-[100%] lg:w-[80%] no-scroll  ">
       <div className="flex flex-col ml-5 ">
         <div className="  lg:flex lg:h-[80px] lg:items-center  ">
           <div className="mx-auto lg:mx-0  w-[80%] h-[45px] flex mt-5  overflow-hidden ">
@@ -183,6 +185,7 @@ const Coupons = () => {
         disableSelectionOnClick
         className="productListTable"
         rowHeight={60}
+        loading={loading}
         initialState={{
           pagination: {
             paginationModel: { pageSize: 5, page: 0 },

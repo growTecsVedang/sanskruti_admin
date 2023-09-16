@@ -15,7 +15,9 @@ import EditIcon from "@material-ui/icons/Edit";
 import { toast } from "react-toastify";
 
 const Banner = () => {
-  const { banners, message, type } = useSelector((state) => state.banners);
+  const { banners, message, type, loading } = useSelector(
+    (state) => state.banners
+  );
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState("");
 
@@ -151,7 +153,7 @@ const Banner = () => {
     });
 
   return (
-    <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[89vh] w-[100%] lg:w-[80%] no-scroll  ">
+    <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[90vh] w-[100%] lg:w-[80%] no-scroll  ">
       <div className="flex flex-col ml-5 ">
         <div className="  lg:flex lg:h-[80px] lg:items-center  ">
           <div className="mx-auto lg:mx-0  w-[80%] h-[45px] flex mt-5  overflow-hidden ">
@@ -183,6 +185,7 @@ const Banner = () => {
         className="productListTable"
         rowSpacingType=""
         rowHeight={180}
+        loading={loading}
         initialState={{
           pagination: {
             paginationModel: { pageSize: 5, page: 0 },

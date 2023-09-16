@@ -4,7 +4,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { addSocials, clearState } from "../../Redux/slices/Config";
 import { toast } from "react-toastify";
 const MAX_SIZE = 400 * 1024;
-const SocialForm = () => {
+const EditSocialForm = (props) => {
   const { message, type } = useSelector((state) => state.config);
   const dispatch = useDispatch();
   const [Title, setTitle] = useState("");
@@ -73,6 +73,7 @@ const SocialForm = () => {
       }
     }
   }, [dispatch, type, message]);
+  console.log(props.match.params.id);
 
   return (
     <div className=" flex flex-col overflow-y-scroll   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">
@@ -173,4 +174,4 @@ const SocialForm = () => {
   );
 };
 
-export default SocialForm;
+export default EditSocialForm;

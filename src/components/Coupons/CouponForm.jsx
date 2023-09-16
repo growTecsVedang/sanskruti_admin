@@ -60,6 +60,7 @@ const CouponForm = () => {
       if (type === "success") {
         notify(message);
         dispatch(clearState());
+        window.location.replace("/coupons");
       } else {
         notify(message);
         dispatch(clearState());

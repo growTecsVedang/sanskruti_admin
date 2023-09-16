@@ -46,6 +46,9 @@ import EditCouponForm from "./components/Coupons/EditCouponForm";
 import PaymentMethodsIndex from "./components/PaymentMethods";
 import Socials from "./components/config/Socials";
 import SocialForm from "./components/config/SocialForm";
+import EditSocialForm from "./components/config/EditSocialForm";
+import GoogleAnalytics from "./components/config/GoogleAnalytics";
+import AuthKeys from "./components/config/AuthKeys";
 
 function App() {
   const dispatch = useDispatch();
@@ -70,7 +73,7 @@ function App() {
 
   return (
     <React.Fragment>
-      <ToastContainer autoClose={2000} />
+      <ToastContainer autoClose={1500} />
       <Switch>
         <Route exact path="/" component={SignInOne} />
         <ProtectedRoute exact path="/home" isAdmin={true} component={Home} />
@@ -161,6 +164,17 @@ function App() {
           path="/editcoupon/:id"
           component={EditCouponForm}
         />
+        <ProtectedRoute
+          exact
+          path="/viewsocial/:id"
+          component={EditSocialForm}
+        />
+        <ProtectedRoute
+          exact
+          path="/googleanalytics"
+          component={GoogleAnalytics}
+        />
+        <ProtectedRoute exact path="/authkeys" component={AuthKeys} />
       </Switch>
     </React.Fragment>
   );

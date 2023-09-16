@@ -88,6 +88,7 @@ const SubCategoryForm = () => {
       if (type === "success") {
         notify(message);
         dispatch(clearState());
+        window.location.replace("/subcategories");
       } else {
         notify(message);
         dispatch(clearState());
@@ -96,7 +97,7 @@ const SubCategoryForm = () => {
   }, [dispatch, type, message]);
 
   return (
-    <div className=" flex flex-col overflow-y-scroll   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">
+    <div className=" flex flex-col overflow-y-scroll   h-[90vh] w-[100%] lg:w-[80%] no-scroll ">
       <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
         <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
           Sub Category Form
@@ -126,7 +127,7 @@ const SubCategoryForm = () => {
               onChange={handleCategoryChange}
               className="cursor-pointer h-[45px] min-w-[140px] pl-3  bg-gray-50 rounded-md text-lg border-2 border-gray-300 "
             >
-              <option>categories</option>
+              <option hidden>categories</option>
               {categories &&
                 categories.map((item, key) => {
                   return (

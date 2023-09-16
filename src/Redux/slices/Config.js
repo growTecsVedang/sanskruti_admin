@@ -114,32 +114,32 @@ export const loadAllSocials = createAsyncThunk(
 //   }
 // );
 
-// export const deleteCategory = createAsyncThunk(
-//   "deleteCategory",
-//   async (datas, { rejectWithValue }) => {
-//     try {
-//       const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/deleteCategory?id=${datas.id}`;
-//       const headers = {
-//         "Content-Type": "application/json; charset=utf-8",
-//       };
+export const deleteSocials = createAsyncThunk(
+  "deleteSocials",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/superadmin/config/social?id=${datas.id}`;
+      const headers = {
+        "Content-Type": "application/json; charset=utf-8",
+      };
 
-//       const response = await axios.delete(url, {
-//         headers,
-//         withCredentials: true,
-//       });
+      const response = await axios.delete(url, {
+        headers,
+        withCredentials: true,
+      });
 
-//       if (response.status === 409 || response.status === 404) {
-//         const payload = response.data;
-//         return rejectWithValue(payload);
-//       }
+      if (response.status === 409 || response.status === 404) {
+        const payload = response.data;
+        return rejectWithValue(payload);
+      }
 
-//       const data = response.data;
-//       return data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
+      const data = response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 // export const updateCategory = createAsyncThunk(
 //   "updateCategory",
@@ -262,20 +262,20 @@ const configurationSlice = createSlice({
       state.type = action.payload.type;
     });
 
-    // // deleteCategory
-    // builder.addCase(deleteCategory.pending, (state, action) => {
-    //   state.loading = true;
-    // });
-    // builder.addCase(deleteCategory.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.message = action.payload.message;
-    //   state.type = action.payload.type;
-    // });
-    // builder.addCase(deleteCategory.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.message = action.payload.message;
-    //   state.type = action.payload.type;
-    // });
+    // deleteSocials
+    builder.addCase(deleteSocials.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteSocials.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(deleteSocials.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
 
     // // deleteCategoryImage
     // builder.addCase(deleteCategoryImage.pending, (state, action) => {

@@ -6,8 +6,13 @@ import { Link } from "react-router-dom";
 import Sidebar from "../Home/Sidebar";
 import Navbar from "../Home/Navbar";
 import { toast } from "react-toastify";
-import { loadAllSocials, clearState } from "../../Redux/slices/Config";
+import {
+  loadAllSocials,
+  clearState,
+  deleteSocials,
+} from "../../Redux/slices/Config";
 import { useDispatch, useSelector } from "react-redux";
+import EditIcon from "@material-ui/icons/Edit";
 
 const Socials = () => {
   const { socials, message, type } = useSelector((state) => state.config);
@@ -26,6 +31,15 @@ const Socials = () => {
     }
     return null; // Cookie not found
   }
+
+  const handleDeleteProduct = (params) => {
+    const cookie = getCookie();
+    dispatch(
+      deleteSocials({
+        id: params.row.id,
+      })
+    );
+  };
 
   useEffect(() => {
     const notify = (arg) => toast(`${arg}`);
@@ -58,17 +72,20 @@ const Socials = () => {
 
     {
       field: "actions",
-      flex: 0.1,
+      flex: 0.7,
       headerName: "Actions",
-      minWidth: 60,
+      minWidth: 180,
       type: "number",
       sortable: false,
       renderCell: (params) => {
         return (
           <Fragment>
-            <button className="  px-2 w-[50px] bg-sky-200 rounded-sm font-semibold hover:underline  ">
-              <Link to={`/vieworder/${params.id}`}>View</Link>
-            </button>
+            <Link to={`/viewsocial/${params.id}`}>
+              <EditIcon />
+            </Link>
+            <Button onClick={() => handleDeleteProduct(params)}>
+              <DeleteIcon />
+            </Button>
           </Fragment>
         );
       },

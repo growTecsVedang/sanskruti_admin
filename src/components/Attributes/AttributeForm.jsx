@@ -35,6 +35,9 @@ const AttributeForm = () => {
       if (type === "success") {
         notify(message);
         dispatch(clearState());
+        setTimeout(() => {
+          window.location.replace("/attributes");
+        }, 1500);
       } else {
         notify(message);
         dispatch(clearState());

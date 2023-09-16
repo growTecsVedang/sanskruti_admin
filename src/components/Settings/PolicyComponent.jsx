@@ -67,7 +67,7 @@ const PolicyComponent = () => {
   }, [dispatch, type, message]);
 
   return (
-    <main className="w-full p-5">
+    <div className="w-full overflow-y-scroll h-[89vh] bg-gray-50 ">
       <div className="bg-white rounded-md w-full flex flex-col p-5">
         <h1 className=" text-2xl  lg:text-3xl font-semibold my-4 ">
           Privacy Policy
@@ -89,7 +89,7 @@ const PolicyComponent = () => {
           </button>
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 

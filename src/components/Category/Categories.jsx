@@ -17,7 +17,7 @@ import {
 // import "./Category.css";
 
 const Categories = () => {
-  const { categories, message, type, categoryCount } = useSelector(
+  const { categories, message, type, categoryCount, loading } = useSelector(
     (state) => state.categories
   );
   const dispatch = useDispatch();
@@ -85,13 +85,6 @@ const Categories = () => {
       flex: 0.3,
     },
     {
-      field: "Slug",
-      headerName: "Slug",
-      minWidth: 180,
-      type: "string",
-      flex: 0.3,
-    },
-    {
       field: "Created_At",
       headerName: "Created At",
       minWidth: 180,
@@ -127,7 +120,6 @@ const Categories = () => {
       rows.push({
         id: item._id,
         Category: item.Title,
-        Slug: item.Slug,
         Created_At: item.created_at,
       });
     });
@@ -166,6 +158,7 @@ const Categories = () => {
         disableSelectionOnClick
         className="productListTable"
         rowHeight={60}
+        loading={loading}
         initialState={{
           pagination: {
             paginationModel: { pageSize: 8, page: 0 },

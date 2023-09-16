@@ -17,9 +17,8 @@ import {
 const SubCategories = () => {
   const [keyword, setKeyword] = useState("");
   const dispatch = useDispatch();
-  const { subCategories, message, type, subCategoriesCount } = useSelector(
-    (state) => state.subcategories
-  );
+  const { subCategories, message, type, subCategoriesCount, loading } =
+    useSelector((state) => state.subcategories);
   function getCookie() {
     var name = "connect.sid".concat("=");
     var decodedCookie = document.cookie;
@@ -167,6 +166,7 @@ const SubCategories = () => {
         disableSelectionOnClick
         className="productListTable"
         rowHeight={60}
+        loading={loading}
         initialState={{
           pagination: {
             paginationModel: { pageSize: 8, page: 0 },

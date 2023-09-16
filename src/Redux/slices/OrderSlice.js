@@ -21,7 +21,6 @@ export const loadAllOrders = createAsyncThunk(
       }
 
       const data = response.data;
-      console.log(data.orders);
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data);

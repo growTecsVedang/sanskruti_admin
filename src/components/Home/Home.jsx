@@ -10,18 +10,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadAllProducts } from "../../Redux/slices/ProductSlice";
 import { useState } from "react";
 import { loadAllOrders } from "../../Redux/slices/OrderSlice";
+import { loadAllCategories } from "../../Redux/slices/CategorySlice";
 import PieChartComponent from "../Charts/PieChart";
+import generateData from "../../helper/resultData";
+import generateDataForPieChart from "../../helper/pieChartData";
 
 const Home = () => {
   const [allusers, setAllUsers] = useState(0);
   const [allproducts, setAllProducts] = useState(0);
   const [allOrders, setAllOrders] = useState(0);
+  const [data, setData] = useState([]);
+  const [piedata, setPieData] = useState([]);
   const history = useHistory();
   const dispatch = useDispatch();
-  const { message, type, isAuthenticated, userCount } = useSelector(
+  const { message, type, isAuthenticated, userCount, users } = useSelector(
     (state) => state.user
   );
-  const { productCount } = useSelector((state) => state.products);
+  const { productCount, products } = useSelector((state) => state.products);
+  const { categories } = useSelector((state) => state.categories);
   const { orders, orderCount } = useSelector((state) => state.orders);
 
   function getCookie() {
@@ -53,6 +59,13 @@ const Home = () => {
     dispatch(
       loadAllOrders({
         cookie,
+        date: "",
+        pay_status: "",
+      })
+    );
+    dispatch(
+      loadAllCategories({
+        cookie,
       })
     );
   }, []);
@@ -66,7 +79,21 @@ const Home = () => {
     setAllUsers(userCount);
     setAllProducts(productCount);
     setAllOrders(orderCount);
-  }, [dispatch, type, message, history, userCount, productCount, orderCount]);
+    setData(generateData(categories, products));
+    setPieData(generateDataForPieChart(users));
+  }, [
+    dispatch,
+    type,
+    message,
+    history,
+    userCount,
+    productCount,
+    orderCount,
+    categories,
+    products,
+    users,
+  ]);
+  console.log(data);
   return (
     <div className=" flex flex-col overflow-y-scroll no-scroll  h-[89vh] w-[100%] lg:w-[80%]">
       <div className="flex flex-col lg:flex-row mx-3 mt-3 ">
@@ -89,10 +116,10 @@ const Home = () => {
       </div>
       <div className="flex flex-col lg:flex-row w-full ">
         <div className="lg:w-[60%] lg:ml-4 ">
-          <BarChart />
+          <BarChart data={data} />
         </div>
         <div className="lg:w-[40%]">
-          <PieChartComponent />
+          <PieChartComponent data={piedata} />
         </div>
       </div>
       <OrderStat />

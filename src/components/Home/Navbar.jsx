@@ -229,7 +229,7 @@ const Navbar = () => {
                 <div className="mx-5">Social Media</div>
               </div>
             </Link>
-            <Link to="/t&c">
+            <Link to="googleanalytics">
               <div
                 className="h-[40px] flex mt-3 items-center w-[100%] pl-5 text-[16px]"
                 onClick={() => setOpen(false)}
@@ -237,7 +237,7 @@ const Navbar = () => {
                 <div className="mx-5">Google Analytics</div>
               </div>
             </Link>
-            <Link to="/policy">
+            <Link to="/authkeys">
               <div
                 className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-[16px]"
                 onClick={() => setOpen(false)}

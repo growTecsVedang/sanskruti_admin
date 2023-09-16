@@ -16,7 +16,7 @@ import getRole from "../../helper/getRole";
 const Users = () => {
   const [Role, setRole] = useState("");
   const dispatch = useDispatch();
-  const { users, message, type } = useSelector((state) => state.user);
+  const { users, message, type, loading } = useSelector((state) => state.user);
 
   function getCookie() {
     var name = "accessToken".concat("=");
@@ -127,7 +127,7 @@ const Users = () => {
       });
     });
   return (
-    <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[89vh] w-[100%] lg:w-[80%] no-scroll  ">
+    <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[90vh] w-[100%] lg:w-[80%] no-scroll  ">
       <div className="flex flex-col ml-5 ">
         <div className="  lg:flex lg:h-[80px] lg:items-center  ">
           <div className="mx-auto lg:mx-0  w-[80%] h-[45px] flex mt-5  overflow-hidden ">
@@ -150,6 +150,7 @@ const Users = () => {
         disableSelectionOnClick
         className="productListTable"
         rowHeight={60}
+        loading={loading}
         initialState={{
           pagination: {
             paginationModel: { pageSize: 8, page: 0 },

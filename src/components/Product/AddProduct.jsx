@@ -352,7 +352,7 @@ const AddProduct = () => {
     }
   }, [dispatch, type, message]);
   return (
-    <div className=" flex flex-col overflow-y-scroll overflow-x-hidden   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">
+    <div className=" flex flex-col overflow-y-scroll overflow-x-hidden   h-[90vh] w-[100%] lg:w-[80%] no-scroll ">
       <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
         <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
           Product Details

@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import { PieChart, Pie, Sector, ResponsiveContainer } from "recharts";
 
-const data = [
-  { Role: "USER", value: 4 },
-  { Role: "ADMIN", value: 3 },
-  { Role: "SUPERADMIN", value: 3 },
-  { Role: "BANNED", value: 2 },
-];
-
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
   const {
@@ -81,9 +74,10 @@ const renderActiveShape = (props) => {
   );
 };
 
-const PieChartComponent = () => {
+const PieChartComponent = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
-
+  const { data } = props;
+  console.log(data);
   const onPieEnter = (_, index) => {
     setActiveIndex(index);
   };
@@ -94,7 +88,7 @@ const PieChartComponent = () => {
         <div className="  h-[333px] lg:min-h-[450px]  rounded-md ">
           <h1 className="ml-4  text-2xl font-bold   my-2 ">Users Statistics</h1>
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart width={500} height={500}>
+            <PieChart width={400} height={400}>
               <Pie
                 activeIndex={activeIndex}
                 activeShape={renderActiveShape}
