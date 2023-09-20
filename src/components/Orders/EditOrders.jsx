@@ -108,50 +108,11 @@ const EditOrders = (props) => {
       {order && order.order && order.payment ? (
         <div className=" flex  flex-col  overflow-y-scroll  overflow-x-hidden  h-[89vh] w-[100%] lg:w-[80%]   ">
           <div className="w-[97%] mx-auto mt-3 mb-[1px] py-3 min-h-full  bg-white  rounded-md flex flex-col shadow-md  ">
-            <div className=" mx-4 flex flex-col lg:justify-between  lg:flex-row gap-y-4 ">
-              <div className="flex flex-col">
-                <p className="font-bold">
-                  Name :
-                  <span className="font-normal ml-3 ">
-                    {order.payment.shippingAddress.fullName}
-                  </span>
-                </p>
-                {/* <p className="font-bold">Address :</p> */}
-                <p className="font-bold">
-                  Phone No :
-                  <span className="font-normal ml-3 ">
-                    {order.payment.shippingAddress.contactNo}
-                  </span>
-                </p>
-              </div>
-              <div className="flex flex-col w-[450px] ">
-                <div className="flex  ">
-                  <h1 className="font-semibold w-[40%] ">Order</h1>
-                  <p className="">{order.order.orderId}</p>
-                </div>
-                <div className="flex ">
-                  <h1 className="font-semibold w-[40%]">Shipping Status</h1>
-                  <p>{order.order.deliveryInfo.status}</p>
-                </div>
-                <div className="flex ">
-                  <h1 className="font-semibold w-[40%]">Payment Method</h1>
-                  <p>{order.payment.paymentMethod}</p>
-                </div>
-                <div className="flex ">
-                  <h1 className="font-semibold w-[40%]">Payment Status</h1>
-                  <p>{order.payment.paymentInfo.status}</p>
-                </div>
-                <div className="flex ">
-                  <h1 className="font-semibold w-[40%]">Date</h1>
-                  <p>{order.payment.orderInfo.Date}</p>
-                </div>
-                <div className="flex ">
-                  <h1 className="font-semibold w-[40%]">Amount</h1>
-                  <p>Amount</p>
-                </div>
-              </div>
-            </div>
-            <div className=" px-4 my-5 flex flex-col lg:justify-between  lg:flex-row gap-y-4 bg-white ">
+            <h1 className="text-2xl h-[50px] flex  items-center pl-3 font-semibold ">
+              Order Details
+            </h1>
+            <hr className="my-2  " />
+            <div className=" px-4 my-2 flex flex-col lg:justify-between  lg:flex-row gap-y-4 bg-white ">
               <div className="flex flex-col   lg:w-[60%]  ">
                 <h1 className="font-bold text-xl mt-4 ">Ordered Item</h1>
                 <div className="font-semibold flex gap-x-3 mt-5 ">
@@ -186,9 +147,9 @@ const EditOrders = (props) => {
                       </span>
                     </p>
                     <p className="">
-                      Quantity :
+                      Price :
                       <span className="ml-3">
-                        {order.order.product.varient.price}
+                        {order.order.product.varient.price} Rs
                       </span>
                     </p>
                   </div>
@@ -197,26 +158,102 @@ const EditOrders = (props) => {
               <div className="flex flex-col w-[450px] lg:mt-[65px] mt-5 ">
                 <div className="flex  ">
                   <h1 className="font-semibold w-[40%] ">Subtotal</h1>
-                  <p className="">{order.order.product.varient.price}</p>
+                  <p className="">{order.order.product.varient.price} </p>
                 </div>
                 <div className="flex ">
                   <h1 className="font-semibold w-[40%]">Shipping Cost</h1>
-                  <p>{order.payment.orderInfo.ShippingCost}</p>
+                  <p>{order.payment._doc.orderInfo.ShippingCost}</p>
+                </div>
+                <div className="flex ">
+                  <h1 className="font-semibold w-[40%]">Coupon Code</h1>
+                  <p>
+                    {order.payment._doc.orderInfo.CouponCode
+                      ? order.payment._doc.orderInfo.CouponCode
+                      : "Not Applied"}
+                  </p>
+                </div>
+                <div className="flex ">
+                  <h1 className="font-semibold w-[40%]">Coupon Discount</h1>
+                  <p>{order.payment._doc.orderInfo.CouponDiscount}</p>
                 </div>
                 <div className="flex ">
                   <h1 className="font-semibold w-[40%]">Gst(%)</h1>
                   <p>{order.order.product.gst_percent}</p>
                 </div>
                 <div className="flex ">
-                  <h1 className="font-semibold w-[40%]">Total</h1>
-                  <p>Total</p>
+                  <h1 className="font-semibold w-[40%]">Total Discount</h1>
+                  <p>{order.payment._doc.orderInfo.Totaldiscount}</p>
+                </div>
+                <div className="flex ">
+                  <h1 className="font-semibold w-[40%] text-blue-500 ">
+                    Net Amount :-
+                  </h1>
+                  <p className="font-bold">
+                    {order.payment._doc.orderInfo.Amount} Rs
+                  </p>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div className=" mx-4 flex flex-col lg:justify-between  lg:flex-row   gap-y-4 ">
+              <div className="flex flex-col   lg:w-[450px]  ">
+                <h1 className="font-bold text-xl mt-4 ">Payment Details</h1>
+                <div className="flex flex-col  ">
+                  {order.payment._doc.paymentInfo.map((item) => {
+                    return (
+                      <div className=" w-full border-2 my-3 bg-gray-50">
+                        <div className="flex border-2 ">
+                          <h1 className="font-semibold w-[40%]  ">
+                            Payment Status
+                          </h1>
+                          <p className="">{item.order_status}</p>
+                        </div>
+                        <div className="flex border-2">
+                          <h1 className="font-semibold w-[40%]">Tracking ID</h1>
+                          <p>{item.tracking_id ? item.tracking_id : "N/A"}</p>
+                        </div>
+                        <div className="flex border-2">
+                          <h1 className="font-semibold w-[40%]">
+                            Bank Reference No.
+                          </h1>
+                          <p>{item.bank_ref_no ? item.bank_ref_no : "N/A"}</p>
+                        </div>
+                        <div className="flex border-2">
+                          <h1 className="font-semibold w-[40%]">
+                            Payment Mode
+                          </h1>
+                          <p>{item.payment_mode ? item.payment_mode : "COD"}</p>
+                        </div>
+                        <div className="flex border-2">
+                          <h1 className="font-semibold w-[40%]">Currency</h1>
+                          <p>{item.currency ? item.currency : "INR"}</p>
+                        </div>
+                        <div className="flex border-2">
+                          <h1 className="font-semibold w-[40%]">
+                            Transaction Date
+                          </h1>
+                          <p>{item.trans_date}</p>
+                        </div>
+                        <div className="flex ">
+                          <h1 className="font-semibold w-[40%] text-blue-500 ">
+                            Amount Paid
+                          </h1>
+                          <p className="font-bold">
+                            {item.amount ? item.amount : "__"} Rs
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
             <div className="flex flex-col bg-white ">
               <hr className="mb-3" />
               <div className="flex flex-col gap-y-3 ">
-                <h1 className="text-black  text-xl  pl-4 ">Order Delivery</h1>
+                <h1 className="text-black font-bold text-xl  pl-4 ">
+                  Order Delivery
+                </h1>
                 <div className="flex ml-4 gap-2 ">
                   <h1 className="font-semibold">Current Status :</h1>
                   <p>{order.order.deliveryInfo.status}</p>
@@ -235,14 +272,14 @@ const EditOrders = (props) => {
                   </select>
                 </div>
                 <hr className="my-3" />
-                <h1 className="text-black text-xl  pl-4 ">
+                <h1 className="text-black font-bold text-xl  pl-4 ">
                   Order Cancellation
                 </h1>
                 <div className=" flex flex-wrap gap-2 ">
                   <div className="flex h-[30px] items-center">
                     <label
                       htmlFor=""
-                      className="mb-1 ml-4 mr-3 text-xl text-gray-400 lg:flex lg:h-[30px] lg:items-center"
+                      className="mb-1 ml-4 mr-3 text-xl text-gray-800 lg:flex lg:h-[30px] lg:items-center"
                     >
                       Request For Cancellation :-
                     </label>
@@ -255,7 +292,7 @@ const EditOrders = (props) => {
                   <div className="flex h-[30px] items-center">
                     <label
                       htmlFor=""
-                      className="mb-1 ml-4 mr-3 text-xl text-gray-400 lg:flex lg:h-[30px] lg:items-center"
+                      className="mb-1 ml-4 mr-3 text-xl text-gray-800 lg:flex lg:h-[30px] lg:items-center"
                     >
                       Amount Refunded
                     </label>
@@ -271,13 +308,15 @@ const EditOrders = (props) => {
                     />
                   </div>
                 </div>
-                <hr className="my-3" />
-                <h1 className="text-black  text-xl  pl-4 ">Order Return </h1>
+                <hr className="my-3  " />
+                <h1 className="text-black font-bold text-xl  pl-4 ">
+                  Order Return
+                </h1>
                 <div className=" flex lg:flex-row flex-col  gap-2 ">
                   <div className="flex h-[30px] items-center">
                     <label
                       htmlFor=""
-                      className="mb-1 ml-4 mr-3 text-xl text-gray-400 lg:flex lg:h-[30px] lg:items-center"
+                      className="mb-1 ml-4 mr-3 text-xl text-gray-800 lg:flex lg:h-[30px] lg:items-center"
                     >
                       Request For Return :-
                     </label>
@@ -291,7 +330,7 @@ const EditOrders = (props) => {
                   <div className="flex h-[30px] items-center">
                     <label
                       htmlFor=""
-                      className="mb-1 ml-4 mr-3 text-xl text-gray-400 lg:flex lg:h-[30px] lg:items-center"
+                      className="mb-1 ml-4 mr-3 text-xl text-gray-800 lg:flex lg:h-[30px] lg:items-center"
                     >
                       Amount Creadited
                     </label>

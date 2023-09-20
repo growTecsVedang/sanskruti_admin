@@ -98,7 +98,7 @@ const Orders = () => {
       renderCell: (params) => {
         return (
           <Fragment>
-            <button className="  px-2 w-[50px] bg-sky-200 rounded-sm font-semibold hover:underline  ">
+            <button className="  px-2 w-[50px] bg-sky-300 rounded-lg font-semibold hover:underline  ">
               <Link to={`/vieworder/${params.id}`}>View</Link>
             </button>
           </Fragment>
