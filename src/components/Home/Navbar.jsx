@@ -14,9 +14,13 @@ import { FiUsers, FiLogOut } from "react-icons/fi";
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import { BsShieldLockFill } from "react-icons/bs";
 import { ImImages, ImProfile } from "react-icons/im";
+import { HiOutlineClipboardList } from "react-icons/hi";
+import { BiLogOut } from "react-icons/bi";
 import { logOutUser } from "../../Redux/slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 const Navbar = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   function getCookie() {
     var name = "accessToken".concat("=");
@@ -35,6 +39,19 @@ const Navbar = () => {
   const [prod, setProd] = useState(false);
   const [prod1, setProd1] = useState(false);
   const [settings, setSettings] = useState(false);
+
+  function handleLogout() {
+    const accessToken = getCookie();
+    const temp = window.confirm("Do you want to LogOut");
+    if (temp) {
+      dispatch(
+        logOutUser({
+          cookie: accessToken,
+        })
+      );
+      window.location.replace("/");
+    }
+  }
 
   return (
     <div className="">
@@ -254,8 +271,8 @@ const Navbar = () => {
           onClick={() => setSettings(!settings)}
           className=" cursor-pointer h-[40px] flex mt-3  w-[100%] pl-5 text-[16px]"
         >
-          <AiOutlineSetting size={30} />
-          <div className="mx-5">Settings</div>
+          <HiOutlineClipboardList size={30} />
+          <div className="mx-5">Policies</div>
           {settings ? (
             <RiArrowDropUpLine size={30} />
           ) : (
@@ -288,18 +305,18 @@ const Navbar = () => {
                 <div className="mx-5">Privacy Policy</div>
               </div>
             </Link>
-            <Link to="/analytics">
-              <div
-                className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-[16px]"
-                onClick={() => setOpen(false)}
-              >
-                <div className="mx-5">Analytics</div>
-              </div>
-            </Link>
           </div>
         ) : (
           ""
         )}
+        <hr className="text-black h-2" />
+        <div
+          className="h-[40px] flex mt-3  w-[200px] pl-5 text-[16px]"
+          onClick={() => handleLogout()}
+        >
+          <BiLogOut size={30} />
+          <div className="mx-5">Logout</div>
+        </div>
         <hr className="text-black h-2" />
       </div>
       {/* laptop */}

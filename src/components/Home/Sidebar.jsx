@@ -8,6 +8,7 @@ import { ImImages, ImProfile } from "react-icons/im";
 import { CiDiscount1 } from "react-icons/ci";
 import { AiOutlineInbox, AiOutlineSetting } from "react-icons/ai";
 import { HiCurrencyRupee, HiOutlineClipboardList } from "react-icons/hi";
+import { BiLogOut } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../Redux/slices/UserSlice";
 
@@ -31,11 +32,15 @@ const Sidebar = () => {
   }
   function handleLogout() {
     const accessToken = getCookie();
-    dispatch(
-      logOutUser({
-        cookie: accessToken,
-      })
-    );
+    const temp = window.confirm("Do you want to LogOut");
+    if (temp) {
+      dispatch(
+        logOutUser({
+          cookie: accessToken,
+        })
+      );
+      window.location.replace("/");
+    }
   }
 
   return (
@@ -208,6 +213,14 @@ const Sidebar = () => {
       ) : (
         ""
       )}
+      <hr className="text-black h-2" />
+      <div
+        className="h-[40px] flex mt-3  w-[200px] pl-5 text-[16px] cursor-pointer  "
+        onClick={() => handleLogout()}
+      >
+        <BiLogOut size={30} />
+        <div className="mx-5  ">Logout</div>
+      </div>
       <hr className="text-black h-2" />
     </div>
   );
