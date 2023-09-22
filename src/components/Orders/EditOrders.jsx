@@ -195,57 +195,53 @@ const EditOrders = (props) => {
               </div>
             </div>
             <hr />
-            <div className=" mx-4 flex flex-col lg:justify-between  lg:flex-row   gap-y-4 ">
-              <div className="flex flex-col   lg:w-[450px]  ">
-                <h1 className="font-bold text-xl mt-4 ">Payment Details</h1>
-                <div className="flex flex-col  ">
-                  {order.payment._doc.paymentInfo.map((item) => {
-                    return (
-                      <div className=" w-full border-2 my-3 bg-gray-50">
-                        <div className="flex border-2 ">
-                          <h1 className="font-semibold w-[40%]  ">
-                            Payment Status
-                          </h1>
-                          <p className="">{item.order_status}</p>
-                        </div>
-                        <div className="flex border-2">
-                          <h1 className="font-semibold w-[40%]">Tracking ID</h1>
-                          <p>{item.tracking_id ? item.tracking_id : "N/A"}</p>
-                        </div>
-                        <div className="flex border-2">
-                          <h1 className="font-semibold w-[40%]">
-                            Bank Reference No.
-                          </h1>
-                          <p>{item.bank_ref_no ? item.bank_ref_no : "N/A"}</p>
-                        </div>
-                        <div className="flex border-2">
-                          <h1 className="font-semibold w-[40%]">
-                            Payment Mode
-                          </h1>
-                          <p>{item.payment_mode ? item.payment_mode : "COD"}</p>
-                        </div>
-                        <div className="flex border-2">
-                          <h1 className="font-semibold w-[40%]">Currency</h1>
-                          <p>{item.currency ? item.currency : "INR"}</p>
-                        </div>
-                        <div className="flex border-2">
-                          <h1 className="font-semibold w-[40%]">
-                            Transaction Date
-                          </h1>
-                          <p>{item.trans_date}</p>
-                        </div>
-                        <div className="flex ">
-                          <h1 className="font-semibold w-[40%] text-blue-500 ">
-                            Amount Paid
-                          </h1>
-                          <p className="font-bold">
-                            {item.amount ? item.amount : "__"} Rs
-                          </p>
-                        </div>
+            <div className="flex flex-col bg-white  ">
+              <h1 className="font-bold text-xl  ">Payment Details</h1>
+              <div className="flex flex-col lg:flex-row lg:flex-wrap  lg:ml-3 gap-4  ">
+                {order.payment._doc.paymentInfo.map((item) => {
+                  return (
+                    <div className=" w-full lg:w-[450px] border-2 my-3 bg-gray-50">
+                      <div className="flex border-2 ">
+                        <h1 className="font-semibold w-[40%]  ">
+                          Payment Status
+                        </h1>
+                        <p className="">{item.order_status}</p>
                       </div>
-                    );
-                  })}
-                </div>
+                      <div className="flex border-2">
+                        <h1 className="font-semibold w-[40%]">Tracking ID</h1>
+                        <p>{item.tracking_id ? item.tracking_id : "N/A"}</p>
+                      </div>
+                      <div className="flex border-2">
+                        <h1 className="font-semibold w-[40%]">
+                          Bank Reference No.
+                        </h1>
+                        <p>{item.bank_ref_no ? item.bank_ref_no : "N/A"}</p>
+                      </div>
+                      <div className="flex border-2">
+                        <h1 className="font-semibold w-[40%]">Payment Mode</h1>
+                        <p>{item.payment_mode ? item.payment_mode : "COD"}</p>
+                      </div>
+                      <div className="flex border-2">
+                        <h1 className="font-semibold w-[40%]">Currency</h1>
+                        <p>{item.currency ? item.currency : "INR"}</p>
+                      </div>
+                      <div className="flex border-2">
+                        <h1 className="font-semibold w-[40%]">
+                          Transaction Date
+                        </h1>
+                        <p>{item.trans_date}</p>
+                      </div>
+                      <div className="flex ">
+                        <h1 className="font-semibold w-[40%] text-blue-500 ">
+                          Amount Paid
+                        </h1>
+                        <p className="font-bold">
+                          {item.amount ? item.amount : "__"} Rs
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div className="flex flex-col bg-white ">

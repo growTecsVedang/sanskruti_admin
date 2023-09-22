@@ -32,7 +32,7 @@ const Sidebar = () => {
   }
   function handleLogout() {
     const accessToken = getCookie();
-    const temp = window.confirm("Do you want to LogOut");
+    const temp = window.confirm("Do you want to Logout");
     if (temp) {
       dispatch(
         logOutUser({

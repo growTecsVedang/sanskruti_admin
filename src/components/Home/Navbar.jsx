@@ -14,7 +14,7 @@ import { FiUsers, FiLogOut } from "react-icons/fi";
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import { BsShieldLockFill } from "react-icons/bs";
 import { ImImages, ImProfile } from "react-icons/im";
-import { HiOutlineClipboardList } from "react-icons/hi";
+import { HiOutlineClipboardList, HiCurrencyRupee } from "react-icons/hi";
 import { BiLogOut } from "react-icons/bi";
 import { logOutUser } from "../../Redux/slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,7 +42,7 @@ const Navbar = () => {
 
   function handleLogout() {
     const accessToken = getCookie();
-    const temp = window.confirm("Do you want to LogOut");
+    const temp = window.confirm("Do you want to Logout");
     if (temp) {
       dispatch(
         logOutUser({
@@ -221,6 +221,16 @@ const Navbar = () => {
           >
             <BsShieldLockFill size={30} />
             <div className="mx-5">Permissions</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/paymentMethods">
+          <div
+            className="min-h-[40px] flex mt-3  w-[200px] pl-5 text-[16px]"
+            onClick={() => setOpen(false)}
+          >
+            <HiCurrencyRupee size={30} />
+            <div className="mx-5">Payment Method</div>
           </div>
         </Link>
         <hr className="text-black h-2" />

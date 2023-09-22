@@ -82,6 +82,12 @@ const Orders = () => {
       flex: 0.5,
     },
     {
+      field: "pay_method1",
+      headerName: "Transactions Count",
+      minWidth: 180,
+      flex: 0.5,
+    },
+    {
       field: "created_at",
       headerName: "Created At",
       minWidth: 180,
@@ -116,6 +122,7 @@ const Orders = () => {
         product: item.order.order.product.name,
         status: item.order.order.deliveryInfo.status,
         pay_method: item.order.payment.paymentMethod,
+        pay_method1: item.order.payment.paymentInfo.length,
         created_at: item.order.payment.orderInfo.Date,
         quantity: item.order.order.product.quantity,
       });
