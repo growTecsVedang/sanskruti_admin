@@ -162,7 +162,7 @@ const PaymentMethodsIndex = () => {
   };
 
   return (
-    <main className="p-5 w-full">
+    <main className="p-5 w-full min-h-screen h-full">
       <div className="flex w-full flex-col gap-4">
         <div className="bg-white p-5 rounded-lg flex flex-col gap-3">
           <h3 className="text-lg font-semibold">Cash on Delivery</h3>
