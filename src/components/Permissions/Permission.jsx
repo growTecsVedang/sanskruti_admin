@@ -52,20 +52,20 @@ const Users = () => {
   }, [dispatch, type, message]);
 
   const columns = [
-    { field: "id", headerName: "id", minWidth: 200, flex: 0.5 },
+    { field: "id", headerName: "id", minWidth: 250, flex: 0.5 },
 
     {
       field: "Username",
       headerName: "Username",
       minWidth: 180,
-      flex: 0.3,
+      flex: 0.5,
     },
 
     {
       field: "Email",
       headerName: "Email",
-      minWidth: 180,
-      flex: 0.3,
+      minWidth: 250,
+      flex: 0.5,
     },
 
     {
@@ -77,7 +77,7 @@ const Users = () => {
     {
       field: "Mobile_No",
       headerName: "Mobile_No",
-      minWidth: 100,
+      minWidth: 180,
       flex: 0.5,
     },
 

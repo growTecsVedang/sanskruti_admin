@@ -165,7 +165,7 @@ const EditCategoryForm = (props) => {
           <div className="w-[95%] mx-auto flex   flex-col  lg:flex-row    ">
             <div className="lg:w-[40%]">
               <h2 className="text-lg font-bold mt-5  mx-4 ">Image</h2>
-              <div className="w-[95%] mx-auto h-[40px] sm:h-[40px] lg:h-[40px] px-5 mt-6  flex items-center bg-[#bde0fe]  ">
+              <div className="w-[95%] mx-auto h-[40px] sm:min-h-[40px] lg:h-[40px] px-5 mt-6  flex items-center bg-[#bde0fe]  ">
                 first <strong className="px-2  text-[red]"> Delete </strong>
                 the Image and then
                 <strong className="px-2 text-[green] "> Upload </strong> .

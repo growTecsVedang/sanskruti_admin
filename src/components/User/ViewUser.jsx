@@ -169,7 +169,7 @@ const ViewUser = (props, ID) => {
                   className="h-[30px] w-full pl-3 my-1  rounded-md border text-black border-gray-300"
                 />
               </div>
-              <div className="flex mx-2 flex-grow flex-col">
+              {/* <div className="flex mx-2 flex-grow flex-col">
                 <label htmlFor="" className="font-semibold my-1 ">
                   Address
                 </label>
@@ -178,7 +178,7 @@ const ViewUser = (props, ID) => {
                   readOnly
                   className="h-[100px] w-full pl-3 my-1  rounded-md border text-black border-gray-300"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

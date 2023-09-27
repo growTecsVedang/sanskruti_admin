@@ -276,132 +276,128 @@ const AuthKeys = () => {
       });
   };
   return (
-    <main className="p-5 w-full min-h-screen h-full">
-      <div className="flex w-full flex-col gap-4">
-        <div className="bg-white p-5 rounded-lg flex flex-col gap-3">
-          <h3 className="text-lg font-semibold">Google Auth</h3>
-          <div className="flex gap-1 items-center">
-            <input
-              type="checkbox"
-              id="google"
-              checked={status.google}
-              className="hidden"
-              onChange={toggleGoogle}
-              readOnly
-            />
-            <label
-              className={`border-[1px] ${
-                status.google
-                  ? "border-green-400 bg-green-50"
-                  : "border-gray-300"
-              } py-2 rounded-md cursor-pointer px-4`}
-              htmlFor="google"
-            >
-              Google Auth is {status.google ? "Activated" : "Deactivated"}
-            </label>
-          </div>
-
-          <div className="flex flex-col mt-5 gap-1">
-            <label htmlFor="google_client_id">Client Id</label>
-            <input
-              type="text"
-              id="google_client_id"
-              value={googleClientId}
-              placeholder={tempGoogleClientId}
-              onChange={(e) => setGoogleClientId(e.target.value)}
-              className="border-[1px] border-gray-300 focus-within:border-gray-600 rounded-md px-4 py-2"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="google_client_secret">Client Secret</label>
-            <input
-              type="text"
-              id="google_client_secret"
-              value={googleClientSecret}
-              placeholder={tempGoogleClientSecret}
-              onChange={(e) => setGoogleClientSecret(e.target.value)}
-              className="border-[1px] border-gray-300 focus-within:border-gray-600 rounded-md px-4 py-2"
-            />
-          </div>
-
-          <div className="flex ml-auto gap-2">
-            <button
-              onClick={clearGoogle}
-              className="px-4 outline-none py-2 border-[1px] border-gray-300 hover:border-red-300 rounded-md hover:bg-red-50"
-            >
-              Clear Credentials
-            </button>
-            <button
-              onClick={setGoogle}
-              className="px-4 outline-none py-2 border-[1px] border-gray-300 hover:border-sky-300 rounded-md hover:bg-sky-50"
-            >
-              Submit Credentials
-            </button>
-          </div>
+    <div className="flex w-full flex-col gap-4 overflow-y-scroll h-[89vh]">
+      <div className="bg-white p-5 rounded-lg flex flex-col gap-3">
+        <h3 className="text-lg font-semibold">Google Auth</h3>
+        <div className="flex gap-1 items-center">
+          <input
+            type="checkbox"
+            id="google"
+            checked={status.google}
+            className="hidden"
+            onChange={toggleGoogle}
+            readOnly
+          />
+          <label
+            className={`border-[1px] ${
+              status.google ? "border-green-400 bg-green-50" : "border-gray-300"
+            } py-2 rounded-md cursor-pointer px-4`}
+            htmlFor="google"
+          >
+            Google Auth is {status.google ? "Activated" : "Deactivated"}
+          </label>
         </div>
-        <div className="bg-white p-5 rounded-lg flex flex-col gap-3">
-          <h3 className="text-lg font-semibold">Facebook Auth</h3>
-          <div className="flex gap-1 items-center">
-            <input
-              type="checkbox"
-              id="facebook"
-              checked={status.facebook}
-              className="hidden"
-              onChange={toggleFacebook}
-              readOnly
-            />
-            <label
-              className={`border-[1px] ${
-                status.facebook
-                  ? "border-green-400 bg-green-50"
-                  : "border-gray-300"
-              } py-2 rounded-md cursor-pointer px-4`}
-              htmlFor="facebook"
-            >
-              Facebook Auth is {status.facebook ? "Activated" : "Deactivated"}
-            </label>
-          </div>
 
-          <div className="flex flex-col mt-5 gap-1">
-            <label htmlFor="facebook_client_id">Client Id</label>
-            <input
-              type="text"
-              id="facebook_client_id"
-              value={facebookClientId}
-              placeholder={tempFacebookClientId}
-              onChange={(e) => setFacebookClientId(e.target.value)}
-              className="border-[1px] border-gray-300 focus-within:border-gray-600 rounded-md px-4 py-2"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="facebook_client_secret">Client Secret</label>
-            <input
-              type="text"
-              id="facebook_client_secret"
-              value={facebookClientSecret}
-              placeholder={tempFacebookClientSecret}
-              onChange={(e) => setFacebookClientSecret(e.target.value)}
-              className="border-[1px] border-gray-300 focus-within:border-gray-600 rounded-md px-4 py-2"
-            />
-          </div>
+        <div className="flex flex-col mt-5 gap-1">
+          <label htmlFor="google_client_id">Client Id</label>
+          <input
+            type="text"
+            id="google_client_id"
+            value={googleClientId}
+            placeholder={tempGoogleClientId}
+            onChange={(e) => setGoogleClientId(e.target.value)}
+            className="border-[1px] border-gray-300 focus-within:border-gray-600 rounded-md px-4 py-2"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="google_client_secret">Client Secret</label>
+          <input
+            type="text"
+            id="google_client_secret"
+            value={googleClientSecret}
+            placeholder={tempGoogleClientSecret}
+            onChange={(e) => setGoogleClientSecret(e.target.value)}
+            className="border-[1px] border-gray-300 focus-within:border-gray-600 rounded-md px-4 py-2"
+          />
+        </div>
 
-          <div className="flex ml-auto gap-2">
-            <button
-              onClick={clearFacebook}
-              className="px-4 outline-none py-2 border-[1px] border-gray-300 hover:border-red-300 rounded-md hover:bg-red-50"
-            >
-              Clear Credentials
-            </button>
-            <button
-              onClick={setFacebook}
-              className="px-4 outline-none py-2 border-[1px] border-gray-300 hover:border-sky-300 rounded-md hover:bg-sky-50"
-            >
-              Submit Credentials
-            </button>
-          </div>
+        <div className="flex ml-auto gap-2">
+          <button
+            onClick={clearGoogle}
+            className="px-4 outline-none py-2 border-[1px] border-gray-300 hover:border-red-300 rounded-md hover:bg-red-50"
+          >
+            Clear Credentials
+          </button>
+          <button
+            onClick={setGoogle}
+            className="px-4 outline-none py-2 border-[1px] border-gray-300 hover:border-sky-300 rounded-md hover:bg-sky-50"
+          >
+            Submit Credentials
+          </button>
         </div>
       </div>
-    </main>
+      <div className="bg-white p-5 rounded-lg flex flex-col gap-3">
+        <h3 className="text-lg font-semibold">Facebook Auth</h3>
+        <div className="flex gap-1 items-center">
+          <input
+            type="checkbox"
+            id="facebook"
+            checked={status.facebook}
+            className="hidden"
+            onChange={toggleFacebook}
+            readOnly
+          />
+          <label
+            className={`border-[1px] ${
+              status.facebook
+                ? "border-green-400 bg-green-50"
+                : "border-gray-300"
+            } py-2 rounded-md cursor-pointer px-4`}
+            htmlFor="facebook"
+          >
+            Facebook Auth is {status.facebook ? "Activated" : "Deactivated"}
+          </label>
+        </div>
+
+        <div className="flex flex-col mt-5 gap-1">
+          <label htmlFor="facebook_client_id">Client Id</label>
+          <input
+            type="text"
+            id="facebook_client_id"
+            value={facebookClientId}
+            placeholder={tempFacebookClientId}
+            onChange={(e) => setFacebookClientId(e.target.value)}
+            className="border-[1px] border-gray-300 focus-within:border-gray-600 rounded-md px-4 py-2"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="facebook_client_secret">Client Secret</label>
+          <input
+            type="text"
+            id="facebook_client_secret"
+            value={facebookClientSecret}
+            placeholder={tempFacebookClientSecret}
+            onChange={(e) => setFacebookClientSecret(e.target.value)}
+            className="border-[1px] border-gray-300 focus-within:border-gray-600 rounded-md px-4 py-2"
+          />
+        </div>
+
+        <div className="flex ml-auto gap-2">
+          <button
+            onClick={clearFacebook}
+            className="px-4 outline-none py-2 border-[1px] border-gray-300 hover:border-red-300 rounded-md hover:bg-red-50"
+          >
+            Clear Credentials
+          </button>
+          <button
+            onClick={setFacebook}
+            className="px-4 outline-none py-2 border-[1px] border-gray-300 hover:border-sky-300 rounded-md hover:bg-sky-50"
+          >
+            Submit Credentials
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

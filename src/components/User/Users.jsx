@@ -75,14 +75,14 @@ const Users = () => {
       field: "Email",
       headerName: "Email",
       minWidth: 180,
-      flex: 0.3,
+      flex: 0.5,
     },
 
     {
       field: "Provider",
       headerName: "Provider",
-      minWidth: 180,
-      flex: 0.5,
+      minWidth: 100,
+      flex: 0.3,
     },
 
     {

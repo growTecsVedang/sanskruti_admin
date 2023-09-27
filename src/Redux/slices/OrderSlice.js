@@ -8,7 +8,7 @@ export const loadAllOrders = createAsyncThunk(
     try {
       console.log(datas);
       const response = await axios.get(
-        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/allOrders?date=${datas.date}&status=${datas.pay_status}`,
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/allOrders?type=${datas.type}&date=${datas.date}&status=${datas.pay_status}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -59,6 +59,32 @@ export const updateOrder = createAsyncThunk(
   async (datas, { rejectWithValue }) => {
     try {
       const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/updateOrderStatus?id=${datas.id}`;
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const response = await axios.put(url, datas.body, {
+        headers,
+        withCredentials: true,
+      });
+
+      if (response.status === 409 || response.status === 404) {
+        const payload = response.data;
+        return rejectWithValue(payload);
+      }
+
+      const data = response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateCod = createAsyncThunk(
+  "updateCod",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/updatecod?id=${datas.id}&status=${datas.status}`;
       const headers = {
         "Content-Type": "application/json",
       };
@@ -167,6 +193,21 @@ const orderSlice = createSlice({
       state.type = action.payload.type;
     });
     builder.addCase(updateOrder.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+
+    // updateCod
+    builder.addCase(updateCod.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(updateCod.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(updateCod.rejected, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
       state.type = action.payload.type;

@@ -69,7 +69,7 @@ const Coupons = () => {
   }, [dispatch, type, message]);
 
   const columns = [
-    { field: "id", headerName: "ID", minWidth: 200, flex: 0.5 },
+    { field: "id", headerName: "ID", minWidth: 250, flex: 0.5 },
 
     {
       field: "name",

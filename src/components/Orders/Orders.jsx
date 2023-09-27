@@ -14,6 +14,89 @@ const Orders = () => {
   const dispatch = useDispatch();
   const [date, setDate] = useState("");
   const [pay_status, setPay_Status] = useState("");
+  const [pay_category, setPay_Category] = useState("");
+
+  const obj̣ = [
+    {
+      name: "",
+      label: "Order Status",
+      feilds: [],
+    },
+    {
+      name: "On delivery",
+      label: "Delivery Status",
+      feilds: [
+        {
+          name: "All",
+          value: "",
+        },
+        {
+          name: "Pending",
+          value: "Pending",
+        },
+        {
+          name: "Confirmed",
+          value: "Confirmed",
+        },
+        {
+          name: "Out for Delivery",
+          value: "Out for delivery",
+        },
+        {
+          name: "Delivered",
+          value: "Delivered",
+        },
+      ],
+    },
+    {
+      name: "On return",
+      label: "Return Status",
+      feilds: [
+        {
+          name: "All",
+          value: "",
+        },
+        {
+          name: "Pending",
+          value: "Pending",
+        },
+        {
+          name: "Confirmed",
+          value: "Confirmed",
+        },
+        {
+          name: "Out for Pickup",
+          value: "Out for pickup",
+        },
+        {
+          name: "Refund Initiated",
+          value: "Refund initiated",
+        },
+        {
+          name: "Refund Credited",
+          value: "Refund credited",
+        },
+      ],
+    },
+    {
+      name: "Cancelled",
+      label: "Cancel Status",
+      feilds: [
+        {
+          name: "All",
+          value: "",
+        },
+        {
+          name: "Not Refunded",
+          value: "false",
+        },
+        {
+          name: "Refunded",
+          value: "true",
+        },
+      ],
+    },
+  ];
 
   function getCookie() {
     var name = "accessToken".concat("=");
@@ -42,19 +125,20 @@ const Orders = () => {
     }
     const cookie = getCookie();
     async function request() {
-      await dispatch(
+      dispatch(
         loadAllOrders({
           cookie,
           date,
           pay_status,
+          type: pay_category,
         })
       );
     }
     request();
-  }, [dispatch, type, message, pay_status, date]);
+  }, [dispatch, type, message, pay_status, date, pay_category]);
 
   const columns = [
-    { field: "id", headerName: "id", minWidth: 200, flex: 0.5 },
+    { field: "id", headerName: "id", minWidth: 250, flex: 0.5 },
     { field: "order_id", headerName: "order id", minWidth: 350, flex: 1.5 },
     {
       field: "product",
@@ -90,7 +174,7 @@ const Orders = () => {
     {
       field: "created_at",
       headerName: "Created At",
-      minWidth: 180,
+      minWidth: 250,
       flex: 0.3,
     },
 
@@ -129,6 +213,10 @@ const Orders = () => {
     });
   console.log(orders);
 
+  useEffect(() => {
+    setPay_Category("");
+  }, [pay_status]);
+
   return (
     <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[89vh] w-[100%] lg:w-[80%] no-scroll  ">
       <div className=" ml-2 lg:ml-0 flex flex-col sm:flex-row lg:justify-end mt-3 lg:items-center gap-x-8  mr-2 min-h-[60px] ">
@@ -143,9 +231,9 @@ const Orders = () => {
             className="h-[40px] border-2"
           />
         </div>
-        <div>
+        <div className="mb-2 lg:mb-0">
           <label htmlFor="" className="font-semibold lg:m-3 ">
-            Order Status :-
+            Order Type :-
           </label>
           <select
             name=""
@@ -155,13 +243,35 @@ const Orders = () => {
             className="h-[40px] w-[180px] border-2"
           >
             <option value="">All</option>
-            <option>Pending</option>
-            <option>Confirmed</option>
-            <option>Out for pickup</option>
-            <option>Refund initiated</option>
-            <option>Refund credited</option>
+            <option>On delivery</option>
+            <option>On return</option>
+            <option>Cancelled</option>
           </select>
         </div>
+        {obj̣
+          .filter((item) => {
+            return item.name === pay_status;
+          })
+          .map((i) => {
+            return (
+              <div>
+                <label htmlFor="" className="font-semibold lg:m-3 ">
+                  {i.label} :-
+                </label>
+                <select
+                  name=""
+                  value={pay_category}
+                  onChange={(e) => setPay_Category(e.target.value)}
+                  id=""
+                  className="h-[40px] w-[180px] border-2"
+                >
+                  {i.feilds.map((j) => {
+                    return <option value={j.value}>{j.name}</option>;
+                  })}
+                </select>
+              </div>
+            );
+          })}
       </div>
       <div className="flex flex-col ml-5 ">
         <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results {orderCount}</p>

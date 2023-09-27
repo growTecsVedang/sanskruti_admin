@@ -8,12 +8,15 @@ import {
   clearState,
   orderDetails,
   updateOrder,
+  updateCod,
 } from "../../Redux/slices/OrderSlice";
 const EditOrders = (props) => {
   const [delivery_status, setDelivery_status] = useState("");
   const [Return_status, setReturn_status] = useState("");
   const [cancelChecked, setCancelChecked] = useState(false);
   const [returnChecked, setReturnChecked] = useState(false);
+  const [payStatus, setPayStatus] = useState("");
+  const [id, setId] = useState("");
   const { order, message, type, orderCount, loading } = useSelector(
     (state) => state.orders
   );
@@ -71,17 +74,24 @@ const EditOrders = (props) => {
       );
     }
   }
+  function handleUpdateCod() {
+    dispatch(
+      updateCod({
+        id,
+        status: payStatus,
+      })
+    );
+  }
   useEffect(() => {
     if (order && order.order && order.payment) {
+      setId(order.payment._doc._id);
+      setPayStatus(order.payment._doc.paymentInfo[0].order_status);
       setDelivery_status(order.order.deliveryInfo.status);
       setReturn_status(order.order.returnInfo.status);
       setCancelChecked(order.order.cancellationInfo.Amount_refunded);
       setReturnChecked(order.order.returnInfo.Amount_refunded);
     }
   }, [order]);
-
-  console.log(delivery_status, Return_status, returnChecked, cancelChecked);
-
   useEffect(() => {
     const notify = (arg) => toast(`${arg}`);
     if (message && type) {
@@ -194,29 +204,171 @@ const EditOrders = (props) => {
                 </div>
               </div>
             </div>
+            <hr className="" />
+            <div className="bg-white flex flex-col h-full ">
+              <h1 className="font-bold text-xl pl-4 ">Address</h1>
+              <div className="flex flex-col lg:flex-row lg:flex-wrap mx-4 gap-4 ">
+                <div>
+                  <div className="w-[450px] flex items-center  gap-2">
+                    <div className="w-[12px] h-[12px] rounded-full bg-purple-600  "></div>
+                    <h1 className="text-lg font-semibold">Shipping Address</h1>
+                  </div>
+                  <div className="flex flex-col border-2   my-3">
+                    <div className="flex border-purple-300 border-2 bg-purple-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        Name
+                      </h1>
+                      <p>{order.payment._doc.shippingAddress.name}</p>
+                    </div>
+                    <div className="flex border-purple-300 border-2 bg-purple-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        Email
+                      </h1>
+                      <p>{order.payment._doc.shippingAddress.email}</p>
+                    </div>
+                    <div className="flex border-purple-300 border-2 bg-purple-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        Ph.no
+                      </h1>
+                      <p>{order.payment._doc.shippingAddress.tel}</p>
+                    </div>
+                    <div className="flex border-purple-300 border-2 bg-purple-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        Landmark
+                      </h1>
+                      <p>{order.payment._doc.shippingAddress.address}</p>
+                    </div>
+                    <div className="flex border-purple-300 border-2 bg-purple-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        City
+                      </h1>
+                      <p>{order.payment._doc.shippingAddress.city}</p>
+                    </div>
+                    <div className="flex border-purple-300 border-2 bg-purple-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        Country
+                      </h1>
+                      <p>{order.payment._doc.shippingAddress.country}</p>
+                    </div>
+                    <div className="flex border-purple-300 border-2 bg-purple-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        State
+                      </h1>
+                      <p>{order.payment._doc.shippingAddress.state}</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="w-[450px]  flex items-center  gap-2">
+                    <div className="w-[12px] h-[12px] rounded-full bg-red-600  "></div>
+                    <h1 className="text-lg font-semibold">Billing Address</h1>
+                  </div>
+                  <div className="flex flex-col border-2   my-3">
+                    <div className="flex border-red-200 border-2 bg-red-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        Name
+                      </h1>
+                      <p>{order.payment._doc.billingAddress.name}</p>
+                    </div>
+                    <div className="flex border-red-200 border-2 bg-red-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        Email
+                      </h1>
+                      <p>{order.payment._doc.billingAddress.email}</p>
+                    </div>
+                    <div className="flex border-red-200 border-2 bg-red-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        Ph.no
+                      </h1>
+                      <p>{order.payment._doc.billingAddress.tel}</p>
+                    </div>
+                    <div className="flex border-red-200 border-2 bg-red-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        Landmark
+                      </h1>
+                      <p>{order.payment._doc.billingAddress.address}</p>
+                    </div>
+                    <div className="flex border-red-200 border-2 bg-red-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        City
+                      </h1>
+                      <p>{order.payment._doc.billingAddress.city}</p>
+                    </div>
+                    <div className="flex border-red-200 border-2 bg-red-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        Country
+                      </h1>
+                      <p>{order.payment._doc.billingAddress.country}</p>
+                    </div>
+                    <div className="flex border-red-200 border-2 bg-red-50 min-h-[10px]">
+                      <h1 className="font-semibold w-[40%]  flex items-center ">
+                        State
+                      </h1>
+                      <p>{order.payment._doc.billingAddress.state}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <hr />
             <div className="flex flex-col bg-white  ">
-              <h1 className="font-bold text-xl  ">Payment Details</h1>
-              <div className="flex flex-col lg:flex-row lg:flex-wrap  lg:ml-3 gap-4  ">
+              <h1 className="font-bold text-xl pl-4 ">Payment Details</h1>
+              <div className="flex flex-col lg:flex-row lg:flex-wrap  mx-4 gap-4  ">
                 {order.payment._doc.paymentInfo.map((item) => {
                   return (
                     <div className=" w-full lg:w-[450px] border-2 my-3 bg-gray-50">
-                      <div className="flex border-2 ">
-                        <h1 className="font-semibold w-[40%]  ">
+                      <div className="flex border-2 h-[40px] ">
+                        <h1 className="font-semibold w-[40%] flex items-center ">
                           Payment Status
                         </h1>
-                        <p className="">{item.order_status}</p>
+                        <p className="flex items-center">
+                          {order.payment._doc.paymentMethod === "COD"
+                            ? ""
+                            : item.order_status}
+                        </p>
+                        {item.payment_mode ? (
+                          ""
+                        ) : (
+                          <div className="flex items-center gap-5 ">
+                            <select
+                              onChange={(e) => setPayStatus(e.target.value)}
+                              value={payStatus}
+                              className="cursor-pointer h-[30px] min-w-[150px] pl-3   bg-gray-50 rounded-md text-lg border-2 border-gray-300 "
+                            >
+                              <option value={""} hidden>
+                                Status
+                              </option>
+                              <option value="Pending">Pending</option>
+                              <option value="Success">Success</option>
+                            </select>
+                            <button
+                              onClick={() => handleUpdateCod()}
+                              className="bg-slate-300 h-[30px] w-[80px] hover:bg-slate-400 rounded-md cursor-pointer"
+                            >
+                              Update
+                            </button>
+                          </div>
+                        )}
                       </div>
-                      <div className="flex border-2">
-                        <h1 className="font-semibold w-[40%]">Tracking ID</h1>
-                        <p>{item.tracking_id ? item.tracking_id : "N/A"}</p>
-                      </div>
-                      <div className="flex border-2">
-                        <h1 className="font-semibold w-[40%]">
-                          Bank Reference No.
-                        </h1>
-                        <p>{item.bank_ref_no ? item.bank_ref_no : "N/A"}</p>
-                      </div>
+                      {order.payment._doc.paymentMethod === "COD" ? (
+                        ""
+                      ) : (
+                        <div className="flex border-2">
+                          <h1 className="font-semibold w-[40%]">Tracking ID</h1>
+                          <p>{item.tracking_id ? item.tracking_id : "N/A"}</p>
+                        </div>
+                      )}
+                      {order.payment._doc.paymentMethod === "COD" ? (
+                        ""
+                      ) : (
+                        <div className="flex border-2">
+                          <h1 className="font-semibold w-[40%]">
+                            Bank Reference No.
+                          </h1>
+                          <p>{item.bank_ref_no ? item.bank_ref_no : "N/A"}</p>
+                        </div>
+                      )}
+
                       <div className="flex border-2">
                         <h1 className="font-semibold w-[40%]">Payment Mode</h1>
                         <p>{item.payment_mode ? item.payment_mode : "COD"}</p>
@@ -225,20 +377,28 @@ const EditOrders = (props) => {
                         <h1 className="font-semibold w-[40%]">Currency</h1>
                         <p>{item.currency ? item.currency : "INR"}</p>
                       </div>
-                      <div className="flex border-2">
-                        <h1 className="font-semibold w-[40%]">
-                          Transaction Date
-                        </h1>
-                        <p>{item.trans_date}</p>
-                      </div>
-                      <div className="flex ">
-                        <h1 className="font-semibold w-[40%] text-blue-500 ">
-                          Amount Paid
-                        </h1>
-                        <p className="font-bold">
-                          {item.amount ? item.amount : "__"} Rs
-                        </p>
-                      </div>
+                      {order.payment._doc.paymentMethod === "COD" ? (
+                        ""
+                      ) : (
+                        <div className="flex border-2">
+                          <h1 className="font-semibold w-[40%]">
+                            Transaction Date
+                          </h1>
+                          <p>{item.trans_date}</p>
+                        </div>
+                      )}
+                      {order.payment._doc.paymentMethod === "COD" ? (
+                        ""
+                      ) : (
+                        <div className="flex ">
+                          <h1 className="font-semibold w-[40%] text-blue-500 ">
+                            Amount Paid
+                          </h1>
+                          <p className="font-bold">
+                            {item.amount ? item.amount : "__"} Rs
+                          </p>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -260,7 +420,9 @@ const EditOrders = (props) => {
                     value={delivery_status}
                     className="cursor-pointer h-[40px] min-w-[120px] pl-3  bg-gray-50 rounded-md text-lg border-2 border-gray-300 "
                   >
-                    <option value={""}>Status</option>
+                    <option value={""} hidden>
+                      Status
+                    </option>
                     <option value={"Pending"}>Pending</option>
                     <option value={"Confirmed"}>Confirmed</option>
                     <option value={"Out for delivery"}>Out For Delivery</option>
@@ -308,7 +470,7 @@ const EditOrders = (props) => {
                 <h1 className="text-black font-bold text-xl  pl-4 ">
                   Order Return
                 </h1>
-                <div className=" flex lg:flex-row flex-col  gap-2 ">
+                <div className=" flex lg:flex-row flex-col  gap-2 lg:items-center">
                   <div className="flex h-[30px] items-center">
                     <label
                       htmlFor=""
