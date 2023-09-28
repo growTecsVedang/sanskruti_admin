@@ -326,7 +326,7 @@ const EditOrders = (props) => {
                             ? ""
                             : item.order_status}
                         </p>
-                        {item.payment_mode ? (
+                        {order.payment._doc.paymentMethod !== "COD" ? (
                           ""
                         ) : (
                           <div className="flex items-center gap-5 ">
@@ -371,7 +371,11 @@ const EditOrders = (props) => {
 
                       <div className="flex border-2">
                         <h1 className="font-semibold w-[40%]">Payment Mode</h1>
-                        <p>{item.payment_mode ? item.payment_mode : "COD"}</p>
+                        <p>
+                          {order.payment._doc.paymentMethod
+                            ? order.payment._doc.paymentMethod
+                            : "N/A"}
+                        </p>
                       </div>
                       <div className="flex border-2">
                         <h1 className="font-semibold w-[40%]">Currency</h1>
