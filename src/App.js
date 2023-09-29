@@ -71,6 +71,17 @@ function App() {
     return null; // Cookie not found
   }
 
+  // redirect
+  const href = window.location.href;
+  useEffect(() => {
+    if (window.location.href.includes("sanskrutinx.in")) {
+      window.location.href = window.location.href.replace(
+        "sanskrutinx.in",
+        "sanskrutinx.com"
+      );
+    }
+  }, [href]);
+
   return (
     <React.Fragment>
       <ToastContainer autoClose={1500} />
