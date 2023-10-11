@@ -49,6 +49,7 @@ import SocialForm from "./components/config/SocialForm";
 import EditSocialForm from "./components/config/EditSocialForm";
 import GoogleAnalytics from "./components/config/GoogleAnalytics";
 import AuthKeys from "./components/config/AuthKeys";
+import WhatsappNumber from "./components/config/WhatsappNumber";
 
 function App() {
   const dispatch = useDispatch();
@@ -184,6 +185,11 @@ function App() {
           exact
           path="/googleanalytics"
           component={GoogleAnalytics}
+        />
+        <ProtectedRoute
+          exact
+          path="/whatsappNumber"
+          component={WhatsappNumber}
         />
         <ProtectedRoute exact path="/authkeys" component={AuthKeys} />
       </Switch>

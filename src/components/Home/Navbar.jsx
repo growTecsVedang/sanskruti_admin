@@ -264,6 +264,14 @@ const Navbar = () => {
                 <div className="mx-5">Google Analytics</div>
               </div>
             </Link>
+            <Link to="whatsappNumber">
+              <div
+                className="h-[40px] flex mt-3 items-center w-[100%] pl-5 text-[16px]"
+                onClick={() => setOpen(false)}
+              >
+                <div className="mx-5">Whatsapp Number</div>
+              </div>
+            </Link>
             <Link to="/authkeys">
               <div
                 className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-[16px]"
