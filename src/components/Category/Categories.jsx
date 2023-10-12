@@ -105,7 +105,14 @@ const Categories = () => {
             <Link to={`/editcategory/${params.id}`}>
               <EditIcon />
             </Link>
-            <Button onClick={() => deleteCategoryHandler(params.id)}>
+            <Button
+              onClick={() => {
+                const doesUserWantToDelete = window.confirm(
+                  `Are you sure you want to DELETE category "${params.row.Category}"`
+                );
+                if (doesUserWantToDelete) deleteCategoryHandler(params.id);
+              }}
+            >
               <DeleteIcon />
             </Button>
           </Fragment>
@@ -126,19 +133,19 @@ const Categories = () => {
 
   return (
     <div className=" flex  flex-col overflow-y-scroll overflow-x-scroll  h-[89vh] w-[100%] lg:w-[80%] no-scroll  ">
-      <div className="flex flex-col ml-5 ">
-        <div className="  lg:flex lg:h-[80px] lg:items-center  ">
-          <div className="mx-auto lg:mx-0  w-[80%] h-[45px] flex mt-5  overflow-hidden ">
+      <div className="flex flex-col px-5">
+        <div className="lg:flex gap-1 lg:h-[80px] lg:items-center  ">
+          <div className="gap-2 h-[45px] w-full max-w-4xl flex mt-5 overflow-hidden ">
             <input
               type="text"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               placeholder="Enter Category Name"
-              className="w-[200px] flex-grow rounded-l-3xl border-[1px] border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none  disabled:cursor-not-allowed disabled:opacity-50 "
+              className="w-[200px] flex-grow bg-white rounded-md border-[1px] border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none  disabled:cursor-not-allowed disabled:opacity-50 "
             />
             <button
               onClick={handleSearch}
-              className="cursor-pointer w-[100px] flex justify-center items-center rounded-r-3xl border-[1px] border-gray-300  bg-[#4361ee] text-white"
+              className="cursor-pointer w-[100px] flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white"
             >
               Search
             </button>
@@ -147,9 +154,6 @@ const Categories = () => {
             <Link to="/categoryform">Add Category</Link>
           </button>
         </div>
-        <p className="mx-[10%] lg:mx-[1%] my-3">
-          Showing results {categories.length}
-        </p>
       </div>
 
       <DataGrid
