@@ -50,6 +50,7 @@ import EditSocialForm from "./components/config/EditSocialForm";
 import GoogleAnalytics from "./components/config/GoogleAnalytics";
 import AuthKeys from "./components/config/AuthKeys";
 import WhatsappNumber from "./components/config/WhatsappNumber";
+import ReviewsPage from "./components/Reviews/Reviews";
 
 function App() {
   const dispatch = useDispatch();
@@ -191,6 +192,7 @@ function App() {
           path="/whatsappNumber"
           component={WhatsappNumber}
         />
+        <ProtectedRoute exact path="/productsReviews" component={ReviewsPage} />
         <ProtectedRoute exact path="/authkeys" component={AuthKeys} />
       </Switch>
     </React.Fragment>

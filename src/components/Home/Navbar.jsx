@@ -63,7 +63,7 @@ const Navbar = () => {
           <div className="">
             <div className="flex items-center space-x-2">
               <span className="flex flex-col">
-                <Link href="/profile" className="cursor-pointer">
+                <Link to="/profile" className="cursor-pointer">
                   <BiUserCircle size={30} />
                 </Link>
               </span>
@@ -156,6 +156,17 @@ const Navbar = () => {
                 }}
               >
                 <div className="mx-5">Products</div>
+              </div>
+            </Link>
+            <Link to="/productsReviews">
+              <div
+                className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-[16px]"
+                onClick={() => {
+                  setProd(!prod);
+                  setOpen(false);
+                }}
+              >
+                <div className="mx-5">Reviews</div>
               </div>
             </Link>
           </div>
