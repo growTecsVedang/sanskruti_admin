@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 const ReviewsPage = () => {
   const [reviews, setReviews] = useState([]);
@@ -18,6 +19,7 @@ const ReviewsPage = () => {
   // Modal
   const [commentTitle, setcommentTitle] = useState("");
   const [commentContent, setcommentContent] = useState("");
+  const [commentRating, setcommentRating] = useState(5);
   const [showModal, setshowModal] = useState(false);
 
   const _getReviews = async () => {
@@ -128,6 +130,9 @@ const ReviewsPage = () => {
       headerName: "Review rating",
       minWidth: 180,
       flex: 0.5,
+      renderCell: (params) => {
+        return params.row.rating + " / 5";
+      },
     },
     {
       field: "comment",
@@ -144,6 +149,7 @@ const ReviewsPage = () => {
               onClick={() => {
                 setcommentContent(params.row.comment);
                 setcommentTitle(params.row.title);
+                setcommentRating(params.row.rating);
                 setshowModal(true);
               }}
               className="px-3 py-1 rounded-md border-[1px] border-gray-300 bg-gray-100"
@@ -192,7 +198,7 @@ const ReviewsPage = () => {
         product_name: item.product_name,
         product_image: item.product_image,
         title: item.title,
-        rating: item.rating + " / 5",
+        rating: item.rating,
         comment: item.comment,
         status: item.status,
         pinned: item.notify,
@@ -210,6 +216,21 @@ const ReviewsPage = () => {
               onClick={() => setshowModal(false)}
             />
             <h3 className="font-semibold text-xl">{commentTitle}</h3>
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5].map((rate) =>
+                rate <= commentRating ? (
+                  <AiFillStar
+                    key={rate}
+                    className="h-5 w-5 cursor-pointer text-yellow-300"
+                  />
+                ) : (
+                  <AiOutlineStar
+                    key={rate}
+                    className="h-5 w-5 cursor-pointer text-gray-400"
+                  />
+                )
+              )}
+            </div>
             <p>{commentContent}</p>
           </div>
         </div>
