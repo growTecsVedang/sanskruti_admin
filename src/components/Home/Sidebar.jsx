@@ -90,6 +90,11 @@ const Sidebar = () => {
               <div className="mx-5">Products</div>
             </div>
           </Link>
+          <Link to="/productsReviews">
+            <div className="h-[40px] flex mt-3 items-center  w-[200px] pl-5 text-[16px]">
+              <div className="mx-5">Reviews</div>
+            </div>
+          </Link>
         </div>
       ) : (
         ""
@@ -168,6 +173,11 @@ const Sidebar = () => {
           <Link to="/googleanalytics">
             <div className="h-[40px] flex mt-3 items-center w-[200px] pl-5 text-[16px]">
               <div className="mx-5">Google Analytics</div>
+            </div>
+          </Link>
+          <Link to="/whatsappNumber">
+            <div className="h-[40px] flex mt-3 items-center w-[200px] pl-5 text-[16px]">
+              <div className="mx-5">Whatsapp Number</div>
             </div>
           </Link>
           <Link to="/authkeys">

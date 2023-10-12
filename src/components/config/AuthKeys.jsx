@@ -276,8 +276,8 @@ const AuthKeys = () => {
       });
   };
   return (
-    <div className="flex w-full flex-col gap-4 overflow-y-scroll h-[89vh]">
-      <div className="bg-white p-5 rounded-lg flex flex-col gap-3">
+    <div className="flex w-full p-5 flex-col gap-4 overflow-y-scroll h-[89vh]">
+      <div className="bg-white p-5 rounded-lg w-full max-w-3xl flex flex-col gap-3">
         <h3 className="text-lg font-semibold">Google Auth</h3>
         <div className="flex gap-1 items-center">
           <input
@@ -336,7 +336,7 @@ const AuthKeys = () => {
           </button>
         </div>
       </div>
-      <div className="bg-white p-5 rounded-lg flex flex-col gap-3">
+      <div className="bg-white p-5 rounded-lg w-full max-w-3xl flex flex-col gap-3">
         <h3 className="text-lg font-semibold">Facebook Auth</h3>
         <div className="flex gap-1 items-center">
           <input

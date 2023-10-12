@@ -172,7 +172,6 @@ const Products = () => {
             </button>
           </Link>
         </div>
-        <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
       </div>
       <DataGrid
         rows={rows}

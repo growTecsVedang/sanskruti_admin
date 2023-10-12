@@ -162,9 +162,9 @@ const PaymentMethodsIndex = () => {
   };
 
   return (
-    <main className="p-5 w-full min-h-screen h-full">
+    <main className="p-5 w-full min-[89vh] h-full">
       <div className="flex w-full flex-col gap-4">
-        <div className="bg-white p-5 rounded-lg flex flex-col gap-3">
+        <div className="bg-white p-5 rounded-lg w-full max-w-3xl flex flex-col gap-3">
           <h3 className="text-lg font-semibold">Cash on Delivery</h3>
           <div className="flex gap-1 items-center">
             <input
@@ -188,7 +188,7 @@ const PaymentMethodsIndex = () => {
             </label>
           </div>
         </div>
-        <div className="bg-white p-5 rounded-lg flex flex-col gap-3">
+        <div className="bg-white p-5 rounded-lg w-full max-w-3xl flex flex-col gap-3">
           <h3 className="text-lg font-semibold">PayZapp</h3>
           <div className="flex gap-1 items-center">
             <input
