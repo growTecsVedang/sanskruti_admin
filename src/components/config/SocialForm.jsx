@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineDelete } from "react-icons/ai";
 import { addSocials, clearState } from "../../Redux/slices/Config";
 import { toast } from "react-toastify";
-const MAX_SIZE = 400 * 1024;
+const MAX_SIZE = 1024 * 1024;
 const SocialForm = () => {
   const { message, type } = useSelector((state) => state.config);
   const dispatch = useDispatch();
@@ -23,6 +23,11 @@ const SocialForm = () => {
       alert("file size exceeded");
       return;
       // NOTE: state set ker joh prevent karega user ko upload karne se
+    }
+    // Check if file type is other than png or jpg
+    if (extension !== "png" && extension !== "svg") {
+      alert("Invalid file type. Please upload a file of type png or svg.");
+      return;
     }
     const reader = new FileReader();
 
@@ -146,7 +151,7 @@ const SocialForm = () => {
                       and drop
                     </p>
                     <p class="text-xs text-gray-500 dark:text-gray-400">
-                      SVG (MAX. 96x96 px)
+                      SVG, PNG, (MAX. 96x96px) ,MAX_SIZE=1.0MB
                     </p>
                   </div>
                   <input

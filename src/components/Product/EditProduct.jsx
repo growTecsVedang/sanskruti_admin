@@ -857,7 +857,7 @@ const EditProduct = (props) => {
                   drop
                 </p>
                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                  SVG, PNG, JPG or GIF (MAX. 800x400px)
+                  JPEG, PNG, JPG (MAX. 800x400px) ,MAX_SIZE=1.0MB
                 </p>
               </div>
               <input

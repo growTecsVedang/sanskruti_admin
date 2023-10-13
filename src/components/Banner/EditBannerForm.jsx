@@ -79,10 +79,18 @@ const EditBannerForm = (props) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    const extension = file.name.split(".")[1];
     if (file?.size !== undefined && file.size > MAX_SIZE) {
       alert("file size exceeded");
       return;
       // NOTE: state set ker joh prevent karega user ko upload karne se
+    }
+    // Check if file type is other than png or jpg
+    if (extension !== "png" && extension !== "jpg" && extension !== "jpeg") {
+      alert(
+        "Invalid file type. Please upload a file of type png or jpg or jpeg."
+      );
+      return;
     }
     const reader = new FileReader();
     if (file) {
@@ -274,7 +282,7 @@ const EditBannerForm = (props) => {
                         drag and drop
                       </p>
                       <p class="text-xs text-gray-500 dark:text-gray-400">
-                        SVG, PNG, JPG or GIF (MAX. 800x400px)
+                        JPEG, PNG, JPG (MAX. 800x400px) ,MAX_SIZE=1.0MB
                       </p>
                     </div>
                     <input

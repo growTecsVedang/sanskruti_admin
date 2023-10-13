@@ -50,6 +50,13 @@ const EditCategoryForm = (props) => {
       return;
       // NOTE: state set ker joh prevent karega user ko upload karne se
     }
+    // Check if file type is other than png or jpg
+    if (extension !== "png" && extension !== "jpg" && extension !== "jpeg") {
+      alert(
+        "Invalid file type. Please upload a file of type png or jpg or jpeg."
+      );
+      return;
+    }
     const reader = new FileReader();
 
     reader.onloadend = () => {
@@ -225,7 +232,7 @@ const EditCategoryForm = (props) => {
                       and drop
                     </p>
                     <p class="text-xs text-gray-500 dark:text-gray-400">
-                      SVG, PNG, JPG or GIF (MAX. 800x400px)
+                      JPEG, PNG, JPG (MAX. 800x400px) ,MAX_SIZE=1.0MB
                     </p>
                   </div>
                   <input

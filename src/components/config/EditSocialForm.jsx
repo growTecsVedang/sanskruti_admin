@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineDelete } from "react-icons/ai";
-import { addSocials, clearState } from "../../Redux/slices/Config";
+import {
+  addSocials,
+  clearState,
+  deleteSocialImage,
+  getSocial,
+  updateSocials,
+} from "../../Redux/slices/Config";
 import { toast } from "react-toastify";
-const MAX_SIZE = 400 * 1024;
+const MAX_SIZE = 1024 * 1024;
 const EditSocialForm = (props) => {
-  const { message, type } = useSelector((state) => state.config);
+  const { message, type, obj } = useSelector((state) => state.config);
   const dispatch = useDispatch();
+  const [id, setId] = useState("");
+  const [path, setPath] = useState("");
   const [Title, setTitle] = useState("");
+  const [image, setImage] = useState("");
   const [base64Image, setBase64Image] = useState("");
   const [imageName, setImageName] = useState("");
 
@@ -24,6 +33,11 @@ const EditSocialForm = (props) => {
       return;
       // NOTE: state set ker joh prevent karega user ko upload karne se
     }
+    // Check if file type is other than png or jpg
+    if (extension !== "png" && extension !== "svg") {
+      alert("Invalid file type. Please upload a file of type png or svg.");
+      return;
+    }
     const reader = new FileReader();
 
     reader.onloadend = () => {
@@ -37,20 +51,50 @@ const EditSocialForm = (props) => {
     }
   };
 
+  function getCookie() {
+    var name = "accessToken".concat("=");
+    var decodedCookie = document.cookie;
+    var cookieArray = decodedCookie.split(";");
+
+    for (var i = 0; i < cookieArray.length; i++) {
+      var cookie = cookieArray[i].trim();
+      if (cookie.startsWith(name)) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return null; // Cookie not found
+  }
+
   const deleteFile = () => {
-    setImageName("");
-    setBase64Image("");
+    if (image !== "") {
+      const name = image.split(`${process.env.REACT_APP_ENDPOINT_CDN}/`)[1];
+      console.log(id, name);
+      dispatch(
+        deleteSocialImage({
+          id,
+          name,
+        })
+      );
+      setImage("");
+    } else {
+      setBase64Image("");
+    }
   };
 
-  const createCategorySubmitHandler = (e) => {
+  const updateCategorySubmitHandler = (e) => {
     e.preventDefault();
-
-    if (Title.trim() !== "" && imageName.trim() !== "" && Image !== "") {
+    console.log(Title, imageName, Image);
+    const cookie = getCookie();
+    if (Title.trim() !== "") {
       dispatch(
-        addSocials({
-          media: Title,
-          Image: base64Image,
-          imageName,
+        updateSocials({
+          cookie,
+          body: {
+            id,
+            media: Title,
+            Image: image || base64Image,
+            imageName,
+          },
         })
       );
       setTitle("");
@@ -64,16 +108,34 @@ const EditSocialForm = (props) => {
       if (type === "success") {
         notify(message);
         dispatch(clearState());
-        setTimeout(() => {
-          window.location.replace("/socials");
-        }, 1000);
+        window.location.replace("/socials");
       } else {
         notify(message);
         dispatch(clearState());
       }
     }
   }, [dispatch, type, message]);
-  console.log(props.match.params.id);
+
+  useEffect(() => {
+    const cookie = getCookie();
+    const id = props.match.params.id;
+    setId(id);
+    console.log("exec");
+    dispatch(
+      getSocial({
+        cookie,
+        id,
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    if (obj) {
+      setTitle(obj.media);
+      setImage(obj.link);
+      setPath(obj.link);
+    }
+  }, [obj]);
 
   return (
     <div className=" flex flex-col overflow-y-scroll   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">
@@ -84,7 +146,7 @@ const EditSocialForm = (props) => {
       </div>
       <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
         <form
-          onSubmit={createCategorySubmitHandler}
+          onSubmit={updateCategorySubmitHandler}
           encType="multipart/form-data"
         >
           <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
@@ -102,15 +164,30 @@ const EditSocialForm = (props) => {
           <div className="w-[95%] mx-auto flex   flex-col  lg:flex-row    ">
             <div className="lg:w-[40%]">
               <h2 className="text-lg font-bold mt-5  mx-4 ">Image</h2>
+              <div className="w-[95%] mx-auto h-[40px] sm:min-h-[40px] lg:h-[40px] px-5 mt-6  flex items-center bg-[#bde0fe]  ">
+                first <strong className="px-2  text-[red]"> Delete </strong>
+                the Image and then
+                <strong className="px-2 text-[green] "> Upload </strong> .
+              </div>
               <div className=" mt-5 mx-4  flex overflow-x-scroll w-full gap-x-6 h-[430px] overflow-y-hidden  ">
                 <div className="">
-                  <div className="w-[300px] h-[350px] border-2 border-gray-200 ">
-                    <img
-                      src={base64Image}
-                      className="w-[300px] h-[350px]"
-                      alt="upload_image"
-                    />
-                  </div>
+                  {image === "" ? (
+                    <div className="w-[300px] h-[350px] border-2 border-gray-200 ">
+                      <img
+                        src={base64Image}
+                        className="w-[300px] h-[350px]"
+                        alt="upload_image"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-[300px] h-[350px] border-2 border-gray-200 ">
+                      <img
+                        src={image}
+                        className="w-[300px] h-[350px]"
+                        alt="upload_image"
+                      />
+                    </div>
+                  )}
                   <div
                     onClick={deleteFile}
                     className=" cursor-pointer hover:bg-slate-300 w-[300px] h-[40px] flex justify-center items-center bg-gray-200 rounded-lg mt-3 active:bg-slate-300 "
@@ -147,7 +224,7 @@ const EditSocialForm = (props) => {
                       and drop
                     </p>
                     <p class="text-xs text-gray-500 dark:text-gray-400">
-                      SVG (MAX. 96x96 px)
+                      SVG, PNG, (MAX. 96x96px) ,MAX_SIZE=1.0MB
                     </p>
                   </div>
                   <input
@@ -165,7 +242,7 @@ const EditSocialForm = (props) => {
               type="submit"
               className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
             >
-              Add
+              Update
             </button>
           </div>
         </form>

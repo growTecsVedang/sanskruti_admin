@@ -30,6 +30,58 @@ export const addSocials = createAsyncThunk(
   }
 );
 
+export const deleteSocialImage = createAsyncThunk(
+  "deleteSocialImage",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/superadmin/config/social/deleteImage?id=${datas.id}&name=${datas.name}`;
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      console.log(datas);
+      const response = await axios.delete(url, {
+        headers,
+        withCredentials: true,
+      });
+      if (response.status === 409 || response.status === 404) {
+        const payload = response.data;
+        return rejectWithValue(payload);
+      }
+
+      const data = response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message.data);
+    }
+  }
+);
+
+export const getSocial = createAsyncThunk(
+  "getSocial",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/superadmin/config/social?id=${datas.id}`;
+      const headers = {
+        "Content-Type": "application/json ; charset=utf-8",
+      };
+      console.log("exec1", datas.id);
+      const response = await axios.get(url, {
+        headers,
+        withCredentials: true,
+      });
+      if (response.status === 409 || response.status === 404) {
+        const payload = response.data;
+        return rejectWithValue(payload);
+      }
+
+      const data = response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message.data);
+    }
+  }
+);
+
 // export const addCategoryImage = createAsyncThunk(
 //   "addCategoryImage",
 //   async (datas, { rejectWithValue }) => {
@@ -141,31 +193,36 @@ export const deleteSocials = createAsyncThunk(
   }
 );
 
-// export const updateCategory = createAsyncThunk(
-//   "updateCategory",
-//   async (datas, { rejectWithValue }) => {
-//     try {
-//       const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/updateCategory?id=${datas.id}`;
-//       const headers = {
-//         "Content-Type": "application/json; charset=utf-8",
-//       };
-//       const response = await axios.put(url, datas.body, {
-//         headers,
-//         withCredentials: true,
-//       });
+export const updateSocials = createAsyncThunk(
+  "updateSocials",
+  async (datas, { rejectWithValue }) => {
+    try {
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/superadmin/config/social?id=${datas.body.id}`;
+      const headers = {
+        "Content-Type": "application/json; charset=utf-8",
+      };
+      console.log(datas);
+      const response = await axios.put(
+        url,
+        { ...datas.body },
+        {
+          headers,
+          withCredentials: true,
+        }
+      );
 
-//       if (response.status === 409 || response.status === 404) {
-//         const payload = response.data;
-//         return rejectWithValue(payload);
-//       }
+      if (response.status === 409 || response.status === 404) {
+        const payload = response.data;
+        return rejectWithValue(payload);
+      }
 
-//       const data = response.data;
-//       return data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
+      const data = response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 // export const searchCategory = createAsyncThunk(
 //   "searchCategory",
@@ -262,6 +319,20 @@ const configurationSlice = createSlice({
       state.type = action.payload.type;
     });
 
+    // getSocial
+    builder.addCase(getSocial.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(getSocial.fulfilled, (state, action) => {
+      state.loading = false;
+      state.type = action.payload.type;
+      state.obj = action.payload.data[0];
+    });
+    builder.addCase(getSocial.rejected, (state, action) => {
+      state.loading = false;
+      state.type = action.payload.type;
+    });
+
     // deleteSocials
     builder.addCase(deleteSocials.pending, (state, action) => {
       state.loading = true;
@@ -277,35 +348,35 @@ const configurationSlice = createSlice({
       state.type = action.payload.type;
     });
 
-    // // deleteCategoryImage
-    // builder.addCase(deleteCategoryImage.pending, (state, action) => {
-    //   state.loading = true;
-    // });
-    // builder.addCase(deleteCategoryImage.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.message = action.payload.message;
-    //   state.type = action.payload.type;
-    // });
-    // builder.addCase(deleteCategoryImage.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.message = action.payload.message;
-    //   state.type = action.payload.type;
-    // });
+    // deleteSocialImage
+    builder.addCase(deleteSocialImage.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteSocialImage.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(deleteSocialImage.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
 
-    // // updateCategory
-    // builder.addCase(updateCategory.pending, (state, action) => {
-    //   state.loading = true;
-    // });
-    // builder.addCase(updateCategory.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.message = action.payload.message;
-    //   state.type = action.payload.type;
-    // });
-    // builder.addCase(updateCategory.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.message = action.payload.message;
-    //   state.type = action.payload.type;
-    // });
+    // updateSocials
+    builder.addCase(updateSocials.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(updateSocials.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
+    builder.addCase(updateSocials.rejected, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+    });
 
     // // searchCategory
     // builder.addCase(searchCategory.pending, (state, action) => {
