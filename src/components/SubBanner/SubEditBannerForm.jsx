@@ -32,7 +32,6 @@ const SubEditBannerForm = (props) => {
     subBanners.forEach((item) => {
       if (item._id === props.match.params.id) {
         setId(item._id);
-        setType(item.type);
         setChecked(item.isPublished);
         setMobileImage(item.mobileImage);
         setDesktopImage(item.desktopImage);

@@ -81,7 +81,6 @@ const SubBannerForm = () => {
 
     reader.onloadend = () => {
       const base64String = reader.result;
-      console.log(Type);
       if (screenType === "Desktop") {
         const name = file.name.split(".")[0];
         const extension = file.name.split(".")[1];
@@ -133,7 +132,6 @@ const SubBannerForm = () => {
       setMobileImage("");
       setDesktopImageName("");
       setMobileImageName("");
-      setType("");
       setChecked(false);
     }
   };
