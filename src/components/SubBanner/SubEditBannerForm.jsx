@@ -190,7 +190,7 @@ const SubEditBannerForm = (props) => {
         <div className="flex w-full gap-6 max-md:flex-col">
           <div className="flex w-full flex-col gap-3">
             <h3 className="text-lg">Desktop Image</h3>
-            {desktopImage && desktopImageName ? (
+            {desktopImage ? (
               <>
                 <img
                   src={desktopImage}
@@ -215,7 +215,7 @@ const SubEditBannerForm = (props) => {
           </div>
           <div className="flex w-full flex-col gap-3">
             <h3 className="text-lg">Mobile Image</h3>
-            {mobileImage && mobileImageName ? (
+            {mobileImage ? (
               <>
                 <img
                   src={mobileImage}
