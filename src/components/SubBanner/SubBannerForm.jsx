@@ -15,9 +15,9 @@ const SubBannerForm = () => {
   const [desktopImage, setDesktopImage] = useState("");
   const [mobileImageName, setMobileImageName] = useState("");
   const [desktopImageName, setDesktopImageName] = useState("");
-  const [Type, setType] = useState("");
   const [checked, setChecked] = useState(false);
   const [bannerLink, setbannerLink] = useState("");
+
   useEffect(() => {
     const notify = (arg) => toast(`${arg}`);
     if (message && type) {
@@ -58,7 +58,7 @@ const SubBannerForm = () => {
     return null; // Cookie not found
   }
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e, screenType) => {
     const file = e.target.files[0];
     const extension = file.name.split(".")[1];
     if (file?.size !== undefined && file.size > MAX_SIZE) {
@@ -77,11 +77,11 @@ const SubBannerForm = () => {
     if (file) {
       reader.readAsDataURL(file);
     }
+    console.log("cs");
 
     reader.onloadend = () => {
       const base64String = reader.result;
-      console.log(Type);
-      if (Type === "Desktop") {
+      if (screenType === "Desktop") {
         const name = file.name.split(".")[0];
         const extension = file.name.split(".")[1];
         const date = Date.now().toString();
@@ -89,7 +89,7 @@ const SubBannerForm = () => {
         setDesktopImageName(imageName);
         setDesktopImage(base64String);
       }
-      if (Type === "Mobile") {
+      if (screenType === "Mobile") {
         const name = file.name.split(".")[0];
         const extension = file.name.split(".")[1];
         const date = Date.now().toString();
@@ -132,7 +132,6 @@ const SubBannerForm = () => {
       setMobileImage("");
       setDesktopImageName("");
       setMobileImageName("");
-      setType("");
       setChecked(false);
     }
   };
