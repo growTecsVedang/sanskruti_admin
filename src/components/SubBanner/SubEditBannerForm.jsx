@@ -24,7 +24,6 @@ const SubEditBannerForm = (props) => {
   const [desktopImageBase64, setDesktopImageBase64] = useState("");
   const [mobileImageName, setMobileImageName] = useState("");
   const [desktopImageName, setDesktopImageName] = useState("");
-  const [Type, setType] = useState("");
   const [checked, setChecked] = useState(false);
   const [id, setId] = useState(null);
   const [bannerLink, setbannerLink] = useState("");
@@ -80,7 +79,7 @@ const SubEditBannerForm = (props) => {
     return null; // Cookie not found
   }
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e, screenType) => {
     const file = e.target.files[0];
     const extension = file.name.split(".")[1];
     if (file?.size !== undefined && file.size > MAX_SIZE) {
@@ -102,8 +101,7 @@ const SubEditBannerForm = (props) => {
 
     reader.onloadend = () => {
       const base64String = reader.result;
-      console.log(Type);
-      if (Type === "Desktop") {
+      if (screenType === "Desktop") {
         setDesktopImageBase64(base64String);
         const name = file.name.split(".")[0];
         const extension = file.name.split(".")[1];
@@ -111,7 +109,7 @@ const SubEditBannerForm = (props) => {
         const imageName = name.concat(date).concat(".").concat(extension);
         setDesktopImageName(imageName);
       }
-      if (Type === "Mobile") {
+      if (screenType === "Mobile") {
         setMobileImageBase64(base64String);
         const name = file.name.split(".")[0];
         const extension = file.name.split(".")[1];
