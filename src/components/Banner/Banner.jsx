@@ -171,9 +171,12 @@ const Banner = () => {
               Search
             </div>
           </div>
-          <button className=" lg:mx-[5%] mx-[10%] mt-4 lg:mt-6 px-2 h-[45px] w-[80px] lg:w-[100px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
-            <Link to="/bannerform">Add</Link>
-          </button>
+          <Link
+            to="/bannerform"
+            className="lg:mx-[5%] mx-[10%] mt-4 lg:mt-6 px-2 h-[45px] w-[80px] lg:w-[100px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white"
+          >
+            Add
+          </Link>
         </div>
         <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
       </div>
