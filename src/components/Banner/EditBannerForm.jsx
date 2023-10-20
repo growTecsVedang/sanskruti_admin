@@ -34,6 +34,7 @@ const EditBannerForm = (props) => {
         setChecked(item.isPublished);
         setMobileImage(item.mobileImage);
         setDesktopImage(item.desktopImage);
+        setbannerLink(item.bannerLink);
       }
     });
   }, []);
