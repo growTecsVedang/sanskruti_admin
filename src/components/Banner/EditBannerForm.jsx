@@ -19,11 +19,10 @@ const EditBannerForm = (props) => {
   );
   const [mobileImage, setMobileImage] = useState("");
   const [desktopImage, setDesktopImage] = useState("");
-  const [mobileImageBase64, setMobileImageBase64] = useState("");
-  const [desktopImageBase64, setDesktopImageBase64] = useState("");
+  // const [mobileImageBase64, setMobileImageBase64] = useState("");
+  // const [desktopImageBase64, setDesktopImageBase64] = useState("");
   const [mobileImageName, setMobileImageName] = useState("");
   const [desktopImageName, setDesktopImageName] = useState("");
-  const [Type, setType] = useState("");
   const [checked, setChecked] = useState(false);
   const [id, setId] = useState(null);
   const [bannerLink, setbannerLink] = useState("");
@@ -32,7 +31,6 @@ const EditBannerForm = (props) => {
     banners.forEach((item) => {
       if (item._id === props.match.params.id) {
         setId(item._id);
-        setType(item.type);
         setChecked(item.isPublished);
         setMobileImage(item.mobileImage);
         setDesktopImage(item.desktopImage);
@@ -79,7 +77,7 @@ const EditBannerForm = (props) => {
     return null; // Cookie not found
   }
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e, screenType) => {
     const file = e.target.files[0];
     const extension = file.name.split(".")[1];
     if (file?.size !== undefined && file.size > MAX_SIZE) {
@@ -101,17 +99,16 @@ const EditBannerForm = (props) => {
 
     reader.onloadend = () => {
       const base64String = reader.result;
-      console.log(Type);
-      if (Type === "Desktop") {
-        setDesktopImageBase64(base64String);
+      if (screenType === "Desktop") {
+        setDesktopImage(base64String);
         const name = file.name.split(".")[0];
         const extension = file.name.split(".")[1];
         const date = Date.now().toString();
         const imageName = name.concat(date).concat(".").concat(extension);
         setDesktopImageName(imageName);
       }
-      if (Type === "Mobile") {
-        setMobileImageBase64(base64String);
+      if (screenType === "Mobile") {
+        setMobileImage(base64String);
         const name = file.name.split(".")[0];
         const extension = file.name.split(".")[1];
         const date = Date.now().toString();
@@ -139,7 +136,7 @@ const EditBannerForm = (props) => {
       );
       setDesktopImage("");
     } else {
-      setDesktopImageBase64("");
+      setDesktopImage("");
     }
   };
 
@@ -157,7 +154,7 @@ const EditBannerForm = (props) => {
       );
       setMobileImage("");
     } else {
-      setMobileImageBase64("");
+      setMobileImage("");
     }
   };
 
@@ -166,8 +163,8 @@ const EditBannerForm = (props) => {
     if (
       desktopImage !== "" &&
       mobileImage !== "" &&
-      desktopImageBase64 !== "" &&
-      mobileImageBase64 !== "" &&
+      desktopImage !== "" &&
+      mobileImage !== "" &&
       bannerLink !== ""
     ) {
       dispatch(
@@ -175,8 +172,8 @@ const EditBannerForm = (props) => {
           id,
           body: {
             isPublished: checked,
-            mobileImage: mobileImage || mobileImageBase64,
-            desktopImage: desktopImage || desktopImageBase64,
+            mobileImage,
+            desktopImage,
             mobileImageName,
             desktopImageName,
             bannerLink,
