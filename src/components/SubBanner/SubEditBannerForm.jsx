@@ -20,8 +20,8 @@ const SubEditBannerForm = (props) => {
   );
   const [mobileImage, setMobileImage] = useState("");
   const [desktopImage, setDesktopImage] = useState("");
-  const [mobileImageBase64, setMobileImageBase64] = useState("");
-  const [desktopImageBase64, setDesktopImageBase64] = useState("");
+  // const [mobileImageBase64, setMobileImageBase64] = useState("");
+  // const [desktopImageBase64, setDesktopImageBase64] = useState("");
   const [mobileImageName, setMobileImageName] = useState("");
   const [desktopImageName, setDesktopImageName] = useState("");
   const [checked, setChecked] = useState(false);
@@ -101,7 +101,7 @@ const SubEditBannerForm = (props) => {
     reader.onloadend = () => {
       const base64String = reader.result;
       if (screenType === "Desktop") {
-        setDesktopImageBase64(base64String);
+        setDesktopImage(base64String);
         const name = file.name.split(".")[0];
         const extension = file.name.split(".")[1];
         const date = Date.now().toString();
@@ -109,7 +109,7 @@ const SubEditBannerForm = (props) => {
         setDesktopImageName(imageName);
       }
       if (screenType === "Mobile") {
-        setMobileImageBase64(base64String);
+        setMobileImage(base64String);
         const name = file.name.split(".")[0];
         const extension = file.name.split(".")[1];
         const date = Date.now().toString();
@@ -136,7 +136,7 @@ const SubEditBannerForm = (props) => {
       );
       setDesktopImage("");
     } else {
-      setDesktopImageBase64("");
+      setDesktopImage("");
     }
   };
 
@@ -154,7 +154,7 @@ const SubEditBannerForm = (props) => {
       );
       setMobileImage("");
     } else {
-      setMobileImageBase64("");
+      setMobileImage("");
     }
   };
 
@@ -163,8 +163,8 @@ const SubEditBannerForm = (props) => {
     if (
       desktopImage !== "" &&
       mobileImage !== "" &&
-      desktopImageBase64 !== "" &&
-      mobileImageBase64 !== "" &&
+      desktopImage !== "" &&
+      mobileImage !== "" &&
       bannerLink !== ""
     ) {
       dispatch(
@@ -172,8 +172,8 @@ const SubEditBannerForm = (props) => {
           id,
           body: {
             isPublished: checked,
-            mobileImage: mobileImage || mobileImageBase64,
-            desktopImage: desktopImage || desktopImageBase64,
+            mobileImage,
+            desktopImage,
             mobileImageName,
             desktopImageName,
           },
