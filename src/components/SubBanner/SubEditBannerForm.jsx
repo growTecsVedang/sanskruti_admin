@@ -35,6 +35,7 @@ const SubEditBannerForm = (props) => {
         setChecked(item.isPublished);
         setMobileImage(item.mobileImage);
         setDesktopImage(item.desktopImage);
+        setbannerLink(item.bannerLink);
       }
     });
   }, []);
