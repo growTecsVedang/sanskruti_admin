@@ -44,7 +44,6 @@ const Sidebar = () => {
       );
       dispatch(clearIsAuthenticate());
     }
-    window.location.replace("/");
   }
 
   return (

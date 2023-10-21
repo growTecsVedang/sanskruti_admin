@@ -106,6 +106,7 @@ export const logOutUser = createAsyncThunk(
       }
 
       const data = response.data;
+      window.location.replace("/");
 
       // Add this code after successful logout
 
