@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { clearLoadUSer } from "./LoadUserSlice";
 
 export const deleteUser = createAsyncThunk(
   "deleteUser",
@@ -105,6 +106,9 @@ export const logOutUser = createAsyncThunk(
       }
 
       const data = response.data;
+
+      // Add this code after successful logout
+
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data);

@@ -208,6 +208,9 @@ const categorySlice = createSlice({
     clearState: (state) => {
       state.type = "";
     },
+    clearCategory: (state) => {
+      state.initialState = {};
+    },
   },
   extraReducers: (builder) => {
     // addCategory

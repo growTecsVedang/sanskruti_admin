@@ -6,10 +6,12 @@ import { loadUser } from "../Redux/slices/LoadUserSlice";
 import SignInOne from "./SignInOne";
 import Navbar from "./Home/Navbar";
 import Sidebar from "./Home/Sidebar";
+import { useHistory, useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
   const dispatch = useDispatch();
-  const { isAuthenticate, loading, loaduser } = useSelector(
+  const history = useHistory();
+  const { isAuthenticate, loading, loaduser, isLoggedOut } = useSelector(
     (state) => state.loaduser
   );
   function getCookie() {
@@ -25,6 +27,7 @@ const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
     }
     return null; // Cookie not found
   }
+
   useEffect(() => {
     console.log("called");
     dispatch(
@@ -33,27 +36,34 @@ const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
       })
     );
   }, []);
+
+  useEffect(() => {
+    console.log("useeffec");
+    if (loading === false && isAuthenticate === true) {
+      if (isLoggedOut === true) {
+        history.push(`/`);
+      }
+      if (loaduser.username !== undefined) {
+        var currentURL = window.location.href;
+        var url = new URL(currentURL);
+        var path = url.pathname;
+        console.log(path);
+        history.push(`${path}`);
+      }
+    }
+  }, [loaduser, isLoggedOut]);
+  console.log(loading, isAuthenticate);
   return (
     <Fragment>
       <Navbar />
       <div className=" flex w-[full] bg-[#edf2f4] opacity-80  ">
         <Sidebar />
-        {loading === false && isAuthenticate === true ? (
-          <Route
-            {...rest}
-            render={(props) => {
-              if (!isAuthenticate) {
-                return <Redirect to="/" />;
-              } else if (isAdmin === true && loaduser.role === "USER") {
-                return <Redirect to="/" />;
-              } else {
-                return <Component {...props} />;
-              }
-            }}
-          ></Route>
-        ) : (
-          <Route exact path="/" component={SignInOne} />
-        )}
+        <Route
+          {...rest}
+          render={(props) => {
+            return <Component {...props} />;
+          }}
+        ></Route>
       </div>
     </Fragment>
   );

@@ -151,6 +151,9 @@ const bannerSlice = createSlice({
     clearState: (state) => {
       state.type = "";
     },
+    clearBanner: (state) => {
+      state.initialState = {};
+    },
   },
   extraReducers: (builder) => {
     // addBanner

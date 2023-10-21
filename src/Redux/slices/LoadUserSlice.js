@@ -13,15 +13,17 @@ export const loadUser = createAsyncThunk(
           withCredentials: true,
         }
       );
-
+      console.log(response.status);
       if (response.status === 409 || response.status === 404) {
         const payload = response.data;
+        console.log(payload);
         return rejectWithValue(payload);
       }
 
       const data = response.data;
       return data;
     } catch (error) {
+      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -30,31 +32,43 @@ export const loadUser = createAsyncThunk(
 const loadUserSlice = createSlice({
   name: "loadUser",
   initialState: {
+    type: "",
     loaduser: {},
     loading: false,
     isAuthenticate: false,
+    isLoggedOut: false,
   },
   reducers: {
     clearIsAuthenticate: (state) => {
       state.isAuthenticate = false;
       state.loaduser = {};
+      state.isLoggedOut = true;
     },
   },
   extraReducers: (builder) => {
     // loadUser
     builder.addCase(loadUser.pending, (state) => {
       state.loading = true;
+      state.isAuthenticate = true;
+      state.isLoggedOut = false;
     });
     builder.addCase(loadUser.fulfilled, (state, action) => {
       state.loading = false;
       state.type = action.payload.type;
       state.loaduser = action.payload.userTrimmend;
       state.isAuthenticate = action.payload.isAuthenticated;
+      state.isLoggedOut = false;
     });
     builder.addCase(loadUser.rejected, (state, action) => {
-      state.loading = false;
-      state.type = action.payload.type;
-      state.isAuthenticate = action.payload.isAuthenticated;
+      if (action.payload) {
+        state.loading = false;
+        state.isLoggedOut = false;
+        state.type = action.payload.type;
+        state.isAuthenticate = action.payload.isAuthenticated;
+      } else {
+        state.loading = false;
+        state.isLoggedOut = true;
+      }
     });
   },
 });
