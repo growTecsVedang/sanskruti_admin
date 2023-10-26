@@ -19,6 +19,7 @@ import { BiLogOut } from "react-icons/bi";
 import { logOutUser } from "../../Redux/slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { clearIsAuthenticate } from "../../Redux/slices/LoadUserSlice";
 const Navbar = () => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -49,7 +50,7 @@ const Navbar = () => {
           cookie: accessToken,
         })
       );
-      window.location.replace("/");
+      dispatch(clearIsAuthenticate());
     }
   }
 
