@@ -10,8 +10,10 @@ import {
   deleteBannerImage,
 } from "../../Redux/slices/BannerSlice";
 import { ReactDropZone } from "./BannerForm";
+import axios from "axios";
 const MAX_SIZE = 400 * 1024;
 const EditBannerForm = (props) => {
+  const notify = (arg) => toast(`${arg}`);
   const fileInputRef = useRef("");
   const dispatch = useDispatch();
   const { message, type, banners, loading } = useSelector(
@@ -28,15 +30,22 @@ const EditBannerForm = (props) => {
   const [bannerLink, setbannerLink] = useState("");
 
   useEffect(() => {
-    banners.forEach((item) => {
-      if (item._id === props.match.params.id) {
-        setId(item._id);
-        setChecked(item.isPublished);
-        setMobileImage(item.mobileImage);
-        setDesktopImage(item.desktopImage);
-        setbannerLink(item.bannerLink);
-      }
-    });
+    axios
+      .get(
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/user/getAllBanners/${props.match.params.id}`
+      )
+      .then((res) => {
+        const response = res.data.banner;
+        setId(response._id);
+        setChecked(response.isPublished);
+        setMobileImage(response.mobileImage);
+        setDesktopImage(response.desktopImage);
+        setbannerLink(response.bannerLink);
+      })
+      .catch((err) => {
+        const response = err.response.data;
+        notify(response.message);
+      });
   }, []);
 
   useEffect(() => {
