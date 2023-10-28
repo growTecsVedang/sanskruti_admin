@@ -17,6 +17,20 @@ const AttributeForm = () => {
   const varientSubmitHandler = (e) => {
     e.preventDefault();
 
+    if (varientName.trim() !== "") {
+      var noDuplicate = false;
+      arr.forEach((i) => {
+        if (i === varientName.trim().toLowerCase()) {
+          noDuplicate = true;
+        }
+      });
+      if (noDuplicate === false) {
+        arr.push(varientName.trim().toLowerCase());
+        setArr(arr);
+        setVarientName("");
+      }
+    }
+
     if (title !== "" && arr.length !== 0) {
       dispatch(
         addVarient({
@@ -54,7 +68,7 @@ const AttributeForm = () => {
   }
 
   function addAttribute() {
-    if (varientName !== "") {
+    if (varientName.trim() !== "") {
       var noDuplicate = false;
       arr.forEach((i) => {
         if (i === varientName.trim().toLowerCase()) {
