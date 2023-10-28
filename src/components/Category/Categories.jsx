@@ -144,6 +144,7 @@ const Categories = () => {
         id: item._id,
         Category: item.Title,
         Created_At: item.created_at,
+        Image: item.Image,
       });
     });
 
