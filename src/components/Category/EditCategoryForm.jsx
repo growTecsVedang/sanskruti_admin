@@ -9,8 +9,10 @@ import {
   clearState,
 } from "../../Redux/slices/CategorySlice";
 import { toast } from "react-toastify";
+import axios from "axios";
 const MAX_SIZE = 400 * 1024;
 const EditCategoryForm = (props) => {
+  const notify = (arg) => toast(`${arg}`);
   const { categories, message, type } = useSelector(
     (state) => state.categories
   );
@@ -25,16 +27,33 @@ const EditCategoryForm = (props) => {
   const [imageName, setImageName] = useState("");
 
   useEffect(() => {
-    categories.forEach((item) => {
-      if (item._id === props.match.params.id) {
-        setId(item._id);
-        setTitle(item.Title);
-        setPath(item.Image);
-        setMeta_Title(item.Meta_Title);
-        setMeta_Description(item.Meta_Description);
-        setImage(item.Image);
-      }
-    });
+    // categories.forEach((item) => {
+    //   if (item._id === props.match.params.id) {
+    //     setId(item._id);
+    //     setTitle(item.Title);
+    //     setPath(item.Image);
+    //     setMeta_Title(item.Meta_Title);
+    //     setMeta_Description(item.Meta_Description);
+    //     setImage(item.Image);
+    //   }
+    // });
+    axios
+      .get(
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/user/categories/${props.match.params.id}`
+      )
+      .then((res) => {
+        const responce = res.data.category;
+        setId(responce._id);
+        setTitle(responce.Title);
+        setPath(responce.Image);
+        setMeta_Title(responce.Meta_Title);
+        setMeta_Description(responce.Meta_Description);
+        setImage(responce.Image);
+      })
+      .catch((err) => {
+        const response = err.response.data;
+        notify(response.message);
+      });
   }, [categories, props]);
 
   const handleFileChange = (e) => {
