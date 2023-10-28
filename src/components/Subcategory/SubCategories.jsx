@@ -73,8 +73,6 @@ const SubCategories = () => {
   }, [dispatch, type, message]);
 
   const columns = [
-    { field: "id", headerName: "Category ID", minWidth: 200, flex: 0.5 },
-
     {
       field: "Title",
       headerName: "Sub Category",
