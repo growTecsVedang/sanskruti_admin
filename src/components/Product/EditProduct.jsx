@@ -129,10 +129,10 @@ const EditProduct = (props) => {
             imageName: imageName,
           });
         };
-        if (file.size > MAX_SIZE) {
-          alert("file size exceeded");
-          return;
-        }
+        // if (file.size > MAX_SIZE) {
+        //   alert("file size exceeded");
+        //   return;
+        // }
 
         reader.readAsDataURL(file);
       });

@@ -7,6 +7,7 @@ import {
   logInUserWithEmailOrNumber,
 } from "../Redux/slices/UserSlice";
 import { Input } from "./common/Input";
+import { loadUser } from "../Redux/slices/LoadUserSlice";
 
 const SignInOne = () => {
   const [password, setPassword] = useState("");
@@ -16,7 +17,7 @@ const SignInOne = () => {
   const { message, type, isAuthenticated, role } = useSelector(
     (state) => state.user
   );
-  const { loaduser, loading, isAuthenticate } = useSelector(
+  const { loaduser, loading, isAuthenticate, isLoggedOut } = useSelector(
     (state) => state.loaduser
   );
   const dispatch = useDispatch();
@@ -73,6 +74,32 @@ const SignInOne = () => {
       }
     }
   }, [dispatch, type, message, history, isAuthenticate]);
+
+  useEffect(() => {
+    console.log("called");
+    dispatch(
+      loadUser({
+        cookie: getCookie(),
+      })
+    );
+  }, []);
+  console.log(loaduser, isAuthenticate);
+
+  useEffect(() => {
+    console.log("called");
+    dispatch(
+      loadUser({
+        cookie: getCookie(),
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    if (loaduser.username !== undefined && isLoggedOut === false) {
+      history.push(redirect);
+    }
+  }, [loaduser]);
+
   return (
     <main className="flex relative items-center justify-center isolate w-full h-screen">
       <div className="w-[50vw] -z-10 h-[50vh] absolute bottom-0 right-0 bg-gradient-to-br from-white from-50% via-orange-50 to-orange-200"></div>

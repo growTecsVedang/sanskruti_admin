@@ -66,6 +66,9 @@ const markdownSlice = createSlice({
     clearState: (state) => {
       state.type = "";
     },
+    clearMD: (state) => {
+      state.initialState = {};
+    },
   },
   extraReducers: (builder) => {
     // markdownDetails

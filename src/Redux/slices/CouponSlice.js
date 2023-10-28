@@ -121,6 +121,9 @@ const couponSlice = createSlice({
     clearState: (state) => {
       state.type = "";
     },
+    clearCoupon: (state) => {
+      state.initialState = {};
+    },
   },
   extraReducers: (builder) => {
     // addCoupon

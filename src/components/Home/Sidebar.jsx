@@ -11,6 +11,9 @@ import { HiCurrencyRupee, HiOutlineClipboardList } from "react-icons/hi";
 import { BiLogOut } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../Redux/slices/UserSlice";
+import { Redirect } from "react-router-dom";
+import store from "../../Redux/store";
+import { clearIsAuthenticate } from "../../Redux/slices/LoadUserSlice";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -39,7 +42,7 @@ const Sidebar = () => {
           cookie: accessToken,
         })
       );
-      window.location.replace("/");
+      dispatch(clearIsAuthenticate());
     }
   }
 

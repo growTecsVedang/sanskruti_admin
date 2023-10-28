@@ -266,6 +266,9 @@ const configurationSlice = createSlice({
     clearState: (state) => {
       state.type = "";
     },
+    clearConfig: (state) => {
+      state.initialState = {};
+    },
   },
   extraReducers: (builder) => {
     // addCategory
