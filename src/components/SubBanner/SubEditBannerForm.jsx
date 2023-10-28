@@ -10,9 +10,11 @@ import {
   deleteSubBannerImage,
 } from "../../Redux/slices/SubBannerSlice";
 import { ReactDropZone } from "../Banner/BannerForm";
+import axios from "axios";
 
 const MAX_SIZE = 400 * 1024;
 const SubEditBannerForm = (props) => {
+  const notify = (arg) => toast(`${arg}`);
   const fileInputRef = useRef("");
   const dispatch = useDispatch();
   const { message, type, subBanners, loading } = useSelector(
@@ -29,15 +31,22 @@ const SubEditBannerForm = (props) => {
   const [bannerLink, setbannerLink] = useState("");
 
   useEffect(() => {
-    subBanners.forEach((item) => {
-      if (item._id === props.match.params.id) {
-        setId(item._id);
-        setChecked(item.isPublished);
-        setMobileImage(item.mobileImage);
-        setDesktopImage(item.desktopImage);
-        setbannerLink(item.bannerLink);
-      }
-    });
+    axios
+      .get(
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/user/getAllSubBanners/${props.match.params.id}`
+      )
+      .then((res) => {
+        const response = res.data.subBanner;
+        setId(response._id);
+        setChecked(response.isPublished);
+        setMobileImage(response.mobileImage);
+        setDesktopImage(response.desktopImage);
+        setbannerLink(response.bannerLink);
+      })
+      .catch((err) => {
+        const response = err.response.data;
+        notify(response.message);
+      });
   }, []);
 
   useEffect(() => {

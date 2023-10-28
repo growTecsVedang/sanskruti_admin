@@ -55,25 +55,6 @@ const Banner = () => {
   }
 
   useEffect(() => {
-    const notify = (arg) => toast(`${arg}`);
-    if (message && type) {
-      if (type === "success") {
-        notify(message);
-        dispatch(clearState());
-      } else {
-        notify(message);
-        dispatch(clearState());
-      }
-    }
-    const cookie = getCookie();
-    dispatch(
-      loadAllBanners({
-        cookie,
-      })
-    );
-  }, [dispatch, type, message]);
-
-  useEffect(() => {
     const cookie = getCookie();
     dispatch(
       loadAllBanners({
@@ -83,15 +64,47 @@ const Banner = () => {
   }, []);
 
   const columns = [
-    { field: "id", headerName: "id", minWidth: 200, flex: 0.5 },
-
     {
       field: "image",
-      headerName: "Image",
+      headerName: "Desktop Image",
       minWidth: 380,
       flex: 0.7,
       headerClassName: "center-align",
-      renderCell: renderImageCell,
+      renderCell: (params) => {
+        const imageUrl = params.row.desktopImage;
+        console.log(params);
+
+        return (
+          <img
+            src={imageUrl}
+            alt="Avatar"
+            style={{
+              width: "100%",
+              height: "auto",
+              padding: "8px",
+              margin: "10px",
+            }}
+          />
+        );
+      },
+    },
+    {
+      field: "mobileimage",
+      headerName: "Mobile Image",
+      minWidth: 100,
+      flex: 0.7,
+      renderCell: (params) => {
+        const imageUrl = params.row.mobileImage;
+        console.log(params);
+
+        return (
+          <img
+            src={imageUrl}
+            alt="Avatar"
+            className="object-contain w-full h-full"
+          />
+        );
+      },
     },
 
     {
@@ -123,24 +136,6 @@ const Banner = () => {
     },
   ];
   const rows = [];
-
-  function renderImageCell(params) {
-    const imageUrl = params.value;
-    console.log(params);
-
-    return (
-      <img
-        src={imageUrl}
-        alt="Avatar"
-        style={{
-          width: "100%",
-          height: "auto",
-          padding: "8px",
-          margin: "10px",
-        }}
-      />
-    );
-  }
   // Adjust the row gap value as desired
 
   banners &&
@@ -148,7 +143,8 @@ const Banner = () => {
       rows.push({
         id: item._id,
         isPublished: item.isPublished === true ? "YES" : "NO",
-        image: item.desktopImage,
+        desktopImage: item.desktopImage,
+        mobileImage: item.mobileImage,
       });
     });
 
@@ -178,7 +174,6 @@ const Banner = () => {
             Add
           </Link>
         </div>
-        <p className="mx-[10%] lg:mx-[1%] my-3">Showing Results 53</p>
       </div>
 
       <DataGrid
