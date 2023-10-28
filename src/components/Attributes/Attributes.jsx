@@ -72,8 +72,6 @@ const Attributes = () => {
   }, [dispatch, type, message]);
 
   const columns = [
-    { field: "id", headerName: "ID", minWidth: 200, flex: 0.5 },
-
     {
       field: "name",
       headerName: "Varient Name",

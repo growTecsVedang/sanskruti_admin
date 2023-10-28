@@ -5,8 +5,10 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { clearState, updateVarient } from "../../Redux/slices/VarientSlice";
+import axios from "axios";
 
 const EditAttributeForm = (props) => {
+  const notify = (arg) => toast(`${arg}`);
   const [title, setTitle] = useState("");
   const [id, setId] = useState("");
   const { varients, message, type } = useSelector((state) => state.varients);
@@ -18,18 +20,38 @@ const EditAttributeForm = (props) => {
   useEffect(() => {}, [varients, props]);
 
   useEffect(() => {
-    varients.forEach((item) => {
-      if (item._id === props.match.params.id) {
-        setId(item._id);
-        setTitle(item.varientName);
-        setDuplicateArray(item.value);
-        setArr(item.value);
-      }
-    });
+    axios
+      .get(
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/user/getVarients/${props.match.params.id}`
+      )
+      .then((res) => {
+        const responce = res.data.varient;
+        setId(responce._id);
+        setTitle(responce.varientName);
+        setArr(responce.value);
+      })
+      .catch((err) => {
+        const response = err.response.data;
+        notify(response.message);
+      });
   }, []);
 
   const varientSubmitHandler = (e) => {
     e.preventDefault();
+
+    if (varientName.trim() !== "") {
+      var noDuplicate = false;
+      arr.forEach((i) => {
+        if (i === varientName.trim().toLowerCase()) {
+          noDuplicate = true;
+        }
+      });
+      if (noDuplicate === false) {
+        arr.push(varientName.trim().toLowerCase());
+        setArr(arr);
+        setVarientName("");
+      }
+    }
 
     if (title !== "" && arr.length !== 0) {
       dispatch(
@@ -66,7 +88,7 @@ const EditAttributeForm = (props) => {
   }
 
   function addAttribute() {
-    if (varientName !== "") {
+    if (varientName.trim() !== "") {
       var noDuplicate = false;
       arr.forEach((i) => {
         if (i === varientName.trim().toLowerCase()) {

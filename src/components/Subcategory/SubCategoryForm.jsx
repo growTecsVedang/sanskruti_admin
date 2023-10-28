@@ -10,6 +10,7 @@ import {
 } from "../../Redux/slices/SubCategorySlice";
 
 const SubCategoryForm = () => {
+  const notify = (arg) => toast(`${arg}`);
   const { categories } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -64,7 +65,8 @@ const SubCategoryForm = () => {
     if (
       Title.trim() !== "" &&
       Meta_Description.trim() !== "" &&
-      Meta_Title.trim() !== ""
+      Meta_Title.trim() !== "" &&
+      Category.trim() !== ""
     ) {
       const accessToken = getCookie();
       dispatch(
@@ -79,6 +81,8 @@ const SubCategoryForm = () => {
       setTitle("");
       setMeta_Title("");
       setMeta_Description("");
+    } else {
+      notify("fill all details");
     }
   };
 

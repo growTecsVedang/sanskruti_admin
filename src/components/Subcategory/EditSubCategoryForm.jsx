@@ -8,8 +8,10 @@ import {
   clearState,
   updateSubCategory,
 } from "../../Redux/slices/SubCategorySlice";
+import axios from "axios";
 
 const EditSubCategoryForm = (props) => {
+  const notify = (arg) => toast(`${arg}`);
   const { categories } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -34,9 +36,6 @@ const EditSubCategoryForm = (props) => {
     );
   }, [dispatch]);
 
-  const { subCategories, message, type } = useSelector(
-    (state) => state.subcategories
-  );
   const [Title, setTitle] = useState("");
   const [Meta_Title, setMeta_Title] = useState("");
   const [Meta_Description, setMeta_Description] = useState("");
@@ -44,16 +43,23 @@ const EditSubCategoryForm = (props) => {
   const [id, setId] = useState("");
 
   useEffect(() => {
-    subCategories.forEach((item) => {
-      if (item._id === props.match.params.id) {
-        setId(item._id);
-        setTitle(item.Title);
-        setCategory(item.Category);
-        setMeta_Title(item.Meta_Title);
-        setMeta_Description(item.Meta_Description);
-      }
-    });
-  }, [subCategories, props]);
+    axios
+      .get(
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/user/subcategories/${props.match.params.id}`
+      )
+      .then((res) => {
+        const responce = res.data.subCategory;
+        setId(responce._id);
+        setTitle(responce.Title);
+        setMeta_Title(responce.Meta_Title);
+        setCategory(responce.Category);
+        setMeta_Description(responce.Meta_Description);
+      })
+      .catch((err) => {
+        const response = err.response.data;
+        notify(response.message);
+      });
+  }, [props]);
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
@@ -65,7 +71,8 @@ const EditSubCategoryForm = (props) => {
     if (
       Title.trim() !== "" &&
       Meta_Description.trim() !== "" &&
-      Meta_Title.trim() !== ""
+      Meta_Title.trim() !== "" &&
+      Category.trim() !== ""
     ) {
       dispatch(
         updateSubCategory({
@@ -78,21 +85,10 @@ const EditSubCategoryForm = (props) => {
           },
         })
       );
+    } else {
+      notify("fill all details");
     }
   };
-
-  useEffect(() => {
-    const notify = (arg) => toast(`${arg}`);
-    if (message && type) {
-      if (type === "success") {
-        notify(message);
-        dispatch(clearState());
-      } else {
-        notify(message);
-        dispatch(clearState());
-      }
-    }
-  }, [dispatch, type, message]);
 
   return (
     <div className=" flex flex-col overflow-y-scroll   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">

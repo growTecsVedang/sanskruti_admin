@@ -75,7 +75,23 @@ const Categories = () => {
   }, [dispatch, type, message]);
 
   const columns = [
-    { field: "id", headerName: "Category ID", minWidth: 200, flex: 0.5 },
+    {
+      field: "Image",
+      headerName: "Image",
+      minWidth: 200,
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <Fragment>
+            <img
+              src={params.row.Image}
+              alt={params.row.Category}
+              className="object-contain"
+            />
+          </Fragment>
+        );
+      },
+    },
 
     {
       field: "Category",
@@ -128,6 +144,7 @@ const Categories = () => {
         id: item._id,
         Category: item.Title,
         Created_At: item.created_at,
+        Image: item.Image,
       });
     });
 
@@ -161,7 +178,7 @@ const Categories = () => {
         columns={columns}
         disableSelectionOnClick
         className="productListTable"
-        rowHeight={60}
+        rowHeight={300}
         loading={loading}
         initialState={{
           pagination: {
