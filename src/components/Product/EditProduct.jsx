@@ -14,6 +14,7 @@ import {
   generateResponse,
   takeObj,
 } from "../../helper/combinations";
+import axios from "axios";
 const MAX_SIZE = 400 * 1024;
 const EditProduct = (props) => {
   const dispatch = useDispatch();
@@ -189,34 +190,47 @@ const EditProduct = (props) => {
   };
 
   useEffect(() => {
-    products.forEach((item) => {
-      if (item._id === props.match.params.id) {
+    axios
+      .get(
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/user/product/${props.match.params.id}`
+      )
+      .then((responce) => {
+        const { product } = responce.data;
         setValues({
-          id: item._id,
-          name: item.name,
-          description: item.description,
-          gst_percent: item.gst_percent,
-          brand_name: item.brand_name,
-          is_featured: item.is_featured,
-          is_new_arrival: item.is_new_arrival,
-          is_best_seller: item.is_best_seller,
-          varients: item.varients,
-          meta_tittle: item.meta_tittle,
-          meta_description: item.meta_description,
-          meta_keyword: item.meta_keyword,
+          id: product._id,
+          name: product.name,
+          description: product.description,
+          gst_percent: product.gst_percent,
+          brand_name: product.brand_name,
+          is_featured: product.is_featured,
+          is_new_arrival: product.is_new_arrival,
+          is_best_seller: product.is_best_seller,
+          varients: product.varients,
+          meta_tittle: product.meta_tittle,
+          meta_description: product.meta_description,
+          meta_keyword: product.meta_keyword,
         });
-        const array = item.images.map((i) => {
+        const array = product.images.map((i) => {
           const obj = {
             image: i,
             imageName: "",
           };
           return obj;
         });
+        setAtr(product.varients.attributes);
+        setRes(
+          product.varients.variations.map((varient) => ({
+            combinationString: varient.combinationString,
+            quantity: varient.quantity,
+            price: varient.price,
+            discount: varient.discount,
+          }))
+        );
+
         setImagePreview(array);
-        setMainCategory(item.MainCategory);
-        setSubCategory(item.SubCategory);
-      }
-    });
+        setMainCategory(product.MainCategory);
+        setSubCategory(product.SubCategory);
+      });
     setDuplicateCategory(categories);
     setDuplicateSubCategory(subCategories);
 
@@ -288,7 +302,6 @@ const EditProduct = (props) => {
 
   const handleChangeDiscount = (event) => {
     const { name } = event.target;
-    console.log(name);
     const newInputValues = [...res];
     newInputValues[name].discount = Number(event.target.value);
     setRes(newInputValues);
@@ -304,7 +317,6 @@ const EditProduct = (props) => {
     //const name = e.target.name
     //const value = e.target.value
     const { name, value } = e.target;
-    console.log(typeof value);
     if (
       name === "is_featured" ||
       name === "is_best_seller" ||
@@ -380,8 +392,6 @@ const EditProduct = (props) => {
     }
   }, [dispatch, type, message]);
 
-  console.log(values.varients);
-  console.log(res);
   return (
     <div className=" flex flex-col overflow-y-scroll overflow-x-hidden   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">
       <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
@@ -769,12 +779,14 @@ const EditProduct = (props) => {
                         <input
                           type="number"
                           key={key}
+                          defaultValue={item.quantity}
                           onChange={(event) => handleChangeQuantity(key, event)}
                           className="sm:mr-5 border-2 text-center w-[70px] mr-2 sm:w-[80px] border-black   "
                         />
                         <input
                           type="number"
                           name={key}
+                          defaultValue={item.discount}
                           onChange={(event) => handleChangeDiscount(event)}
                           className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
                         />
@@ -782,6 +794,7 @@ const EditProduct = (props) => {
                           type="number"
                           name={key}
                           placeholder=""
+                          defaultValue={item.price}
                           onChange={(event) => handleChangePrice(event)}
                           className="sm:mr-5 w-[70px] text-center  mr-2  sm:w-[80px] border-black border-2 "
                         />

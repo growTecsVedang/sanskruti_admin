@@ -11,6 +11,7 @@ import {
 } from "../../Redux/slices/BannerSlice";
 import { ReactDropZone } from "./BannerForm";
 import axios from "axios";
+import LoadingPage from "../common/loading";
 const MAX_SIZE = 400 * 1024;
 const EditBannerForm = (props) => {
   const notify = (arg) => toast(`${arg}`);
@@ -29,6 +30,8 @@ const EditBannerForm = (props) => {
   const [id, setId] = useState(null);
   const [bannerLink, setbannerLink] = useState("");
 
+  const [loadingState, setLoadingState] = useState(true);
+
   useEffect(() => {
     axios
       .get(
@@ -41,10 +44,12 @@ const EditBannerForm = (props) => {
         setMobileImage(response.mobileImage);
         setDesktopImage(response.desktopImage);
         setbannerLink(response.bannerLink);
+        setLoadingState(false);
       })
       .catch((err) => {
         const response = err.response.data;
         notify(response.message);
+        setLoadingState(false);
       });
   }, []);
 
@@ -193,7 +198,9 @@ const EditBannerForm = (props) => {
     }
   };
 
-  return (
+  return loadingState ? (
+    <LoadingPage />
+  ) : (
     <main className="overflow-y-auto w-full p-5 overflow-x-hidden h-[89vh]">
       <div className="flex flex-col p-5 gap-6 rounded-md bg-white">
         <h1 className="text-xl font-semibold">Edit Banner</h1>

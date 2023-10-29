@@ -9,6 +9,7 @@ import {
   updateSubCategory,
 } from "../../Redux/slices/SubCategorySlice";
 import axios from "axios";
+import LoadingPage from "../common/loading";
 
 const EditSubCategoryForm = (props) => {
   const notify = (arg) => toast(`${arg}`);
@@ -41,6 +42,7 @@ const EditSubCategoryForm = (props) => {
   const [Meta_Description, setMeta_Description] = useState("");
   const [Category, setCategory] = useState("");
   const [id, setId] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -54,10 +56,12 @@ const EditSubCategoryForm = (props) => {
         setMeta_Title(responce.Meta_Title);
         setCategory(responce.Category);
         setMeta_Description(responce.Meta_Description);
+        setLoading(false);
       })
       .catch((err) => {
         const response = err.response.data;
         notify(response.message);
+        setLoading(false);
       });
   }, [props]);
 
@@ -90,7 +94,9 @@ const EditSubCategoryForm = (props) => {
     }
   };
 
-  return (
+  return loading ? (
+    <LoadingPage />
+  ) : (
     <div className=" flex flex-col overflow-y-scroll   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">
       <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
         <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">

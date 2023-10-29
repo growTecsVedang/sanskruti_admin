@@ -10,6 +10,7 @@ import {
 } from "../../Redux/slices/CategorySlice";
 import { toast } from "react-toastify";
 import axios from "axios";
+import LoadingPage from "../common/loading";
 const MAX_SIZE = 400 * 1024;
 const EditCategoryForm = (props) => {
   const notify = (arg) => toast(`${arg}`);
@@ -26,17 +27,9 @@ const EditCategoryForm = (props) => {
   const [image, setImage] = useState("");
   const [imageName, setImageName] = useState("");
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    // categories.forEach((item) => {
-    //   if (item._id === props.match.params.id) {
-    //     setId(item._id);
-    //     setTitle(item.Title);
-    //     setPath(item.Image);
-    //     setMeta_Title(item.Meta_Title);
-    //     setMeta_Description(item.Meta_Description);
-    //     setImage(item.Image);
-    //   }
-    // });
     axios
       .get(
         `${process.env.REACT_APP_ENDPOINT}/api/v1/user/categories/${props.match.params.id}`
@@ -49,10 +42,12 @@ const EditCategoryForm = (props) => {
         setMeta_Title(responce.Meta_Title);
         setMeta_Description(responce.Meta_Description);
         setImage(responce.Image);
+        setLoading(false);
       })
       .catch((err) => {
         const response = err.response.data;
         notify(response.message);
+        setLoading(false);
       });
   }, [categories, props]);
 
@@ -140,7 +135,9 @@ const EditCategoryForm = (props) => {
     }
   }, [dispatch, type, message]);
 
-  return (
+  return loading ? (
+    <LoadingPage />
+  ) : (
     <div className=" flex flex-col overflow-y-scroll   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">
       <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
         <h1 className="text-black lg:text-3xl text-2xl   pl-4 ">
