@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { clearState, updateVarient } from "../../Redux/slices/VarientSlice";
 import axios from "axios";
+import LoadingPage from "../common/loading";
 
 const EditAttributeForm = (props) => {
   const notify = (arg) => toast(`${arg}`);
@@ -15,9 +16,8 @@ const EditAttributeForm = (props) => {
   const [varientName, setVarientName] = useState("");
   const [arr, setArr] = useState([]);
   const [duplicateArray, setDuplicateArray] = useState([]);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-
-  useEffect(() => {}, [varients, props]);
 
   useEffect(() => {
     axios
@@ -29,10 +29,12 @@ const EditAttributeForm = (props) => {
         setId(responce._id);
         setTitle(responce.varientName);
         setArr(responce.value);
+        setLoading(false);
       })
       .catch((err) => {
         const response = err.response.data;
         notify(response.message);
+        setLoading(false);
       });
   }, []);
 
@@ -101,14 +103,16 @@ const EditAttributeForm = (props) => {
       }
     }
   }
-  return (
-    <div className="w-full ">
-      <div className="w-[97%] mx-auto mt-5  min-h-[50px] bg-white  rounded-md flex flex-col     shadow-md ">
+  return loading ? (
+    <LoadingPage />
+  ) : (
+    <div className="w-full p-5">
+      <div className="w-full mx-auto min-h-[50px] bg-white  rounded-md flex flex-col shadow-md">
         <h1 className="text-xl h-[50px] flex  items-center pl-3 font-semibold ">
           Attribute Form
         </h1>
       </div>
-      <div className="w-[97%] mx-auto mt-1  min-h-[300px] bg-white  rounded-md flex flex-col    shadow-md ">
+      <div className="w-full mx-auto mt-1  min-h-[300px] bg-white  rounded-md flex flex-col    shadow-md ">
         <form onSubmit={varientSubmitHandler}>
           <div className="flex flex-col w-[95%] h-full mx-auto mt-6 ">
             <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
