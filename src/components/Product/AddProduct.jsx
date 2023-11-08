@@ -77,12 +77,12 @@ const AddProductPage = () => {
     setVariationData((varientions) => {
       for (const parent of varientions) {
         if (parent.name === parentName) {
-          for (const child of parent.children) {
+          for (const child of parent.childern) {
             if (child.value === childValue) {
               child.state = state;
             }
           }
-          parent.state = parent.children.every((child) => child.state === true);
+          parent.state = parent.childern.every((child) => child.state === true);
         }
       }
 
@@ -94,7 +94,7 @@ const AddProductPage = () => {
     setVariationData((varientions) => {
       for (const parent of varientions) {
         if (parent.name === parentName) {
-          for (const child of parent.children) {
+          for (const child of parent.childern) {
             child.state = state;
           }
           parent.state = state;
@@ -531,7 +531,7 @@ const AddProductPage = () => {
                   </div>
                 </td>
                 <td className="flex flex-wrap w-full gap-3">
-                  {variant.children.map((child, index) => (
+                  {variant.childern.map((child, index) => (
                     <div
                       key={child.value + index}
                       className="flex items-center gap-2 [&>*]:cursor-pointer"
