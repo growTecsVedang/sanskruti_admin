@@ -42,6 +42,15 @@ const EditProductPage = (props) => {
     (subcat) => subcat.Category === MainCategory
   );
 
+  const foundInCategory =
+    MainCategory !== "" &&
+    categories.find((category) => category.Title === MainCategory);
+  const foundInSubCategory =
+    SubCategory !== "" &&
+    subCategoriesForSelectedCategory.find(
+      (category) => category.Title === SubCategory
+    );
+
   // checkbox
   const [is_featured, setIs_featured] = useState(false);
   const [is_new_arrival, setis_new_arrival] = useState(false);
@@ -65,12 +74,18 @@ const EditProductPage = (props) => {
   // Variations
   // -------------------------------------------------------------------------
   const [VariationData, setVariationData] = useState([]);
+  const [fetchedVariationData, setFetchedVariationData] = useState(false);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_ENDPOINT}/api/v1/user/getVarients`)
       .then((res) => {
         const formatedVarient = getVerientsFormated(res.data.varients);
         setVariationData(formatedVarient);
+        setFetchedVariationData(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setFetchedVariationData(true);
       });
   }, []);
 
@@ -78,12 +93,12 @@ const EditProductPage = (props) => {
     setVariationData((varientions) => {
       for (const parent of varientions) {
         if (parent.name === parentName) {
-          for (const child of parent.children) {
+          for (const child of parent.childern) {
             if (child.value === childValue) {
               child.state = state;
             }
           }
-          parent.state = parent.children.every((child) => child.state === true);
+          parent.state = parent.childern.every((child) => child.state === true);
         }
       }
 
@@ -95,7 +110,7 @@ const EditProductPage = (props) => {
     setVariationData((varientions) => {
       for (const parent of varientions) {
         if (parent.name === parentName) {
-          for (const child of parent.children) {
+          for (const child of parent.childern) {
             child.state = state;
           }
           parent.state = state;
@@ -114,21 +129,22 @@ const EditProductPage = (props) => {
     const newVariationInputs =
       generateProductVariationCombination(VariationData);
 
-    // compare with previous values
-    VaraitionInputs.map((variantInputObject) => {
-      for (const newVariantInputObject of newVariationInputs) {
-        if (
-          variantInputObject[0].includes(newVariantInputObject[0]) ||
-          newVariantInputObject[0].includes(variantInputObject[0])
-        ) {
-          newVariantInputObject[1].quantity = variantInputObject[1].quantity;
-          newVariantInputObject[1].discount = variantInputObject[1].discount;
-          newVariantInputObject[1].price = variantInputObject[1].price;
+    setVaraitionInputs((variationInputs) => {
+      // compare with previous values
+      variationInputs.map((variantInputObject) => {
+        for (const newVariantInputObject of newVariationInputs) {
+          if (
+            variantInputObject[0].includes(newVariantInputObject[0]) ||
+            newVariantInputObject[0].includes(variantInputObject[0])
+          ) {
+            newVariantInputObject[1].quantity = variantInputObject[1].quantity;
+            newVariantInputObject[1].discount = variantInputObject[1].discount;
+            newVariantInputObject[1].price = variantInputObject[1].price;
+          }
         }
-      }
+      });
+      return newVariationInputs;
     });
-
-    setVaraitionInputs(newVariationInputs);
   }, [VariationData]);
 
   const handleVariationInputOnChange = (
@@ -320,6 +336,7 @@ const EditProductPage = (props) => {
   // Fetch Product Data
   // -------------------------------------------------------------------------
   useEffect(() => {
+    if (!fetchedVariationData) return;
     axios
       .get(
         `${process.env.REACT_APP_ENDPOINT}/api/v1/user/product/${props.match.params.id}`
@@ -344,24 +361,42 @@ const EditProductPage = (props) => {
 
         setGst_percent(product.gst_percent.toString());
 
-        const formatedVariationData = VariationData.length
-          ? VariationData.map((parent) => {
-              for (const parentInResponse of product.varients.attributes) {
-                if (parent.name === parentInResponse.name) {
-                  parent.state = parentInResponse.state;
+        const onlyTrueVariationDataChild = product.varients.attributes.map(
+          (parent) => {
+            const childern = parent.childern?.filter(
+              (child) => child.state === true
+            );
+            return { ...parent, childern };
+          }
+        );
+        console.log(onlyTrueVariationDataChild);
+        const onlyTrueVariationData = onlyTrueVariationDataChild.filter(
+          (parent) => parent.childern?.length
+        );
+        console.log(onlyTrueVariationData);
 
-                  for (const child of parent.children) {
-                    for (const childInResponse of parentInResponse.children) {
-                      if (child.name === childInResponse.name) {
-                        child.state = childInResponse.state;
-                      }
-                    }
-                  }
-                }
+        const formatedVariationData = new Object(VariationData);
+        onlyTrueVariationData.forEach((parent) => {
+          const findParentInState = formatedVariationData.find(
+            (parentInState) => parentInState.name === parent.name
+          );
+          if (findParentInState) {
+            parent.childern.forEach((child) => {
+              const findChildInParentInState = findParentInState.childern.find(
+                (childInState) => childInState.value === child.value
+              );
+              if (findChildInParentInState) {
+                findChildInParentInState.state = child.state;
+              } else {
+                // if child not found push child
+                findParentInState.childern.push(child);
               }
-              return parent;
-            })
-          : product.varients.attributes;
+            });
+          } else {
+            // if parent not found push parent
+            formatedVariationData.push(parent);
+          }
+        });
         setVariationData(formatedVariationData);
 
         const formatedVariationInput = product.varients.variations.map(
@@ -383,7 +418,7 @@ const EditProductPage = (props) => {
       .catch((err) => {
         notify(err?.response?.data?.message);
       });
-  }, [location]);
+  }, [location, fetchedVariationData]);
 
   return (
     <main className="w-full flex max-h-[89vh] overflow-y-auto flex-col gap-9 h-full p-5 pb-12 bg-white">
@@ -487,7 +522,11 @@ const EditProductPage = (props) => {
 
           <div className="flex gap-3 max-sm:flex-col mt-4">
             <Dropdown
-              options={categories.map((cat) => cat.Title)}
+              options={
+                foundInCategory
+                  ? categories.map((cat) => cat.Title)
+                  : categories.map((cat) => cat.Title).concat(MainCategory)
+              }
               placeholder="Main Category"
               value={MainCategory}
               setValue={(value) => {
@@ -497,7 +536,13 @@ const EditProductPage = (props) => {
             />
 
             <Dropdown
-              options={subCategoriesForSelectedCategory.map((cat) => cat.Title)}
+              options={
+                foundInSubCategory
+                  ? subCategoriesForSelectedCategory.map((cat) => cat.Title)
+                  : subCategoriesForSelectedCategory
+                      .map((cat) => cat.Title)
+                      .concat(SubCategory)
+              }
               placeholder="Sub Category"
               value={SubCategory}
               setValue={setSubCategory}
@@ -608,32 +653,34 @@ const EditProductPage = (props) => {
                       </div>
                     </td>
                     <td className="flex flex-wrap w-full gap-3">
-                      {variant.children?.length
-                        ? variant.children.map((child, index) => (
-                            <div
-                              key={child.value + index}
-                              className="flex items-center gap-2 [&>*]:cursor-pointer"
-                            >
-                              <label htmlFor={child.value + index}>
-                                {child.value}
-                              </label>
-                              <input
-                                id={child.value + index}
-                                type="checkbox"
-                                className="w-4 h-4 accent-blue-500"
-                                checked={child.state}
-                                onChange={() => {}}
-                                onClick={(e) =>
-                                  handleVariationChangeInChild(
-                                    child.value,
-                                    variant.name,
-                                    e.target.checked
-                                  )
-                                }
-                              />
-                            </div>
-                          ))
-                        : null}
+                      {variant.childern?.length ? (
+                        variant.childern.map((child, index) => (
+                          <div
+                            key={child.value + index}
+                            className="flex items-center gap-2 [&>*]:cursor-pointer"
+                          >
+                            <label htmlFor={child.value + index}>
+                              {child.value}
+                            </label>
+                            <input
+                              id={child.value + index}
+                              type="checkbox"
+                              className="w-4 h-4 accent-blue-500"
+                              checked={child.state}
+                              onChange={() => {}}
+                              onClick={(e) =>
+                                handleVariationChangeInChild(
+                                  child.value,
+                                  variant.name,
+                                  e.target.checked
+                                )
+                              }
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <span className="text-xs">NO VARIATION FOUND</span>
+                      )}
                     </td>
                   </tr>
                 ))

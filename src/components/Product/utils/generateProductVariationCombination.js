@@ -16,7 +16,7 @@ const recursiveCombinationGenerator = (
     });
     productVariations.push([currentCombination.join(" - "), inputObject]);
   } else {
-    for (const option of variations[index].children) {
+    for (const option of variations[index].childern) {
       recursiveCombinationGenerator(variations, productVariations, index + 1, [
         ...currentCombination,
         option.value,
@@ -28,11 +28,11 @@ const recursiveCombinationGenerator = (
 export const generateProductVariationCombination = (variations) => {
   const productVariations = [];
   const filterChildrem = variations.map((parent) => {
-    const children = parent.children?.filter((child) => child.state === true);
-    return { ...parent, children };
+    const childern = parent.childern?.filter((child) => child.state === true);
+    return { ...parent, childern };
   });
   const filteredVariation = filterChildrem.filter(
-    (parent) => !!parent.children?.length
+    (parent) => !!parent.childern?.length
   );
   if (!filteredVariation.length) return [];
   recursiveCombinationGenerator(filteredVariation, productVariations);
