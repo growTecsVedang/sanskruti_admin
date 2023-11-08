@@ -28,11 +28,11 @@ const recursiveCombinationGenerator = (
 export const generateProductVariationCombination = (variations) => {
   const productVariations = [];
   const filterChildrem = variations.map((parent) => {
-    const children = parent.children.filter((child) => child.state === true);
+    const children = parent.children?.filter((child) => child.state === true);
     return { ...parent, children };
   });
   const filteredVariation = filterChildrem.filter(
-    (parent) => !!parent.children.length
+    (parent) => !!parent.children?.length
   );
   if (!filteredVariation.length) return [];
   recursiveCombinationGenerator(filteredVariation, productVariations);

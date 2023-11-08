@@ -381,7 +381,7 @@ const EditProductPage = (props) => {
         setProductImages(formatedProductImages);
       })
       .catch((err) => {
-        notify(err.response.data.message);
+        notify(err?.response?.data?.message);
       });
   }, [location]);
 
@@ -578,58 +578,66 @@ const EditProductPage = (props) => {
         <h4 className="text-lg font-semibold">Product Variations</h4>
         <table>
           <tbody>
-            {VariationData.map((variant, index) => (
-              <tr
-                key={variant.name + index}
-                className="[&>*]:p-3 [&>*]:border-[1px] [&>*]:border-gray-300 border-collapse"
-              >
-                <td className="min-w-[6rem] align-top">
-                  <div
+            {VariationData.length
+              ? VariationData.map((variant, index) => (
+                  <tr
                     key={variant.name + index}
-                    className="flex items-center gap-2 [&>*]:cursor-pointer"
+                    className="[&>*]:p-3 [&>*]:border-[1px] [&>*]:border-gray-300 border-collapse"
                   >
-                    <label htmlFor={variant.name + index}>{variant.name}</label>
-                    <input
-                      id={variant.name + index}
-                      type="checkbox"
-                      className="w-4 h-4 accent-blue-500"
-                      checked={variant.state}
-                      onChange={() => {}}
-                      onClick={(e) =>
-                        handleVariationChangeInParent(
-                          variant.name,
-                          e.target.checked
-                        )
-                      }
-                    />
-                  </div>
-                </td>
-                <td className="flex flex-wrap w-full gap-3">
-                  {variant.children.map((child, index) => (
-                    <div
-                      key={child.value + index}
-                      className="flex items-center gap-2 [&>*]:cursor-pointer"
-                    >
-                      <label htmlFor={child.value + index}>{child.value}</label>
-                      <input
-                        id={child.value + index}
-                        type="checkbox"
-                        className="w-4 h-4 accent-blue-500"
-                        checked={child.state}
-                        onChange={() => {}}
-                        onClick={(e) =>
-                          handleVariationChangeInChild(
-                            child.value,
-                            variant.name,
-                            e.target.checked
-                          )
-                        }
-                      />
-                    </div>
-                  ))}
-                </td>
-              </tr>
-            ))}
+                    <td className="min-w-[6rem] align-top">
+                      <div
+                        key={variant.name + index}
+                        className="flex items-center gap-2 [&>*]:cursor-pointer"
+                      >
+                        <label htmlFor={variant.name + index}>
+                          {variant.name}
+                        </label>
+                        <input
+                          id={variant.name + index}
+                          type="checkbox"
+                          className="w-4 h-4 accent-blue-500"
+                          checked={variant.state}
+                          onChange={() => {}}
+                          onClick={(e) =>
+                            handleVariationChangeInParent(
+                              variant.name,
+                              e.target.checked
+                            )
+                          }
+                        />
+                      </div>
+                    </td>
+                    <td className="flex flex-wrap w-full gap-3">
+                      {variant.children?.length
+                        ? variant.children.map((child, index) => (
+                            <div
+                              key={child.value + index}
+                              className="flex items-center gap-2 [&>*]:cursor-pointer"
+                            >
+                              <label htmlFor={child.value + index}>
+                                {child.value}
+                              </label>
+                              <input
+                                id={child.value + index}
+                                type="checkbox"
+                                className="w-4 h-4 accent-blue-500"
+                                checked={child.state}
+                                onChange={() => {}}
+                                onClick={(e) =>
+                                  handleVariationChangeInChild(
+                                    child.value,
+                                    variant.name,
+                                    e.target.checked
+                                  )
+                                }
+                              />
+                            </div>
+                          ))
+                        : null}
+                    </td>
+                  </tr>
+                ))
+              : null}
           </tbody>
         </table>
 
