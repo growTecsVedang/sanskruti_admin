@@ -80,7 +80,23 @@ const Products = () => {
   }, [dispatch, type, message]);
 
   const columns = [
-    { field: "id", headerName: "Product ID", minWidth: 200, flex: 0.5 },
+    {
+      field: "Image",
+      headerName: "Product Image",
+      minWidth: 200,
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <Fragment>
+            <img
+              src={params.row.Image}
+              alt={params.row.Name}
+              className="object-contain"
+            />
+          </Fragment>
+        );
+      },
+    },
 
     {
       field: "Name",
@@ -108,12 +124,41 @@ const Products = () => {
       flex: 0.5,
     },
     {
-      field: "Varients",
-      headerName: "Varients",
-      minWidth: 80,
+      field: "created_at",
+      headerName: "Created At",
+      minWidth: 180,
       flex: 0.3,
+      renderCell: (params) => {
+        const time = new Date(params.row.created_at)?.toLocaleDateString(
+          "en-IN",
+          {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }
+        );
+        return time;
+      },
     },
-
+    {
+      field: "updated_at",
+      headerName: "Updated At",
+      minWidth: 180,
+      flex: 0.3,
+      renderCell: (params) => {
+        const time = new Date(params.row.updated_at)?.toLocaleDateString(
+          "en-IN",
+          {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }
+        );
+        return time;
+      },
+    },
     {
       field: "actions",
       flex: 0.7,
@@ -124,13 +169,19 @@ const Products = () => {
       renderCell: (params) => {
         return (
           <Fragment>
-            <button className="mx-5 w-[65px]  bg-[#caf0f8] p-2 rounded-md   ">
-              <Link to="/viewuser">Reviews</Link>
-            </button>
             <Link to={`/editproduct/${params.id}`}>
               <EditIcon />
             </Link>
-            <Button onClick={() => handleDeleteProduct(params.id)}>
+            <Button
+              onClick={() => {
+                const checkIfUserWantsToDelete = window.confirm(
+                  `Are you sure you wnat to permenently DELETE "${params.row.Name}" product`
+                );
+
+                if (!checkIfUserWantsToDelete) return;
+                handleDeleteProduct(params.id);
+              }}
+            >
               <DeleteIcon />
             </Button>
           </Fragment>
@@ -149,6 +200,9 @@ const Products = () => {
         Main_Category: item.MainCategory,
         Sub_Category: item.SubCategory,
         Varients: item.varients.variations.length,
+        Image: item.images[0] || "https://placehold.co/400x600/png",
+        created_at: new Date(item.created_at).getTime(),
+        updated_at: new Date(item.updated_at).getTime(),
       });
     });
 
@@ -178,7 +232,7 @@ const Products = () => {
         columns={columns}
         disableSelectionOnClick
         className="productListTable"
-        rowHeight={60}
+        rowHeight={300}
         loading={loading}
         initialState={{
           pagination: {
