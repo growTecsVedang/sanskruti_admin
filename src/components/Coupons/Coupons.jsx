@@ -69,8 +69,6 @@ const Coupons = () => {
   }, [dispatch, type, message]);
 
   const columns = [
-    { field: "id", headerName: "ID", minWidth: 250, flex: 0.5 },
-
     {
       field: "name",
       headerName: "Coupon Name",
@@ -107,12 +105,23 @@ const Coupons = () => {
       minWidth: 180,
       flex: 0.3,
     },
-
     {
       field: "exp_date",
       headerName: "Expiration Date",
       minWidth: 180,
       flex: 0.5,
+      renderCell: (params) => {
+        const time = new Date(params.row.exp_date)?.toLocaleDateString(
+          "en-IN",
+          {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }
+        );
+        return time;
+      },
     },
 
     {
@@ -149,7 +158,7 @@ const Coupons = () => {
         type: item.type,
         dis_type: item.discountType,
         discount: item.value,
-        exp_date: item.expirationDate,
+        exp_date: new Date(item.expirationDate).getTime(),
       });
     });
   return (

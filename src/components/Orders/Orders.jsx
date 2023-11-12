@@ -138,7 +138,6 @@ const Orders = () => {
   }, [dispatch, type, message, pay_status, date, pay_category]);
 
   const columns = [
-    { field: "id", headerName: "id", minWidth: 250, flex: 0.5 },
     { field: "order_id", headerName: "order id", minWidth: 350, flex: 1.5 },
     {
       field: "product",
@@ -166,16 +165,22 @@ const Orders = () => {
       flex: 0.5,
     },
     {
-      field: "pay_method1",
-      headerName: "Transactions Count",
-      minWidth: 180,
-      flex: 0.5,
-    },
-    {
       field: "created_at",
       headerName: "Created At",
       minWidth: 250,
-      flex: 0.3,
+      flex: 0.5,
+      renderCell: (params) => {
+        const time = new Date(params.row.created_at)?.toLocaleDateString(
+          "en-IN",
+          {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }
+        );
+        return time;
+      },
     },
 
     {
@@ -207,7 +212,7 @@ const Orders = () => {
         status: item.order.order.deliveryInfo.status,
         pay_method: item.order.payment.paymentMethod,
         pay_method1: item.order.payment.paymentInfo.length,
-        created_at: item.order.payment.orderInfo.Date,
+        created_at: new Date(item.order.payment.orderInfo.Date).getTime(),
         quantity: item.order.order.product.quantity,
       });
     });
