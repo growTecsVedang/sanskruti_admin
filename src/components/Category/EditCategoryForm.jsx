@@ -53,11 +53,12 @@ const EditCategoryForm = (props) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    const name = file.name.split(".")[0];
-    const extension = file.name.split(".")[1];
+    const imageNameArray = file.name.split(".");
+    const extension = imageNameArray.pop();
+    const name = imageNameArray.join("");
     const date = Date.now().toString();
     const imageName = name.concat(date).concat(".").concat(extension);
-    setImageName(imageName);
+
     if (file.size > MAX_SIZE) {
       console.log(file.size);
       alert("file size exceeded");
@@ -76,6 +77,7 @@ const EditCategoryForm = (props) => {
     reader.onloadend = () => {
       const base64String = reader.result;
       setBase64Image(base64String);
+      setImageName(imageName);
     };
     console.log(base64Image);
 

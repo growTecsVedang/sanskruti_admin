@@ -84,14 +84,24 @@ const Attributes = () => {
       minWidth: 180,
       flex: 0.3,
     },
-
     {
-      field: "Created_At",
+      field: "created_at",
       headerName: "Created At",
       minWidth: 180,
       flex: 0.5,
+      renderCell: (params) => {
+        const time = new Date(params.row.created_at)?.toLocaleDateString(
+          "en-IN",
+          {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }
+        );
+        return time;
+      },
     },
-
     {
       field: "actions",
       flex: 0.3,
@@ -120,7 +130,7 @@ const Attributes = () => {
         id: item._id,
         name: item.varientName,
         value: item.value.length,
-        Created_At: item.created_at,
+        created_at: new Date(item.created_at).getTime(),
       });
     });
   return (

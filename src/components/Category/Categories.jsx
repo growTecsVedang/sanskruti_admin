@@ -101,11 +101,22 @@ const Categories = () => {
       flex: 0.3,
     },
     {
-      field: "Created_At",
+      field: "created_at",
       headerName: "Created At",
       minWidth: 180,
-      type: "string",
       flex: 0.3,
+      renderCell: (params) => {
+        const time = new Date(params.row.created_at)?.toLocaleDateString(
+          "en-IN",
+          {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }
+        );
+        return time;
+      },
     },
 
     {
@@ -143,7 +154,7 @@ const Categories = () => {
       rows.push({
         id: item._id,
         Category: item.Title,
-        Created_At: item.created_at,
+        created_at: new Date(item.created_at).getTime(),
         Image: item.Image,
       });
     });

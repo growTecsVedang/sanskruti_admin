@@ -60,7 +60,7 @@ const SubBannerForm = () => {
 
   const handleFileChange = (e, screenType) => {
     const file = e.target.files[0];
-    const extension = file.name.split(".")[1];
+    const extension = file.name.split(".").pop();
     if (file?.size !== undefined && file.size > MAX_SIZE) {
       alert("file size exceeded");
       return;
@@ -77,23 +77,19 @@ const SubBannerForm = () => {
     if (file) {
       reader.readAsDataURL(file);
     }
-    console.log("cs");
 
     reader.onloadend = () => {
       const base64String = reader.result;
+      const imageNameArray = file.name.split(".");
+      const extension = imageNameArray.pop();
+      const name = imageNameArray.join("");
+      const date = Date.now().toString();
+      const imageName = name.concat(date).concat(".").concat(extension);
       if (screenType === "Desktop") {
-        const name = file.name.split(".")[0];
-        const extension = file.name.split(".")[1];
-        const date = Date.now().toString();
-        const imageName = name.concat(date).concat(".").concat(extension);
         setDesktopImageName(imageName);
         setDesktopImage(base64String);
       }
       if (screenType === "Mobile") {
-        const name = file.name.split(".")[0];
-        const extension = file.name.split(".")[1];
-        const date = Date.now().toString();
-        const imageName = name.concat(date).concat(".").concat(extension);
         setMobileImageName(imageName);
         setMobileImage(base64String);
       }

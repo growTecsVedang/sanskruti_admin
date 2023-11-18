@@ -88,11 +88,22 @@ const SubCategories = () => {
       flex: 0.3,
     },
     {
-      field: "Created_At",
+      field: "created_at",
       headerName: "Created At",
-      minWidth: 200,
-      type: "string",
+      minWidth: 180,
       flex: 0.5,
+      renderCell: (params) => {
+        const time = new Date(params.row.created_at)?.toLocaleDateString(
+          "en-IN",
+          {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }
+        );
+        return time;
+      },
     },
 
     {
@@ -125,7 +136,7 @@ const SubCategories = () => {
           id: item._id,
           Title: item.Title,
           Category: item.Category,
-          Created_At: item.created_at,
+          created_at: new Date(item.created_at),
         });
       }
     });

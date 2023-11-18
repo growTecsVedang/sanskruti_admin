@@ -33,6 +33,11 @@ const Socials = () => {
   }
 
   const handleDeleteProduct = (params) => {
+    const doesUserWantToDelete = window.confirm(
+      `Do you want to delete "${params.row.media}" social media link?`
+    );
+
+    if (!doesUserWantToDelete) return;
     const cookie = getCookie();
     dispatch(
       deleteSocials({
@@ -59,10 +64,25 @@ const Socials = () => {
       })
     );
   }, [dispatch, type, message]);
-  console.log(socials);
 
   const columns = [
-    { field: "id", headerName: "id", minWidth: 200, flex: 0.5 },
+    {
+      field: "image",
+      headerName: "Image",
+      minWidth: 200,
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <Fragment>
+            <img
+              src={params.row.image}
+              alt=""
+              className="h-10 w-10 object-cover"
+            />
+          </Fragment>
+        );
+      },
+    },
     {
       field: "media",
       headerName: "Media",
@@ -98,15 +118,18 @@ const Socials = () => {
       rows.push({
         id: item.id,
         media: item.media,
+        image: item.link,
       });
     });
 
   return (
     <div className=" flex  flex-col overflow-y-scroll overflow-x-hidden  h-[89vh] w-[100%] lg:w-[80%] no-scroll  ">
-      <div className=" ml-2 lg:ml-0 flex flex-col sm:flex-row lg:justify-end mt-3 lg:items-center gap-x-8  mr-2 min-h-[60px] ">
-        <button className=" lg:mx-[5%] mx-[10%] my-4 lg:mt-6 px-2 h-[45px] w-[150px] lg:w-[150px] cursor-pointer  flex justify-center items-center rounded-md border-[1px] border-gray-300  bg-[#4361ee] text-white">
-          <Link to="/socialform">Add Social Media</Link>
-        </button>
+      <div className="p-5">
+        <Link to="/socialform">
+          <button className="outline-none bg-slate-100 hover:bg-blue-400 font-semibold text-black px-6 py-2 rounded-md border-blue-400 border-[1px]">
+            Add Social Media
+          </button>
+        </Link>
       </div>
       <DataGrid
         rows={rows}
