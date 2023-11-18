@@ -175,7 +175,7 @@ const Sidebar = () => {
           </Link>
           <Link to="/googleanalytics">
             <div className="h-[40px] flex mt-3 items-center w-[200px] pl-5 text-[16px]">
-              <div className="mx-5">Google Analytics</div>
+              <div className="mx-5">Google Tag Manager</div>
             </div>
           </Link>
           <Link to="/whatsappNumber">

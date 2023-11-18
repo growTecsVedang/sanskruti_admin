@@ -78,9 +78,9 @@ const GoogleAnalytics = () => {
   return (
     <main className="p-5 w-full max-w-xl  h-[89vh]">
       <div className="bg-white p-5 rounded-lg flex flex-col gap-4">
-        <h3 className="text-lg font-semibold">Google Analytics</h3>
+        <h3 className="text-lg font-semibold">Google Tag Manager</h3>
         <div className="flex mt-2 gap-1 border-[1px] border-gray-300 focus-within:border-gray-600 rounded-md pl-4 py-2">
-          <label htmlFor="google">G-</label>
+          <label htmlFor="google">GTM-</label>
           <input
             type="text"
             id="google"
