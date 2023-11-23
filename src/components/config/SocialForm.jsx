@@ -6,7 +6,8 @@ import { toast } from "react-toastify";
 import { Input } from "../common/Input";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-const MAX_SIZE = 1024 * 1024;
+
+const MAX_SIZE = 5 * 1024 * 1024;
 
 const SocialForm = () => {
   const notify = (arg) => toast(`${arg}`);

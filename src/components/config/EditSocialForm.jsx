@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const MAX_SIZE = 1024 * 1024;
+const MAX_SIZE = 5 * 1024 * 1024;
 
 const EditSocialForm = (props) => {
   const notify = (arg) => toast(`${arg}`);

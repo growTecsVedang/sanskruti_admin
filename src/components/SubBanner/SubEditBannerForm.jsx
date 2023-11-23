@@ -13,7 +13,7 @@ import { ReactDropZone } from "../Banner/BannerForm";
 import axios from "axios";
 import LoadingPage from "../common/loading";
 
-const MAX_SIZE = 400 * 1024;
+const MAX_SIZE = 5 * 1024 * 1024;
 const SubEditBannerForm = (props) => {
   const notify = (arg) => toast(`${arg}`);
   const fileInputRef = useRef("");
