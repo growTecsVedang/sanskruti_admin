@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineDelete } from "react-icons/ai";
 import { addCategory, clearState } from "../../Redux/slices/CategorySlice";
 import { toast } from "react-toastify";
-const MAX_SIZE = 400 * 1024;
+
+const MAX_SIZE = 5 * 1024 * 1024;
+
 const CategoryForm = () => {
   const { message, type } = useSelector((state) => state.categories);
   const dispatch = useDispatch();

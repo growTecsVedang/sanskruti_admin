@@ -11,7 +11,9 @@ import {
 import { toast } from "react-toastify";
 import axios from "axios";
 import LoadingPage from "../common/loading";
-const MAX_SIZE = 400 * 1024;
+
+const MAX_SIZE = 5 * 1024 * 1024;
+
 const EditCategoryForm = (props) => {
   const notify = (arg) => toast(`${arg}`);
   const { categories, message, type } = useSelector(
