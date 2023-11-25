@@ -45,6 +45,7 @@ const Products = () => {
       })
     );
   };
+
   useEffect(() => {
     const notify = (arg) => toast(`${arg}`);
     if (message && type) {
@@ -168,11 +169,12 @@ const Products = () => {
             </Link>
             <Button
               onClick={() => {
-                const checkIfUserWantsToDelete = window.confirm(
-                  `Are you sure you wnat to permenently DELETE "${params.row.Name}" product`
+                const checkIfUserWantsToDelete = window.prompt(
+                  `Are you sure you want to permenently DELETE this product.\nType in product name to confirm deletions.\nNOTE: This action cannot be undone.`
                 );
 
-                if (!checkIfUserWantsToDelete) return;
+                if (checkIfUserWantsToDelete?.trim() !== params.row.Name)
+                  return;
                 handleDeleteProduct(params.id);
               }}
             >
