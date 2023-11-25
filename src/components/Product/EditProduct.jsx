@@ -19,6 +19,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useRef } from "react";
+import LoadingPage from "../common/loading";
 
 const EditProductPage = (props) => {
   const dispatch = useDispatch();
@@ -335,6 +336,7 @@ const EditProductPage = (props) => {
   // -------------------------------------------------------------------------
   // Fetch Product Data
   // -------------------------------------------------------------------------
+  const [fetchingData, setFetchingData] = useState(true);
   useEffect(() => {
     if (!fetchedVariationData) return;
     axios
@@ -414,13 +416,17 @@ const EditProductPage = (props) => {
           image,
         }));
         setProductImages(formatedProductImages);
+        setFetchingData(false);
       })
       .catch((err) => {
         notify(err?.response?.data?.message);
+        setFetchingData(false);
       });
   }, [location, fetchedVariationData]);
 
-  return (
+  return fetchingData ? (
+    <LoadingPage />
+  ) : (
     <main className="w-full flex max-h-[89vh] overflow-y-auto flex-col gap-9 h-full p-5 pb-12 bg-white">
       <h2 className="text-xl font-semibold w-full border-b-2 border-gray-300 pb-3">
         Create New Product
