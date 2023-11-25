@@ -8,6 +8,7 @@ import { clearState, addSubBanner } from "../../Redux/slices/SubBannerSlice";
 import { ReactDropZone } from "../Banner/BannerForm";
 const MAX_SIZE = 5 * 1024 * 1024;
 const SubBannerForm = () => {
+  const notify = (arg) => toast(`${arg}`);
   const fileInputRef = useRef("");
   const dispatch = useDispatch();
   const { message, type, loading } = useSelector((state) => state.subbanners);
@@ -129,9 +130,10 @@ const SubBannerForm = () => {
       setDesktopImageName("");
       setMobileImageName("");
       setChecked(false);
+    } else {
+      notify("Please fill all the fields");
     }
   };
-  console.log(desktopImageName, mobileImageName);
 
   return (
     <main className="overflow-y-auto w-full p-5 overflow-x-hidden h-[89vh]">

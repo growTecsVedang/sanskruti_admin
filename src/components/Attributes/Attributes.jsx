@@ -115,7 +115,17 @@ const Attributes = () => {
             <Link to={`/editattribute/${params.id}`}>
               <EditIcon />
             </Link>
-            <Button onClick={() => deleteVarientHandler(params.id)}>
+            <Button
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Are you sure you want to delete this attribute?"
+                  )
+                ) {
+                  deleteVarientHandler(params.id);
+                }
+              }}
+            >
               <DeleteIcon />
             </Button>
           </Fragment>

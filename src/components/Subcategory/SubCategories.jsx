@@ -119,7 +119,17 @@ const SubCategories = () => {
             <Link to={`/editsubcategory/${params.id}`}>
               <EditIcon />
             </Link>
-            <Button onClick={() => deleteSubCategoryHandler(params.id)}>
+            <Button
+              onClick={() => {
+                if (
+                  !window.confirm(
+                    "Are you sure you want to delete this SubCategory?"
+                  )
+                )
+                  return;
+                deleteSubCategoryHandler(params.id);
+              }}
+            >
               <DeleteIcon />
             </Button>
           </Fragment>

@@ -61,7 +61,7 @@ const SubBanner = () => {
         cookie,
       })
     );
-  }, []);
+  }, [message, type]);
 
   const columns = [
     {
@@ -127,7 +127,17 @@ const SubBanner = () => {
             <Link to={`/subeditbanner/${params.id}`}>
               <EditIcon />
             </Link>
-            <Button onClick={() => deleteBannerHandler(params.id)}>
+            <Button
+              onClick={() => {
+                if (
+                  !window.confirm(
+                    "Are you sure you want to delete this banner?"
+                  )
+                )
+                  return;
+                deleteBannerHandler(params.id);
+              }}
+            >
               <DeleteIcon />
             </Button>
           </Fragment>
