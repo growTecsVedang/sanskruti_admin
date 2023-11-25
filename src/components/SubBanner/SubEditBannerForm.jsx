@@ -191,6 +191,8 @@ const SubEditBannerForm = (props) => {
           },
         })
       );
+    } else {
+      notify("Please fill all the fields");
     }
   };
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
-import { clearState, updateVarient } from "../../Redux/slices/VarientSlice";
 import axios from "axios";
 import LoadingPage from "../common/loading";
 import { Input } from "../common/Input";

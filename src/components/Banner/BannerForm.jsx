@@ -9,6 +9,7 @@ const MAX_SIZE = 5 * 1024 * 1024;
 const BannerForm = () => {
   const fileInputRef = useRef("");
   const dispatch = useDispatch();
+  const notify = (arg) => toast(`${arg}`);
 
   const { message, type, loading } = useSelector((state) => state.banners);
   const [mobileImage, setMobileImage] = useState("");
@@ -131,6 +132,8 @@ const BannerForm = () => {
       setDesktopImageName("");
       setMobileImageName("");
       setChecked(false);
+    } else {
+      notify("Please fill all the fields");
     }
   };
 

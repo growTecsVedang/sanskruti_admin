@@ -195,6 +195,8 @@ const EditBannerForm = (props) => {
           },
         })
       );
+    } else {
+      notify("Please fill all the fields");
     }
   };
 
