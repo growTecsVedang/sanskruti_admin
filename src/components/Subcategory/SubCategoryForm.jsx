@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../Home/Navbar";
-import Sidebar from "../Home/Sidebar";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { loadAllCategories } from "../../Redux/slices/CategorySlice";
-import {
-  clearState,
-  addSubCategory,
-} from "../../Redux/slices/SubCategorySlice";
+import { clearState } from "../../Redux/slices/SubCategorySlice";
+import { Input } from "../common/Input";
+import TextArea from "../common/Textarea";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const SubCategoryForm = () => {
   const notify = (arg) => toast(`${arg}`);
+  const history = useHistory();
   const { categories } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -40,10 +40,7 @@ const SubCategoryForm = () => {
   const [Meta_Title, setMeta_Title] = useState("");
   const [Meta_Description, setMeta_Description] = useState("");
   const [Category, setCategory] = useState("");
-
-  const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
-  };
+  const [loading, setLoading] = useState(false);
 
   function getCookie() {
     var name = "accessToken".concat("=");
@@ -68,19 +65,37 @@ const SubCategoryForm = () => {
       Meta_Title.trim() !== "" &&
       Category.trim() !== ""
     ) {
-      const accessToken = getCookie();
-      dispatch(
-        addSubCategory({
-          cookie: accessToken,
-          Title,
-          Category,
-          Meta_Title,
-          Meta_Description,
+      const url = `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/addSubCategory`;
+      const headers = {
+        "Content-Type": "application/json", // You may need to include other headers based on the API requirements
+      };
+      axios
+        .post(
+          url,
+          {
+            Title,
+            Category,
+            Meta_Title,
+            Meta_Description,
+          },
+          {
+            headers,
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          setLoading(false);
+          notify(res.data.message);
+          setTitle("");
+          setMeta_Title("");
+          setMeta_Description("");
+          setCategory("");
+          history.push("/subcategories");
         })
-      );
-      setTitle("");
-      setMeta_Title("");
-      setMeta_Description("");
+        .catch((err) => {
+          setLoading(false);
+          notify(err.response.data.message);
+        });
     } else {
       notify("fill all details");
     }
@@ -101,81 +116,72 @@ const SubCategoryForm = () => {
   }, [dispatch, type, message]);
 
   return (
-    <div className=" flex flex-col overflow-y-scroll   h-[89vh] w-[100%] lg:w-[80%] no-scroll ">
-      <div className="w-[97%] mx-auto mt-2 mb-[1px] py-3 h-[50px] justify-center bg-white  rounded-md flex flex-col     shadow-md ">
-        <h1 className="text-black lg:text-3xl text-2xl   pl-6 ">
-          Sub Category Form
-        </h1>
-      </div>
-      <div className="w-[97%] mx-auto  bg-white  rounded-md flex flex-col     shadow-md ">
-        <form onSubmit={createSubCategorySubmitHandler}>
-          <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-            <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-              Title
-            </label>
-            <input
-              type="text"
-              value={Title}
-              onChange={(e) => setTitle(e.target.value)}
-              className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-              placeholder="Title"
-            />
-          </div>
-          <div className="w-[95%] mx-auto mt-[60px] flex  ">
-            <h1 className="flex items-center text-lg text-gray-400 mr-4 ">
-              Category
-            </h1>
-            <select
-              defaultValue="category"
-              value={Category}
-              onChange={handleCategoryChange}
-              className="cursor-pointer h-[45px] min-w-[140px] pl-3  bg-gray-50 rounded-md text-lg border-2 border-gray-300 "
+    <div className="w-full max-h-[89vh] min-h-[89vh] h-full overflow-y-auto p-5">
+      <main className="p-5 bg-white max-w-4xl rounded-md flex flex-col gap-6">
+        <h2 className="text-xl font-semibold w-full border-b-2 border-gray-300 pb-3">
+          Create New Sub Category
+        </h2>
+        <form
+          onSubmit={createSubCategorySubmitHandler}
+          className="flex gap-4 flex-col"
+        >
+          <Input
+            input_type={"text"}
+            placeholder={"Title"}
+            value={Title}
+            setValue={setTitle}
+          />
+          <div className="group relative h-10 w-full rounded-md bg-white">
+            <label
+              htmlFor="Category"
+              className={`absolute left-3 -translate-y-1/2 bg-gradient-to-b from-transparent via-transparent via-45% to-white to-50% px-2 text-gray-500 transition-all delay-300 ease-in-out group-focus-within:top-0 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-black ${
+                !!Category ? "top-0 text-xs" : "top-1/2 text-sm"
+              }`}
             >
-              <option hidden>categories</option>
-              {categories &&
-                categories.map((item, key) => {
-                  return (
-                    <option key={key} value={item.Title}>
-                      {item.Title}
-                    </option>
-                  );
-                })}
+              Category
+            </label>
+            <select
+              name="Category"
+              id="Category"
+              onChange={(e) => setCategory(e.target.value)}
+              className="peer h-full w-full rounded-md border-[1px] border-gray-400 bg-transparent px-3 outline-none outline-offset-0 hover:outline hover:outline-4 hover:outline-gray-200 focus:border-black"
+              defaultValue={Category}
+              value={Category}
+            >
+              <option value="" selected hidden></option>
+              {categories.length ? (
+                categories.map((category, index) => (
+                  <option key={category.Title + index} value={category.Title}>
+                    {category.Title}
+                  </option>
+                ))
+              ) : (
+                <option disabled>No items found</option>
+              )}
             </select>
           </div>
-          <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-            <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-              Meta Title
-            </label>
-            <input
-              type="text"
-              className=" h-[50px] pl-3 rounded-md border text-black border-gray-300 bg-transparent py-2 px-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-              placeholder="Meta Title"
-              value={Meta_Title}
-              onChange={(e) => setMeta_Title(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col w-[95%]  mx-auto mt-5 ">
-            <label htmlFor="" className="mb-4 text-lg text-gray-400 ">
-              Meta Description
-            </label>
-            <textarea
-              type="text"
-              className=" min-h-[250px] px-3 py-2 rounded-md border text-black border-gray-300 bg-transparent  text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700  "
-              placeholder="Meta Description"
-              value={Meta_Description}
-              onChange={(e) => setMeta_Description(e.target.value)}
-            />
-          </div>
-          <div className="w-full pr-4 mt-3 h-[60px] flex items-center justify-end  ">
-            <button
-              type="submit"
-              className="w-[150px] h-[45px]  bg-[#4361ee] text-white rounded-md flex items-center justify-center cursor-pointer "
-            >
-              Save & edit
-            </button>
-          </div>
+          <Input
+            input_type={"text"}
+            placeholder={"Meta Title"}
+            value={Meta_Title}
+            setValue={setMeta_Title}
+          />
+          <TextArea
+            placeholder={"Meta Description"}
+            value={Meta_Description}
+            setValue={setMeta_Description}
+          />
+          <button
+            type="submit"
+            className={`rounded-md mt-auto ml-auto border-[1px] border-sky-500 px-6 py-2 text-lg font-semibold hover:bg-sky-500 hover:text-white ${
+              loading ? "grayscale" : ""
+            }`}
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Submit"}
+          </button>
         </form>
-      </div>
+      </main>
     </div>
   );
 };
