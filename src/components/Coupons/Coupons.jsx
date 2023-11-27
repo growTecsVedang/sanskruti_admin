@@ -3,15 +3,14 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import Sidebar from "../Home/Sidebar";
-import Navbar from "../Home/Navbar";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loadAllCoupons, clearState } from "../../Redux/slices/CouponSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { RiH1 } from "react-icons/ri";
+import axios from "axios";
 
 const Coupons = () => {
+  const notify = (arg) => toast(`${arg}`);
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState("");
   const { coupons, message, type, loading } = useSelector(
@@ -31,13 +30,27 @@ const Coupons = () => {
     }
     return null; // Cookie not found
   }
-  const deleteVarientHandler = (id) => {
-    // dispatch(
-    //   deleteVarient({
-    //     id,
-    //   })
-    // );
+  const deleteCoupon = (code) => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_ENDPOINT}/api/v1/admin/coupons/?code=${code}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${getCookie()}`,
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        dispatch(loadAllCoupons({ cookie: getCookie() }));
+        notify(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
   const handleSearch = () => {
     const cookie = getCookie();
     console.log(keyword);
@@ -50,7 +63,6 @@ const Coupons = () => {
   };
 
   useEffect(() => {
-    const notify = (arg) => toast(`${arg}`);
     if (message && type) {
       if (type === "success") {
         notify(message);
@@ -137,7 +149,17 @@ const Coupons = () => {
             <Link to={`/editcoupon/${params.id}`}>
               <EditIcon />
             </Link>
-            <Button onClick={() => deleteVarientHandler(params.id)}>
+            <Button
+              onClick={() => {
+                if (
+                  !window.confirm(
+                    "Are you sure you want to delete this coupon?"
+                  )
+                )
+                  return;
+                deleteCoupon(params.row.code);
+              }}
+            >
               <DeleteIcon />
             </Button>
           </Fragment>
