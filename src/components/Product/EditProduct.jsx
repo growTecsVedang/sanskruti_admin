@@ -68,6 +68,8 @@ const EditProductPage = (props) => {
   const [meta_keyword, setMeta_keyword] = useState("");
   const [meta_description, setMeta_description] = useState("");
 
+  const [stylesAndTips, setStylesAndTips] = useState("");
+
   // Loading State
   const [loading, setLoading] = useState(false);
 
@@ -256,6 +258,7 @@ const EditProductPage = (props) => {
       !MainCategory.trim() ||
       !SubCategory.trim() ||
       !gst_percent.trim() ||
+      !stylesAndTips.trim() ||
       !meta_tittle.trim() ||
       !meta_keyword.trim() ||
       !meta_description.trim()
@@ -302,6 +305,8 @@ const EditProductPage = (props) => {
       is_featured,
       is_new_arrival,
       is_best_seller,
+
+      stylesAndTips,
 
       MainCategory,
       SubCategory,
@@ -356,6 +361,8 @@ const EditProductPage = (props) => {
         setIs_featured(product.is_featured);
         setis_new_arrival(product.is_new_arrival);
         setis_best_seller(product.is_best_seller);
+
+        setStylesAndTips(product?.stylesAndTips || "");
 
         setMeta_tittle(product.meta_tittle);
         setMeta_keyword(product.meta_keyword);
@@ -616,6 +623,12 @@ const EditProductPage = (props) => {
             placeholder="Meta Description"
             value={meta_description}
             setValue={setMeta_description}
+          />
+          <h4 className="text-lg font-semibold">Tips</h4>
+          <TextArea
+            placeholder="Styles and Tips"
+            value={stylesAndTips}
+            setValue={setStylesAndTips}
           />
         </div>
       </div>

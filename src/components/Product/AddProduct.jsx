@@ -57,6 +57,8 @@ const AddProductPage = () => {
   const [meta_keyword, setMeta_keyword] = useState("");
   const [meta_description, setMeta_description] = useState("");
 
+  const [stylesAndTips, setStylesAndTips] = useState("");
+
   // Loading State
   const [loading, setLoading] = useState(false);
 
@@ -238,6 +240,7 @@ const AddProductPage = () => {
       !MainCategory.trim() ||
       !SubCategory.trim() ||
       !gst_percent.trim() ||
+      !stylesAndTips.trim() ||
       !meta_tittle.trim() ||
       !meta_keyword.trim() ||
       !meta_description.trim()
@@ -284,6 +287,8 @@ const AddProductPage = () => {
       is_featured,
       is_new_arrival,
       is_best_seller,
+
+      stylesAndTips,
 
       MainCategory,
       SubCategory,
@@ -491,6 +496,13 @@ const AddProductPage = () => {
             placeholder="Meta Description"
             value={meta_description}
             setValue={setMeta_description}
+          />
+
+          <h4 className="text-lg font-semibold">Tips</h4>
+          <TextArea
+            placeholder="Styles and Tips"
+            value={stylesAndTips}
+            setValue={setStylesAndTips}
           />
         </div>
       </div>
