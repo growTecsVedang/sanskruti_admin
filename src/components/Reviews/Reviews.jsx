@@ -94,7 +94,7 @@ const ReviewsPage = () => {
   const columns = [
     {
       field: "pinned",
-      flex: 0.5,
+      flex: 0.1,
       headerName: "Pinned",
       minWidth: 80,
       type: "number",
@@ -104,7 +104,7 @@ const ReviewsPage = () => {
           <Fragment>
             <input
               type="checkbox"
-              className="w-5 h-5"
+              className="w-5 h-5 mx-auto"
               checked={params.row.pinned}
               onChange={(e) => changePinned(e.target.checked, params.row.id)}
             />
@@ -112,7 +112,6 @@ const ReviewsPage = () => {
         );
       },
     },
-    { field: "id", headerName: "Review Id", minWidth: 200, flex: 0.5 },
     {
       field: "product_name",
       headerName: "Product Name",
@@ -124,6 +123,17 @@ const ReviewsPage = () => {
       headerName: "Product Image",
       minWidth: 180,
       flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <Fragment>
+            <img
+              src={params.row.product_image}
+              alt={params.row.product_name}
+              className="object-contain w-full h-full"
+            />
+          </Fragment>
+        );
+      },
     },
     {
       field: "rating",
@@ -308,7 +318,7 @@ const ReviewsPage = () => {
         columns={columns}
         disableSelectionOnClick
         className="productListTable"
-        rowHeight={100}
+        rowHeight={120}
         loading={false}
         initialState={{
           pagination: {

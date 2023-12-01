@@ -8,11 +8,10 @@ import { ImImages, ImProfile } from "react-icons/im";
 import { CiDiscount1 } from "react-icons/ci";
 import { AiOutlineInbox, AiOutlineSetting } from "react-icons/ai";
 import { HiCurrencyRupee, HiOutlineClipboardList } from "react-icons/hi";
+import { TiContacts } from "react-icons/ti";
 import { BiLogOut } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../Redux/slices/UserSlice";
-import { Redirect } from "react-router-dom";
-import store from "../../Redux/store";
 import { clearIsAuthenticate } from "../../Redux/slices/LoadUserSlice";
 
 const Sidebar = () => {
@@ -122,6 +121,13 @@ const Sidebar = () => {
         <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-[16px]">
           <MdOutlineDashboard size={30} />
           <div className="mx-5">Orders</div>
+        </div>
+      </Link>
+      <hr className="text-black h-2" />
+      <Link to="/contacts">
+        <div className="h-[40px] flex mt-3  w-[200px] pl-5 text-[16px]">
+          <TiContacts size={30} />
+          <div className="mx-5">User Contacts</div>
         </div>
       </Link>
       <hr className="text-black h-2" />

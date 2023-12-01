@@ -51,6 +51,7 @@ import GoogleAnalytics from "./components/config/GoogleAnalytics";
 import AuthKeys from "./components/config/AuthKeys";
 import WhatsappNumber from "./components/config/WhatsappNumber";
 import ReviewsPage from "./components/Reviews/Reviews";
+import ContactsPage from "./components/Contacts/contact";
 
 function App() {
   const dispatch = useDispatch();
@@ -194,6 +195,7 @@ function App() {
         />
         <ProtectedRoute exact path="/productsReviews" component={ReviewsPage} />
         <ProtectedRoute exact path="/authkeys" component={AuthKeys} />
+        <ProtectedRoute exact path="/contacts" component={ContactsPage} />
       </Switch>
     </React.Fragment>
   );

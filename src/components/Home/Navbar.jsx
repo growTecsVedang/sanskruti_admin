@@ -20,6 +20,7 @@ import { logOutUser } from "../../Redux/slices/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { clearIsAuthenticate } from "../../Redux/slices/LoadUserSlice";
+import { TiContacts } from "react-icons/ti";
 const Navbar = () => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -202,6 +203,16 @@ const Navbar = () => {
           >
             <MdOutlineDashboard size={30} />
             <div className="mx-5">Orders</div>
+          </div>
+        </Link>
+        <hr className="text-black h-2" />
+        <Link to="/contacts">
+          <div
+            className="h-[40px] flex mt-3  w-[200px] pl-5 text-[16px]"
+            onClick={() => setOpen(false)}
+          >
+            <TiContacts size={30} />
+            <div className="mx-5">User Contacts</div>
           </div>
         </Link>
         <hr className="text-black h-2" />
