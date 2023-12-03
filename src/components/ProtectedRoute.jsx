@@ -40,7 +40,7 @@ const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
   useEffect(() => {
     console.log("useeffec");
     if (loading === false && isAuthenticate === true) {
-      if (isLoggedOut === true) {
+      if (isLoggedOut === true || loaduser.role === "USER") {
         history.push(`/`);
       }
       if (loaduser.username !== undefined) {
@@ -52,7 +52,7 @@ const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
       }
     }
   }, [loaduser, isLoggedOut]);
-  console.log(loading, isAuthenticate);
+
   return (
     <Fragment>
       <Navbar />

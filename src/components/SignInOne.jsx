@@ -66,7 +66,7 @@ const SignInOne = () => {
           history.push(redirect);
           dispatch(clearState());
         } else {
-          notify("Role of USER is not allowed !");
+          notify("User is Unauthorized to view this page");
         }
       } else {
         notify(message);
@@ -95,7 +95,11 @@ const SignInOne = () => {
   }, []);
 
   useEffect(() => {
-    if (loaduser.username !== undefined && isLoggedOut === false) {
+    if (
+      loaduser.username !== undefined &&
+      isLoggedOut === false &&
+      loaduser.role !== "USER"
+    ) {
       history.push(redirect);
     }
   }, [loaduser]);
